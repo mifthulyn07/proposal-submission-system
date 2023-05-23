@@ -23,14 +23,9 @@
         @livewireStyles
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navbar')
 
-            <!-- Page Content -->
-            <main>
-                @yield('content')
-            </main>
-        </div>
+        <!-- Page Content -->
+        @yield('content')
 
         {{-- flowbite --}}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>

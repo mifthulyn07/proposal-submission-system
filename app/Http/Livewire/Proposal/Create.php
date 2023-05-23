@@ -36,11 +36,10 @@ class Create extends Component
 
             //melihat ada perbedaan di nim & title
             Proposal::firstOrCreate([
-                'nim' => $validatedData['nim'],
+                'nim'   => $validatedData['nim'],
                 'title' => $validatedData['title'],
-            ], [
-                'name' => $validatedData['name'],
-                'year' => $validatedData['year'],
+                'name'  => $validatedData['name'],
+                'year'  => $validatedData['year'],
             ]);
 
             $this->reset();
