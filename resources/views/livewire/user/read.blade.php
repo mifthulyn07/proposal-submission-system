@@ -52,7 +52,7 @@
             </div>
 
             {{-- table --}}
-            <div class="m-4 relative overflow-x-auto sm:rounded-lg">
+            <div class="m-4 relative overflow-x-auto rounded-lg">
                 @if($users->isEmpty())
                     <div class="m-4">
                         <div class="flex flex-col justify-center items-center px-6 mx-auto xl:px-0 dark:bg-gray-900">
@@ -97,7 +97,13 @@
                                         {{ $users->firstItem() + $index }}
                                     </th>
                                     <td class="px-6 py-4">
-                                        {{ $user->role}}
+                                        @if( $user->role == 'admin')
+                                            <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Admin</span>
+                                        @elseif($user->role == 'lecturer')
+                                            <span class="bg-purple-100 text-purple-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300">Lecturer</span>
+                                        @elseif($user->role == 'student')
+                                            <span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Student</span>
+                                        @endif
                                     </td>
                                     <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                                         <div>
@@ -112,7 +118,11 @@
                                         {{ $user->phone }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $user->gender }}
+                                        @if($user->gender == 'male')
+                                            <span class="flex items-center text-xs font-medium text-gray-900 dark:text-white"><span class="flex w-2.5 h-2.5 bg-blue-600 rounded-full mr-1.5 flex-shrink-0"></span>Male</span>
+                                        @else
+                                            <span class="flex items-center text-xs font-medium text-gray-900 dark:text-white"><span class="flex w-2.5 h-2.5 bg-red-300 rounded-full mr-1.5 flex-shrink-0"></span>Female</span>
+                                        @endif
                                     </td>
                                     <td class="p-4 space-x-2 whitespace-nowrap">
                                         <a wire:click="editIdUser({{ $user->id }})" wire:click.prevent class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-yellow-300 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-300 dark:hover:bg-yellow-300 dark:focus:ring-yellow-300">

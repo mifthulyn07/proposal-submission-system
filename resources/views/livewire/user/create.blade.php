@@ -5,6 +5,7 @@
             {{-- form --}}
             <div class="m-4 ">
                 <h5 class="text-xl font-medium text-gray-900 dark:text-white">Add Users</h5>
+                <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">This feature, can only be used by admin submission proposals.</p>
 
                 <form class="mt-6" wire:submit.prevent="store">
                     <div class="grid gap-6 mb-6 md:grid-cols-2">

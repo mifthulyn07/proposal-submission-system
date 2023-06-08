@@ -1,7 +1,5 @@
 @extends('layouts.admin')
 
-@section('title', "Proposal's Title")
-
 @section('breadcrumb')
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 my-3 mt-4">
         <nav class="flex" aria-label="Breadcrumb">

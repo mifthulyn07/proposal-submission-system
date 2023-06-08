@@ -4,7 +4,7 @@
 
             <form class="m-4">
                 <h5 class="text-xl font-medium text-gray-900 dark:text-white">Check Similarity of Title</h5>
-                <p class="mt-1 mb-4 text-gray-500 dark:text-gray-400 font-normal text-sm">The data that will be compared are taken from the titles of the final assignment by Information System's Student UINSU Medan and Goggle Scholar.</p>
+                <p class="mt-1 mb-4 text-gray-500 dark:text-gray-400 font-normal text-sm">The data that will be compared are taken from the titles of the final assignment by Information Systems Student UINSU Medan and Google Scholar.</p>
                 <label for="search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                 <div class="relative mb-4">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -31,13 +31,13 @@
                 {{-- result --}}
                 @if (count($similarities) > 0)
                     <h5 class="text-xl font-medium text-gray-900 dark:text-white">The Result</h5>
-                    <p class="my-1 items-center  text-gray-500 dark:text-gray-400 font-normal text-sm">Show your result for next step Submit Proposal, this result can be read by Lecturers for Submission Proposal.</p>
+                    <p class="my-1 items-center  text-gray-500 dark:text-gray-400 font-normal text-sm">Show your result for the next step: submit a proposal. This result can be read by lecturers for proposal submission process.</p>
                     <div class="flex">
                         <button type="button" class="inline-flex items-center justify-center text-white bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 mt-1 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#4285F4]/55 mb-6">
                             <svg class="w-6 h-6 mr-2 -ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25H15M9 12l3 3m0 0l3-3m-3 3V2.25" />
                             </svg>
-                            Next to Submit Proposal
+                            Next to Submitting Proposal
                         </button>
                         <h5 class="inline-flex items-center mx-4 mb-4 text-2xl font-bold text-gray-700 dark:text-white">{{ $first_percent }}%</h5>
                     </div>
