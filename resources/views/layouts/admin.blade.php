@@ -57,15 +57,5 @@
         {{-- flowbite --}}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
         <script src="https://unpkg.com/flowbite@1.5.5/dist/flowbite.js"></script>
-
-        <script>
-            $(document).ready(function(){
-                window.livewire.on('alert_remove',()=>{
-                    setTimeout(function(){
-                        $(".alert-remove").fadeOut('fast');
-                    }, 3000); // 3 secs
-                });
-            });
-        </script>
     </body>
 </html>

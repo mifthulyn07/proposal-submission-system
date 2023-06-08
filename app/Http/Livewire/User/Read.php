@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Livewire\Proposal;
+namespace App\Http\Livewire\User;
 
+use App\Models\User;
 use Livewire\Component;
-use App\Models\Proposal;
 use Livewire\WithPagination;
 
 class Read extends Component
 {
     use WithPagination;
-
+    
     public $search = '';
-    public $deleteIdProposal;
+    public $deleteIdUser;
 
     // for realtime pagination
     public function updatingSearch()
@@ -21,25 +21,25 @@ class Read extends Component
 
     public function render()
     {
-        return view('livewire.proposal.read', [
-            'proposals' => Proposal::latest()->where('title', 'like', '%'.$this->search.'%')->paginate(12),
+        return view('livewire.user.read', [
+            'users' => User::latest()->where('name', 'like', '%'.$this->search.'%')->paginate(12),
         ]);
     }
 
-    public function editIdProposal($id)
+    public function editIdUser($id)
     {
-        return redirect()->route('proposal.edit', ['proposal' => $id]);
+        return redirect()->route('user.edit', ['user' => $id]);
     }
 
-    public function deleteIdProposal($id)
+    public function deleteIdUser($id)
     {
-        $this->deleteIdProposal = $id;
+        $this->deleteIdUser = $id;
     }
 
-    public function deleteProposal()
+    public function deleteUser()
     {
         try{
-            Proposal::find($this->deleteIdProposal)->delete();
+            User::find($this->deleteIdUser)->delete();
             session()->flash('success', 'Proposal successfully deleted.');
 
             // for hide alert for 3 sec

@@ -1,10 +1,4 @@
----
-title: Tailwind CSS Maintenance Page - Flowbite
-description: Get started with a free and open-source admin dashboard layout built with Tailwind CSS and Flowbite featuring charts, widgets, CRUD layouts, authentication pages, and more
-layout: main
-group: pages
----
-
+! 
 <div class="flex flex-col justify-center items-center px-6 mx-auto h-screen xl:px-0 dark:bg-gray-900">
     <div class="block mb-5 md:max-w-md">
         <img src="/images/illustrations/maintenance.svg" alt="maintenance image">

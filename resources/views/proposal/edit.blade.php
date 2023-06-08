@@ -28,5 +28,5 @@
 @endsection
 
 @section('content')
-    @livewire('proposal.edit', ['proposal_id'=>@intval($id)])
+    @livewire('proposal.edit', ['proposal'=> $proposal])
 @endsection

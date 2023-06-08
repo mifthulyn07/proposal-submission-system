@@ -4,12 +4,11 @@ namespace App\Http\Livewire\Proposal;
 
 use Livewire\Component;
 use App\Models\Proposal;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class Edit extends Component
 {
     public $proposal;
-    public $proposal_id;
     public $empty = false;
 
     public $name;
@@ -19,9 +18,7 @@ class Edit extends Component
 
     public function mount()
     {
-        // masukin ke view
-        $proposal = $this->proposal;
-        $proposal = Proposal::find($this->proposal_id);
+        $proposal = Proposal::find($this->proposal->id);
         if(!empty($proposal)){
             $this->name     = $proposal->name;
             $this->nim      = $proposal->nim;
@@ -38,45 +35,36 @@ class Edit extends Component
         return view('livewire.proposal.edit');
     }
 
-    protected $rules = [
-        'name'  => ['required','max:100'],
-        'nim'   => ['required','max_digits:12','numeric'],
-        'year'  => ['required','max_digits:4','numeric'],
-        'title' => ['required','max:255','unique:proposals,title'],
-    ];
-
     public function updated($propertyName)
     {
-        $this->validateOnly($propertyName);
+        $this->validateOnly($propertyName,[
+            'name'  => ['required','max:100'],
+            'year'  => ['required','max_digits:4','numeric'],
+            'nim'   => ['required','max_digits:12','numeric', 'unique:proposals,nim,'.$this->proposal->id],
+            'title' => ['required','max:255', 'unique:proposals,title,'.$this->proposal->id],
+        ]);
     }
 
     public function update()
     {
        try{
-            //sudah di validate
-            $this->validate([
-                'nim'   => Rule::unique(Proposal::class)->ignore($this->proposal_id),
-                'title' => Rule::unique(Proposal::class)->ignore($this->proposal_id),
+            $validatedData = $this->validate([
+                'name'  => ['required','max:100'],
+                'year'  => ['required','max_digits:4','numeric'],
+                'nim'   => ['required','max_digits:12','numeric', 'unique:proposals,nim,'.$this->proposal->id],
+                'title' => ['required','max:255'],
             ]);
 
-            $proposal = Proposal::find($this->proposal_id);
-
-            $proposal->name     = $this->name;
-            $proposal->nim      = $this->nim;
-            $proposal->year     = $this->year;
-            $proposal->title    = $this->title;
-
+            $proposal = Proposal::find($this->proposal->id)->fill($validatedData);
+            
             $proposal->save();
+
             session()->flash('success', 'Proposal successfully updated.');
 
-            // for hide alert for 3 sec
-            $this->emit('alert_remove');
             return;
         } catch (\Exception $e){
-            session()->flash('error', 'An error occurred while updating the Proposal: '.$e->getMessage());
+            session()->flash('error', $e->getMessage());
 
-            // for hide alert for 3 sec
-            $this->emit('alert_remove');
             return;
         }
     }

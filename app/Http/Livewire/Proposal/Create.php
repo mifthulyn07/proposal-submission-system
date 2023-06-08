@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Proposal;
 
 use Livewire\Component;
 use App\Models\Proposal;
+use Illuminate\Support\Facades\Auth;
 
 class Create extends Component
 {
@@ -34,25 +35,20 @@ class Create extends Component
         try{
             $validatedData = $this->validate();
 
-            //melihat ada perbedaan di nim & title
-            Proposal::firstOrCreate([
-                'nim'   => $validatedData['nim'],
-                'title' => $validatedData['title'],
-                'name'  => $validatedData['name'],
-                'year'  => $validatedData['year'],
-            ]);
+            $proposal = new Proposal();
+            $proposal->fill($validatedData);
+            $proposal->user_id = Auth::user()->id;
+            
+            $proposal->save();
 
             $this->reset();
+
             session()->flash('success', 'Proposal successfully stored.');
 
-            // for hide alert for 3 sec
-            $this->emit('alert_remove');
             return;
         } catch (\Exception $e){
-            session()->flash('error', 'An error occurred while storing the Proposal: '.$e->getMessage());
+            session()->flash('error', $e->getMessage());
 
-            // for hide alert for 3 sec
-            $this->emit('alert_remove');
             return;
         }
     }

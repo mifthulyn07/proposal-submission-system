@@ -1,8 +1,13 @@
 <?php
 
+use App\Models\User;
+use App\Models\Proposal;
 use App\Http\Livewire\Proposal\Edit;
+use App\Http\Livewire\Proposal\Read;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProposalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,9 +35,15 @@ Route::middleware('auth')->group(function () {
 
     Route::view('/add-proposal', 'proposal.create')->name('proposal.create');
     Route::view('/list-proposal', 'proposal.read')->name('proposal.read');
-    Route::get('/edit-proposal/{id}', function($id){
-        return view('proposal.edit', ['id'=>$id]);
+    Route::get('/edit-proposal/{proposal}', function(Proposal $proposal){
+        return view('proposal.edit', ['proposal'=> $proposal]);
     })->name('proposal.edit');
+
+    Route::view('/add-user', 'user.create')->name('user.create');
+    Route::view('/list-user', 'user.read')->name('user.read');
+    Route::get('/edit-user/{user}', function(User $user){
+        return view('user.edit', ['user' => $user]);
+    })->name('user.edit');
 
     Route::view('/similarity', 'similarity.check')->name('similarity.check');
 });
