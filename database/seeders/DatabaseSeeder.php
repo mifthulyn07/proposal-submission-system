@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
             'password'          => Hash::make('developer'),
         ]);
 
-        User::factory()->count(5)->create()->each(function ($user) {
+        User::factory()->count(6)->create()->each(function ($user) {
             Proposal::factory()->create([
                 'user_id'   => $user->id,
                 'name'      => $user->name,

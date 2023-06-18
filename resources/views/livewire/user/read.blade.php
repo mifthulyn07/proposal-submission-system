@@ -105,11 +105,9 @@
                                             <span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Student</span>
                                         @endif
                                     </td>
-                                    <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                        <div>
-                                            <div class="text-light font-semibold">{{ $user->name }}</div>
-                                            <div class="font-normal text-gray-500">{{ $user->email }}</div>
-                                        </div>
+                                    <th scope="row" class="px-6 py-4">
+                                        <div class="text-light font-semibold text-gray-900">{{ $user->name }}</div>
+                                        <div class="font-normal text-gray-500">{{ $user->email }}</div>
                                     </th>
                                     <td class="px-6 py-4">
                                         {{ $user->unique_numbers }}
@@ -168,7 +166,7 @@
     </div>
 </div>
 
-@push('footer-scripts')
+{{-- @push('footer-scripts')
     <script type="text/javascript">
         document.addEventListener('livewire:available', function () {
             window.livewire.on('urlChange', param => {
@@ -176,4 +174,4 @@
             })
         })
     </script>
-@endpush
+@endpush --}}

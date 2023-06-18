@@ -22,7 +22,7 @@ class Read extends Component
     public function render()
     {
         return view('livewire.user.read', [
-            'users' => User::latest()->where('name', 'like', '%'.$this->search.'%')->paginate(12),
+            'users' => User::search($this->search)->paginate(12),
         ]);
     }
 

@@ -90,11 +90,9 @@
                                     <th class="px-4 py-3 font-medium text-xs text-gray-900 whitespace-nowrap dark:text-white">
                                         {{ $proposals->firstItem() + $index }}
                                     </th>
-                                    <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                        <div>
-                                            <div class="text-light font-semibold">{{ $proposal->name }}</div>
-                                            <div class="font-normal text-gray-500">{{ $proposal->nim }}</div>
-                                        </div>
+                                    <th scope="row" class="px-6 py-4">
+                                        <div class="text-light font-semibold text-gray-900">{{ $proposal->name }}</div>
+                                        <div class="font-normal text-gray-500">{{ $proposal->nim }}</div>
                                     </th>
                                     <td class="px-6 py-4">
                                         {{ $proposal->year }}
@@ -146,7 +144,7 @@
     </div>
 </div>
 
-@push('footer-scripts')
+{{-- @push('footer-scripts')
     <script type="text/javascript">
         document.addEventListener('livewire:available', function () {
             window.livewire.on('urlChange', param => {
@@ -154,4 +152,4 @@
             })
         })
     </script>
-@endpush
+@endpush --}}

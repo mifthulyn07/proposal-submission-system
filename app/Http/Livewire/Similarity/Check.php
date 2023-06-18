@@ -1,58 +1,80 @@
 <?php
 
 namespace App\Http\Livewire\Similarity;
-// use Symfony\Component\Process\Process;
 use Livewire\Component;
 use App\Models\Proposal;
-
-use Illuminate\Support\Facades\Process;
-use Symfony\Component\Process\ExecutableFinder;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class Check extends Component
 {
     public $text;
     public $similarities = [];
-    public $first_percent;
+    public $result_cosim = null;
+    // public $me = [];
 
     protected $rules = [
         'text' => 'required',
     ];
 
     public function render()
-    {
-        return view('livewire.similarity.check');
+    {   
+        return view('livewire.similarity.check', [
+            'similarities'  => $this->similarities,
+            'result_cosim'  => $this->result_cosim,
+            // 'me'            => $this->me,
+        ]);
     }
     
     public function checkSimilarities(){
-        $this->validate();
+        // make time limit for executing
         set_time_limit(240);
+
+        $this->validate();
 
         // ambil data
         $text = [
-            'name' => 'data uji',
-            'nim'  => 'data uji',
-            'year' => 'data uji',
+            'name'  => 'data uji',
+            'nim'   => 'data uji',
+            'year'  => 'data uji',
             'title' => $this->text
         ];
+
+        // filter 
+        $search     = trim($this->text);
+        $keywords   = explode(' ', $search);
+        $query      = Proposal::query();
+        foreach ($keywords as $key) {
+            $query->orWhere('title', 'like', "%{$key}%");
+        }
+        $query->get();
+
+        // make an array 
         $corpus = [
-            'name'  => Proposal::select('name')->get()->pluck('name')->toArray(),
-            'nim'   => Proposal::select('nim')->get()->pluck('nim')->toArray(),
-            'year'  => Proposal::select('year')->get()->pluck('year')->toArray(),
-            'title' => Proposal::select('title')->get()->pluck('title')->toArray(),
+            'name'  => $query->pluck('name')->toArray(),
+            'nim'   => $query->pluck('nim')->toArray(),
+            'year'  => $query->pluck('year')->toArray(),
+            'title' => $query->pluck('title')->toArray(),
         ];
-        $similarities = array_merge_recursive($text, $corpus);
-        $similarities = json_encode($similarities);
-        $command = "C:/Users/Administrator/anaconda3/python.exe " . public_path("\cosine_similarity\cosim.py 2>&1 ") . json_encode($similarities);
-        $similarities = exec($command, $output);
-        $similarities = json_decode(json_decode($similarities, true), true);
-        // buang index pertama 
-        $restSimilarities = array_slice($similarities, 1);
-        $similarities = collect($restSimilarities)->sortByDesc('percent')->values();
-        // dd($similarities);
+        $new_cospus = array_merge_recursive($text, $corpus);
+
+        // encode->run->decode
+        $all_similarities = json_encode($new_cospus);
+        $command = "C:/Users/Administrator/anaconda3/python.exe " . public_path("\cosine_similarity\cosim.py 2>&1 ") . json_encode($all_similarities);
+        $all_similarities = exec($command, $output);
+        $all_similarities = json_decode(json_decode($all_similarities));
+
+        // Convert $all_similarities to a collection
+        $all_similarities = collect($all_similarities);
+
+        // ambil semua index kecuali index pertama 
+        $similarities = $all_similarities->slice(1)->sortByDesc('cosim')->values();
         $this->similarities = $similarities;
 
-        $firstSimilarity = $similarities->first(); 
-        $this->first_percent = $firstSimilarity['percent'];
+        // nilai cosim yg paling tinggi 
+        $result_cosim = $all_similarities->first()->cosim;
+        $this->result_cosim = $result_cosim;
+        
+        // ambil index pertama
+        $me = $all_similarities->first(); 
+        // $this->me = $me;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Proposal;
 
+use App\Models\User;
 use Livewire\Component;
 use App\Models\Proposal;
 use Livewire\WithPagination;
@@ -21,8 +22,17 @@ class Read extends Component
 
     public function render()
     {
+        $search = trim($this->search);
+        $keywords   = explode(' ', $search);
+        $query      = Proposal::query();
+        foreach ($keywords as $key) {
+            $query->orWhere('title', 'like', "%{$key}%");
+        }
+
         return view('livewire.proposal.read', [
-            'proposals' => Proposal::latest()->where('title', 'like', '%'.$this->search.'%')->paginate(12),
+            // 'proposals' => Proposal::latest()->where('title', 'like', '%'.$this->search.'%')->paginate(12),
+            // 'proposals' => Proposal::whereRaw("title LIKE CONCAT('%', ?, '%')", [$this->search])->paginate(12),
+            'proposals' => $query->paginate(12),
         ]);
     }
 
