@@ -18,22 +18,20 @@ class DatabaseSeeder extends Seeder
         // Proposal::factory(5)->create();
 
         User::factory()->create([
-            'role'              => 'admin',
+            'role'              => 'coordinator',
             'name'              => 'Developer',
-            'unique_numbers'    => '0702192031',
             'gender'            => 'female',
             'phone'             => '08131234567',
-            'semester'          => 8,
             'email'             => 'developer@example.com',
             'password'          => Hash::make('developer'),
         ]);
 
-        User::factory()->count(6)->create()->each(function ($user) {
-            Proposal::factory()->create([
-                'user_id'   => $user->id,
-                'name'      => $user->name,
-                'nim'       => $user->unique_numbers,
-            ]);
-        });
+        // User::factory()->count(6)->create()->each(function ($user) {
+        //     Proposal::factory()->create([
+        //         'user_id'   => $user->id,
+        //         'name'      => $user->name,
+        //         'nim'       => $user->unique_numbers,
+        //     ]);
+        // });
     }
 }

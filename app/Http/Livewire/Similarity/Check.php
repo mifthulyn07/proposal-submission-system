@@ -17,11 +17,7 @@ class Check extends Component
 
     public function render()
     {   
-        return view('livewire.similarity.check', [
-            'similarities'  => $this->similarities,
-            'result_cosim'  => $this->result_cosim,
-            // 'me'            => $this->me,
-        ]);
+        return view('livewire.similarity.check');
     }
     
     public function checkSimilarities(){
@@ -60,6 +56,7 @@ class Check extends Component
         $all_similarities = json_encode($new_cospus);
         $command = "C:/Users/Administrator/anaconda3/python.exe " . public_path("\cosine_similarity\cosim.py 2>&1 ") . json_encode($all_similarities);
         $all_similarities = exec($command, $output);
+        // dd($output);
         $all_similarities = json_decode(json_decode($all_similarities));
 
         // Convert $all_similarities to a collection
@@ -68,10 +65,11 @@ class Check extends Component
         // ambil semua index kecuali index pertama 
         $similarities = $all_similarities->slice(1)->sortByDesc('cosim')->values();
         $this->similarities = $similarities;
+        dd($similarities);
 
         // nilai cosim yg paling tinggi 
-        $result_cosim = $all_similarities->first()->cosim;
-        $this->result_cosim = $result_cosim;
+        $result_cosim1 = $similarities->first()->cosim;
+        $this->result_cosim = $result_cosim1;
         
         // ambil index pertama
         $me = $all_similarities->first(); 

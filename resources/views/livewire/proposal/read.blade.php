@@ -143,13 +143,3 @@
         </div>
     </div>
 </div>
-
-{{-- @push('footer-scripts')
-    <script type="text/javascript">
-        document.addEventListener('livewire:available', function () {
-            window.livewire.on('urlChange', param => {
-                history.pushState(null, null, param);
-            })
-        })
-    </script>
-@endpush --}}

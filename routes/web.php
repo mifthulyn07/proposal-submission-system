@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Models\Topic;
 use App\Models\Proposal;
 use App\Http\Livewire\Proposal\Edit;
 use App\Http\Livewire\Proposal\Read;
@@ -38,6 +39,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/edit-proposal/{proposal}', function(Proposal $proposal){
         return view('proposal.edit', ['proposal'=> $proposal]);
     })->name('proposal.edit');
+
+    Route::view('/add-topic', 'topic.create')->name('topic.create');
+    Route::view('/list-topic', 'topic.read')->name('topic.read');
+    Route::get('/edit-topic/{topic}', function(Topic $topic){
+        return view('topic.edit', ['topic'=> $topic]);
+    })->name('topic.edit');
 
     Route::view('/add-user', 'user.create')->name('user.create');
     Route::view('/list-user', 'user.read')->name('user.read');

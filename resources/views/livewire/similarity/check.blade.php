@@ -12,8 +12,8 @@
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </div>
-                        <input  wire:model="text" type="search" id="search" class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Let's check your title here!">
-                        <button type="submit" class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+                        <input  wire:model.defer="text" type="search" id="search" class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Let's check your title here!">
+                        <button type="submit" class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Check</button>
                     </div>
                     @error('text') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
                 </form>
@@ -44,40 +44,66 @@
                         </button>
                         <h5 class="inline-flex items-center mx-4 mb-4 text-2xl font-bold text-gray-700 dark:text-white">{{ $result_cosim }}%</h5>
                     </div>
-
-                    @foreach($similarities as $key => $similarity)
-                        @php
-                            $percent = $similarity->cosim;
-                            $colorClass = '';
-                    
-                            if ($percent >= 0 && $percent <= 60) {
-                                $colorClass = 'bg-green-50 border-green-300 text-green-800 hover:bg-green-400';
-                            } elseif ($percent > 65 && $percent <= 85) {
-                                $colorClass = 'bg-yellow-50 border-yellow-300 text-yellow-800 hover:bg-yellow-400';
-                            } elseif ($percent > 85 && $percent <= 100) {
-                                $colorClass = 'bg-red-50 border-red-300 text-red-800 hover:bg-red-400';
-                            }
-                        @endphp
-
-                        <button id="dropdownMenuIconButton{{$similarity->nim_uniquecode}}" data-dropdown-toggle="dropdownDots{{$similarity->nim_uniquecode}}" class="{{$colorClass}} w-full flex justify-between p-3 mb-4 text-sm border rounded-lg" type="button"> 
-                            <span class="font-medium inline-flex text-left">{{$similarity->title}}</span>
-                            <span class="font-medium inline-flex text-left pl-3">({{$similarity->cosim}}%)</span>
-                        </button>
-                        <!-- Dropdown menu -->
-                        <div id="dropdownDots{{$similarity->nim_uniquecode}}" class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
-                            <div class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconButton{{$similarity->nim_uniquecode}}">
-                                <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-                                    <div>{{$similarity->name_summary}}</div>
-                                    <div class="font-medium truncate">{{$similarity->year_link}}</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        @if ($key == 9) @break @endif
-                    @endforeach
-                    
+                    <div class="relative overflow-x-auto rounded-lg">
+                        <table class="rounded-lg w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <thead class="rounded-lg text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Similarity
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Title
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Name/Summary
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Year/Link
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Nim/Result_id
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($similarities as $key => $similarity)
+                                    @php
+                                        $percent = $similarity->cosim;
+                                        $colorClass = '';
+                                
+                                        if ($percent >= 0 && $percent <= 60) {
+                                            $colorClass = 'text-green-800';
+                                        } elseif ($percent > 65 && $percent <= 85) {
+                                            $colorClass = 'text-yellow-800';
+                                        } elseif ($percent > 85 && $percent <= 100) {
+                                            $colorClass = 'text-red-800';
+                                        }
+                                    @endphp
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                        <th scope="row" class="{{$colorClass}} px-6 py-4 font-medium whitespace-nowrap dark:text-white">
+                                            {{$similarity->cosim}}%
+                                        </th>
+                                        <td class="px-6 py-4">
+                                            {{$similarity->title}}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{$similarity->name_summary}}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{$similarity->nim_uniquecode}}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{$similarity->year_link}}
+                                        </td>
+                                    </tr>
+                                    @if ($key == 9) @break @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             @else
+                {{-- image --}}
                 <div class="m-4">
                     <div class="flex flex-col justify-center items-center px-6 mx-auto xl:px-0 dark:bg-gray-900">
                         <div class="block max-w-sm">

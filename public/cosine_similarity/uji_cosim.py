@@ -3,6 +3,7 @@ import timeit
 import multiprocessing as mp
 import json
 import numpy as np
+import pandas as pd
 import nltk 
 nltk.download('stopwords', quiet=True)
 
@@ -13,16 +14,17 @@ from serpapi import GoogleSearch
 #==================================================
 
 def preprocess_text(text):
-    # case folding: remover number, removing punctuation=tanda baca, removing whitespace
+    # remover number
     import re 
+    remover_number = re.sub(r"\d+", "", text)
+
+    # remover punctuation 
     import string
-    text = re.sub(r"\d+", "", text)
-    text = text.translate(str.maketrans('','',string.punctuation))      
-    text = text.strip()
+    remover_punctuation = remover_number.translate(str.maketrans('','',string.punctuation))  
 
     # Tokenization = memecah tiap kalimat menjadi array
     from nltk.tokenize import word_tokenize #tokenezing
-    tokenized_text = word_tokenize(text)
+    tokenized_text = word_tokenize(remover_punctuation)
 
     # Stop Words = menghapus kata kata yang tidak penting = filtering
     from nltk.corpus import stopwords
@@ -42,7 +44,15 @@ def preprocess_text(text):
     stemmer = factory.create_stemmer()
     stemmed_text = [stemmer.stem(word) for word in stopwords_removed]
 
-    return stemmed_text
+    df = pd.DataFrame({
+        'remover_number'        : [remover_number],
+        'remover_punctuation'   : [remover_punctuation],
+        'tokenization'          : [tokenized_text],
+        'stop_words'            : [stopwords_removed],
+        'stemming'              : [stemmed_text]
+    })
+
+    return df
         
 def calculate_tfidf(corpus):
     # make each array row from stopwords_removed to be a sentence
@@ -124,38 +134,228 @@ def google_scholar_api(search):
 #=================================================
 
 if __name__ == '__main__':
-    start = timeit.default_timer()
+    # start = timeit.default_timer()
 
     # print(cosim(sys.argv[1]))
-    # data = '{"name":["data uji","Prof. Tre Dickens I","Dewitt OConnell","Clinton Parker","Colt Kulas III","Amari Abshire","Miftahul Ulyana Hutabarat"],"nim":["data uji","5263567944","3999377246","5726988875","8162648794","9192394583","0702192031"],"year":["data uji","1974","2021","2013","2013","1991","2021"],"title":["Sistem informasi manajemen aset","Rancang Bangun Sistem Informasi Manajemen Aset","Rancang Bangun Sistem Informasi Pengajuan Judul Tugas Akhir Mahasiswa","Rancang dan Bangun Sistem Aplikasi E-Commerce","Rancang dan Bangun Sistem Informasi Geografis Sekolah","Rancang Bangun Sistem Pendukung Keputusan Gizi Balita","Rancang Rancang Bangun Sistem Informasi Manajemen Uang"]}'
+    data = {"name":["data uji","Prof. Tre Dickens I","Dewitt OConnell","Clinton Parker","Colt Kulas III","Amari Abshire","Miftahul Ulyana Hutabarat"],"nim":["data uji","5263567944","3999377246","5726988875","8162648794","9192394583","0702192031"],"year":["data uji","1974","2021","2013","2013","1991","2021"],"title":["Sistem informasi manajemen aset","Rancang Bangun Sistem Informasi Manajemen Aset","Rancang Bangun Sistem Informasi Pengajuan Judul Tugas Akhir Mahasiswa","Rancang dan Bangun Sistem Aplikasi E-Commerce","Rancang dan Bangun Sistem Informasi Geografis Sekolah","Rancang Bangun Sistem Pendukung Keputusan Gizi Balita","Rancang Rancang Bangun Sistem Informasi Manajemen Uang"]}
     # data ='{"name":["data uji","Ms. Willa Doyle MD","Cruz Osinski","Lue Hermann","Destiney Sawayn","Mr. Ludwig Zieme V","Destiny Kuvalis","Allene Tromp III","Prof. Velva DAmore","Christopher Lueilwitz","Stephon Mertz","Henriette Abshire","Verdie Fadel","Mr. Nicola Barrows","Ezekiel Rolfson","Dr. Emanuel Hamill Jr.","Prof. Shad Bruen","Moses Murphy Jr.","Savannah Kuhn Jr.","Eddie Murray Jr.","Andres Mertz","Eddie Nader DVM","Dr. Elbert Rodriguez","Jude Rogahn","Jovanny Kuvalis","Dr. Floyd Grimes","Dr. Broderick Gusikowski IV","Olin Tremblay","Savion Marks","Hector Botsford","Schuyler Smith","Berry Toy","Miss Larissa Bernhard IV","Dr. Tia Rohan","Mrs. Zelma Dooley","Christelle Brekke","Ms. Shanna Jast DDS","Mattie Kohler","Leonie Nader","Emory Cartwright","Dr. Gilda Rolfson DDS","Grant Jast","Darryl Windler","Antonio Schoen","Freeda Bednar","Magnus Dibbert","Prof. Flossie Rodriguez","Prof. Isobel Prohaska IV","Eriberto White","Jaqueline Willms PhD","Adrain Denesik III","Ms. Rosalind Hilpert III","Estella White I","Shawn Feeney MD","Miss Rosalyn Russel DVM","Thelma Balistreri III","Brandy Herzog","Pansy Smitham DVM","Esther Beahan","Jocelyn Thiel","Obie King DDS","Skylar VonRueden","August Denesik","Eduardo Hartmann","Thelma Stoltenberg","Dillon Upton III","Hosea Crooks","Wava Wunsch","Crystal Orn","Jared Torphy MD","Emilia Runolfsson","Alexandrea Greenholt","Rex Auer","Dr. Ladarius Skiles Sr.","Ephraim Howell","Miss Rosanna Greenfelder IV","Mikayla Ward","Laisha Strosin","Mr. Jaycee Ondricka I","Adella Botsford","Kylee Hane","Charlie Jacobi Jr.","Jackeline OConner","Jazmin Williamson","Shanna Haag","Ms. Destinee Jakubowski","Kolby Kutch","Jules Jakubowski","Cordelia Rath","Bernadette VonRueden PhD","Salvador Rogahn","Quinn Ankunding","Michel Sawayn","Rosalind OHara","Damaris Kunde","Donny Nolan","Marcos Schinner","Eloy Swift","Fidel Murphy","Marielle Schulist","Prof. Silas Nader DVM"],"nim":["data uji","5670411746","8807880419","8853809997","8665955503","6809140023","9446458386","4851426245","8732753941","7306533835","4619893902","7499349934","4397328023","4064928423","9858086482","9607356348","7444303889","3191387318","4361237221","4841126862","1181800492","5769405897","2687917928","1859894798","5391793995","8829134928","2515528214","4597997020","5438902603","3508841930","4383154123","4509774732","3407010712","9959201945","5069433486","5778509831","1864392298","6176304333","4877014921","3935292619","3084858247","7709949199","5383100264","9510950648","8335775397","6437094700","5659024505","7876415182","8717216391","5794497884","4822657029","3806585663","6261681013","8169342257","1062032876","9196841252","5865476866","7710416869","4389457890","4970591966","6728252880","9397161921","2310983063","9432955123","1145670061","4503654056","5595265215","7238865039","3763067766","7274041385","4644067377","2695943037","5703736499","1599179289","6313907867","9619713687","1341201429","9698830485","5846201819","4386571562","3523200401","9068644059","3536901095","9427220616","2859752262","7504000567","6556571447","2269138388","9878690370","7971182657","5274288884","6693515830","6829468281","4978322268","6651354103","2436281957","4821414478","5465674407","4169433157","6136417421","1388937750"],"year":["data uji","1986","1994","2016","2013","2023","2019","1979","1986","2008","2000","2011","1970","2016","2020","2002","2005","1985","1992","1982","2005","2019","1992","2008","2006","1980","1991","1999","2018","2016","1998","1987","2017","1999","2019","1982","1998","2019","1983","2021","1977","2021","1974","1995","1974","2018","1986","1988","2010","1974","1971","1986","1996","1972","2019","2000","1984","1994","1997","1984","1974","2010","1993","2018","2016","1989","1994","2023","2014","1994","2010","1992","1985","1994","1992","2000","1975","2003","1971","1984","2007","2015","1977","2018","1976","2021","1988","1971","2020","2004","2005","2018","1998","1989","2016","1980","2010","1988","2008","1975","2003"],"title":["sistem informasi uang desa","Aplikasi pedesaan","sistem informasi perudang-undangan","Sistem informasi geografis aplikasi","Sit a dolor minima aperiam sit.","Quia tempora molestiae eveniet veritatis officia in est.","Quidem placeat modi inventore qui eveniet ut fugiat.","Ut incidunt autem beatae aut ipsum.","Et adipisci iure vitae vitae qui.","Vel sit atque rem.","Nihil voluptas et sapiente vel voluptatem.","Unde est ut officiis quibusdam facere tenetur est accusantium.","Similique eos expedita labore aliquam porro officia porro.","Voluptatem numquam illo nemo inventore accusantium voluptates ut quidem.","Atque molestias provident occaecati nemo sequi repellendus qui voluptatem.","Est occaecati non et labore consequuntur nihil.","Error quis nulla et earum dolorem suscipit deleniti.","Labore rem minima omnis sint veritatis.","Perferendis consequuntur ut quae qui.","Dolore ducimus vel eligendi sit modi.","Aut magnam quam est rem eos qui.","Et unde laudantium possimus.","Ut autem aspernatur eos vel nesciunt sint.","Molestiae sequi error ad perferendis.","Autem eveniet non beatae.","Repellat nihil ullam aspernatur inventore saepe dignissimos quam.","Repellat dignissimos quisquam commodi.","Quo molestiae fuga aut sed nemo.","Quam quo quis non.","Iste praesentium sit laboriosam perspiciatis.","Aut enim et cum corrupti.","Consequatur illum ab harum voluptate quia.","Nostrum ea est ratione.","Qui fugit nam ut natus.","Ipsa repellat quod ipsam magnam expedita laudantium et.","Delectus qui iure ea quibusdam sit.","Accusamus dolor rerum ea cum voluptatem laborum reprehenderit.","Neque et sed ut.","Fuga sit ratione ut aut.","Voluptatem magnam eum ut voluptatibus.","Ad fugiat blanditiis culpa magni.","Vero distinctio at quis autem officia corporis reiciendis.","Rem aspernatur veritatis repellendus quibusdam beatae consequuntur.","Laborum sit totam aut odit fugit optio.","Debitis voluptatem doloremque recusandae distinctio eos.","A labore eos omnis vel error.","Iusto ea fuga vitae iusto praesentium aperiam et.","Rerum ut rem eius.","Quo vitae qui sed harum.","Qui qui architecto impedit et quia sunt qui et.","Qui aut enim necessitatibus cum.","Laborum sed fugit voluptatibus velit.","Sequi laboriosam quia enim ut dolorem similique ratione et.","Recusandae repellat in omnis tempore est molestiae odit nisi.","Vel ut dignissimos omnis cupiditate.","Voluptate aliquid a quidem aut.","Sed officia dignissimos quo est deserunt.","Maxime numquam nam exercitationem dolorem rerum.","Aut rerum atque dolorum reiciendis aperiam sunt facilis.","Amet magni mollitia minima minus porro.","Consequatur libero odit in corporis ipsum.","Earum ut ut dicta possimus id.","Laudantium qui fugit et et.","Quos ut quia ipsam sunt in vero dolorem.","Perferendis consequatur eum a reiciendis.","Dolorem ut autem sunt voluptates voluptatum.","Et cupiditate libero occaecati qui temporibus deleniti.","Aliquam sunt reprehenderit voluptate reiciendis aut perferendis.","Voluptatem neque quos et voluptatem ipsa totam recusandae.","Quae veritatis sunt iure sunt perspiciatis iure earum.","Ea voluptatibus quas eligendi et doloremque.","Velit incidunt ut minima suscipit ea.","Voluptatum molestiae sit qui.","Neque et aut eos sed.","Aut eos dolore veritatis ea nam ab.","Laborum quidem et autem debitis error sed corporis.","Necessitatibus eos id quo expedita error qui tempora.","Et dignissimos provident fugiat dolor eveniet et.","Voluptatem quia temporibus est voluptatem numquam beatae similique accusamus.","Adipisci fugiat adipisci exercitationem dolores molestiae.","Vel sit impedit accusamus a autem et ut.","Sint dolorem occaecati eligendi praesentium.","Iusto eum facilis quis blanditiis.","Eligendi enim ab sed et tempore sint odit aperiam.","Enim consequatur nihil quidem vel.","Omnis iusto quo asperiores dolore hic provident.","Non et cumque sapiente voluptate perferendis quod maxime possimus.","Deleniti qui qui ea quis omnis aliquam sunt.","Voluptatem tempore assumenda nobis molestiae repudiandae.","Quae consequatur dolore voluptates qui quae molestiae.","Est ut exercitationem saepe quis similique.","Delectus delectus qui veniam eos velit dicta.","Deserunt temporibus omnis doloremque ea molestiae ipsum harum.","Natus ab qui tempora.","Mollitia magnam autem nulla ut voluptate et mollitia.","Assumenda natus consequatur magnam quia quis aut.","Itaque quisquam expedita sed.","Id delectus praesentium accusantium sed provident dolorum.","Molestiae aut sunt quis illum.","Dolore modi fugit aliquid aut qui numquam qui.","Harum odit ipsam qui eius."]}'
     
-    # data from laravel
-    import sys
-    data            = json_decode(sys.argv[1])
-    corpus_laravel  = data[:, 3]
+    corpus  = data['title']
+    data1 = pd.DataFrame(columns=['remover_number', 'remover_punctuation', 'tokenization', 'stop_words', 'stemming'])
+    for item in corpus:
+        preprocessing = preprocess_text(item)
+        preprocessing_result = pd.concat([data1, preprocessing], ignore_index=True)
+    print(data1)
 
-    # data from google scholar 
-    data_api    = google_scholar_api(data[0, 3])
-    corpus_api  = data_api[:, 3]
+    # for item in corpus:
+    #     preprocessed_item = preprocess_text(item)
+    #     data1.append(preprocessed_item)
 
-    # satukan corpus_data dan corpus_api
-    corpus = np.concatenate((corpus_laravel, corpus_api))
+    # for item in data:
+    #     # Extract informasi dari corpus
+    #     name = item[0]
+    #     nim  = item[1]
+    #     year = item[2]
+    #     text = item[3]
 
-    # run
-    pool = mp.Pool()
-    preprocess_result = pool.map(preprocess_text, corpus)
-    tfidf_result = calculate_tfidf(preprocess_result)
-    cosim_result = cosineSimilarity(tfidf_result)
-    pool.close()
-    pool.join()
+    #     # Preprocessing
+    #     result_df = preprocess_text(text)
 
-    stop = timeit.default_timer()
-    execution_time = stop - start
+    #     # masukkan value item ke dalam kolom
+    #     result_df['Name'] = name
+    #     result_df['Nim']  = nim
+    #     result_df['Year'] = year
+    
+    #     # satukan hasil preprocessing ke DataFrame utama sesuai dengan nama
+    #     df = pd.concat([df, result_df], ignore_index=True)
+    
 
-    # encode json
-    result = json_encode(data, data_api, cosim_result, execution_time)
 
-    print(result)
+
+
+    # # data from google scholar 
+    # data_api    = google_scholar_api(data[0, 3])
+    # corpus_api  = data_api[:, 3]
+
+    # # satukan corpus_data dan corpus_api
+    # corpus = np.concatenate((corpus_laravel, corpus_api))
+
+    # # run
+    # pool = mp.Pool()
+    # preprocess_result = pool.map(preprocess_text, corpus)
+    # tfidf_result = calculate_tfidf(preprocess_result)
+    # cosim_result = cosineSimilarity(tfidf_result)
+    # pool.close()
+    # pool.join()
+
+    # stop = timeit.default_timer()
+    # execution_time = stop - start
+
+    # # encode json
+    # result = json_encode(data, data_api, cosim_result, execution_time)
+
+    # print(result)
     # print(execution_time)
     
+
+# #!C:/Users/Administrator/anaconda3/python.exe
+# import sys
+# import json
+
+# #import library
+# import pandas as pd
+# import numpy as np
+
+# #dibaca oleh laravel 
+# import sys
+# import json
+
+# #untuk preprocessing
+# import nltk 
+# from nltk.tokenize import word_tokenize #tokenezing
+# from nltk.corpus import stopwords #stopwords
+# from Sastrawi.Stemmer.StemmerFactory import StemmerFactory #stemming
+# import re #cleaning
+
+# #Untuk Tf-IDF
+# from sklearn.feature_extraction.text import TfidfVectorizer
+
+# #untuk cosine similarity
+# from sklearn.metrics.pairwise import cosine_similarity
+
+# nltk.download('stopwords', quiet=True)
+
+# #=================================================
+
+# similarity = sys.argv[1]
+
+# # corpus = '{"name":["data uji","Miftahul Ulyana Hutabarat","Developer","Developer","Developerr","Developer","Miftahul Ulyana Hutabarat","Miftahul Ulyana Hutabarat","Miftahul Ulyana Hutabarat","Developer","vdfvd","Miftahul Ulyana Hutabarat","Developer","Developer","Miftahul Ulyana Hutabarat","Miftahul Ulyana Hutabarat","Miftahul Ulyana Hutabarat","Developer","Developer","Developer","Miftahul Ulyana Hutabarat","cindai","Developer","Miftahul Ulyana Hutabarat","Developer","Developer","Miftahul Ulyana Hutabarat","Developer","Miftahul Ulyana Hutabarat","Developer","Miftahul Ulyana Hutabarat","Developer","Miftahul Ulyana Hutabarat","Miftahul Ulyana Hutabarat","Miftahul Ulyana Hutabarat","Miftahul Ulyana Hutabarat"],"nim":["data uji","0702192031","0702192031","0702192031","0702192031","0702192031","0702192031","0702192031","0702192031","0702192031","0702192031","0702192031","0702192031","0702192031","0702192031","0702192031","0702192031","0702192031","0702192031","0702192032","0702192033","333313","0702192031","0702192031","53252","0702192031","0702192031","0702192031","0702192031","0702192031","0702192031","07021920390","0702192032","0702192031","07021920309","0702192039"],"year":["data uji","2023","2023","2021","2021","2023","2023","2023","2023","2023","2023","2023","2023","2023","2023","2023","2023","2023","2023","4323","3454","4322","2023","2021","1234","4323","3454","3454","4322","2021","4323","4322","4322","3454","7586","2021"],"title":["cindai","nkjiuhilj","fvfdv","apalahkauni","apalahauni","fsfes","vbdvs","dfvsdfv","dcdscs","vvwc","vefvv","cdcdc","bhgth","jbjh","cfdsd","dscs","cdscds","cdca","edad","vva","dvvsdf","fafds","sgverv","xbzsb","dbvsb","jkbkb","hbjh"," hjmbmn","hjhg","bjhkj","etheh","jvmhsvvs","gvmjh","hghg","csCSdvdsv","fsvdfvdfv"]}'
+# # corpus = json.loads(corpus)
+
+# # name    = corpus['name']
+# # nim     = corpus['nim']
+# # year    = corpus['year']
+# # title   = corpus['title']
+
+# # corpus_combined = list(zip(name, nim, year, title))
+
+# # cosim = preprocess_tfidf_cosim(corpus_combined)
+
+# # data_dict = cosim.to_dict(orient='records')
+# # cosim = json.dumps(data_dict)
+
+# print(similarity)
+
+# #==================================================
+
+# def preprocess_text(text):
+#     # Lowercasing
+#     lowercased_text = text.lower()
+
+#     # Cleaning
+#     cleaned_text = re.sub(r'[^\w\s]', '', lowercased_text)
+
+#     # Tokenization
+#     tokenized_text = word_tokenize(cleaned_text)
+
+#     # Stemming
+#     factory = StemmerFactory()
+#     stemmer = factory.create_stemmer()
+#     stemmed_text = [stemmer.stem(word) for word in tokenized_text]
+
+#     # Unique Words
+#     unique_words = list(set(stemmed_text))
+
+#     # Stop Words
+#     stopwords_indonesia = set(stopwords.words('indonesian'))
+#     stopwords_removed = [word for word in unique_words if word not in stopwords_indonesia]
+
+#     # Create DataFrame
+#     df = pd.DataFrame({
+#         'Original Text': [text],
+#         'Lowercasing' : [lowercased_text],
+#         'Cleaning': [cleaned_text],
+#         'Tokenization': [tokenized_text],
+#         'Stemming': [stemmed_text],
+#         'Unique Words': [unique_words],
+#         'Stop Words': [stopwords_removed]
+#     })
+
+#     return df
+    
+# #==================================================
+
+# def preprocess_tfidf_cosim(corpus):  
+        
+#     def preprocessing(corpus):
+#         # Create DataFrames kosong
+#         df = pd.DataFrame(columns=['Name', 'Nim', 'Year', 'Original Text'])
+
+#         #preprocessing dan memasukkan kedalam df
+#         for item in corpus:
+#             # Extract informasi dari corpus
+#             name = item[0]
+#             nim  = item[1]
+#             year = item[2]
+#             text = item[3]
+
+#             # print(len(text))
+#             # Preprocessing
+#             result_df = preprocess_text(text)
+
+#             # masukkan value item ke dalam kolom
+#             result_df['Name'] = name
+#             result_df['Nim']  = nim
+#             result_df['Year'] = year
+            
+#             # satukan hasil preprocessing ke DataFrame utama sesuai dengan nama
+#             df = pd.concat([df, result_df], ignore_index=True)
+#         return df
+    
+#     def tfidf(corpus):
+#         #paggil hasil preprocessing
+#         df = preprocessing(corpus)
+        
+#         #membuat kolom baru dengan header kosong dan join setelah stopwords, memasukkan nilai bobot disetiap header yg kosong
+#         vectorizer = TfidfVectorizer()
+#         tfidf_matrix = vectorizer.fit_transform(df['Stop Words'].apply(' '.join))
+        
+#         #ambil kata dari array stopwords untuk di jadikan header
+#         feature_names = vectorizer.get_feature_names_out()
+        
+#         #satukan judul header dan bobotnya
+#         df_tfidf = pd.DataFrame(tfidf_matrix.toarray(), columns=feature_names)
+#         df_tfidf = pd.concat([df, df_tfidf], axis=1)
+        
+#         return df_tfidf
+    
+#     def cosineSimilarity(corpus):
+#         df_tfidf = tfidf(corpus)
+        
+#         # Mengambil vektor TF-IDF untuk item pertama (index 0)
+#         vector1 = df_tfidf.iloc[0, 10:].values.reshape(1, -1)
+
+#         # Mengambil vektor TF-IDF untuk semua item kecuali item pertama
+#         #vectors = tfidf_df.iloc[1:, 10:].values
+#         vectors = df_tfidf.iloc[:, 10:].values
+
+#         # Menghitung cosine similarity antara item pertama dan semua item lainnya
+#         cosim = cosine_similarity(vector1, vectors)
+        
+#         cosim = pd.DataFrame(cosim)
+#         # Mengubah DataFrame menjadi array satu dimensi
+#         cosim = cosim.values.flatten()
+
+#         # Mengubah hasil cosine similarity menjadi DataFrame
+#         df_cosim = pd.DataFrame(cosim, columns=['cosim'])
+
+#         #menghitung persenan
+#         df_cosim['percent'] = df_cosim['cosim'] * 100
+        
+#         # Menggabungkan array TF-IDF dengan hasil cosine similarity
+#         df_cosim = pd.concat([df_tfidf, df_cosim], axis=1)
+
+#         return df_cosim
+    
+#     return cosineSimilarity(corpus)
+

@@ -3,11 +3,14 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Student;
+use App\Models\Lecturer;
+use Laravel\Scout\Searchable;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Laravel\Scout\Searchable;
 
 class User extends Authenticatable
 {
@@ -22,10 +25,9 @@ class User extends Authenticatable
     protected $fillable = [
         'role',
         'name',
-        'unique_numbers',
         'gender',
         'phone',
-        'semester',
+        'image',
         'email',
         'password',
     ];
@@ -50,9 +52,14 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function proposal()
+    public function lecturer(): HasOne
     {
-        return $this->hasMany(Proposal::class);
+        return $this->hasOne(Lecturer::class);
+    }
+
+    public function student(): HasOne
+    {
+        return $this->hasOne(Student::class);
     }
 
     public function toSearchableArray(): array
@@ -60,7 +67,6 @@ class User extends Authenticatable
         return [
             'role'          => $this->role,
             'name'          => $this->name,
-            'unique_numbers'=> $this->unique_numbers,
             'gender'        => $this->gender,
             'phone'         => $this->phone,
             'email'         => $this->email,

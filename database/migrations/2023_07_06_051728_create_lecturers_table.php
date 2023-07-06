@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('proposals', function (Blueprint $table) {
+        Schema::create('lecturers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('name');
-            $table->string('nim');
-            $table->string('title');
-            $table->string('year');
+            $table->unsignedBigInteger("user_id");
+            $table->string("nip");
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            // "cascade" -> if row users is deleted, id student is deleted too  
+            $table->foreign("user_id")->references("id")->on("users")->cascadeOnDelete();
         });
     }
 
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('proposals');
+        Schema::dropIfExists('lecturers');
     }
 };

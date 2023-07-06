@@ -18,12 +18,10 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'role'              => fake()->randomElement(['admin', 'lecturer', 'student']),
+            'role'              => fake()->randomElement(['coordinator', 'lecturer', 'student']),
             'name'              => fake()->name(),
-            'unique_numbers'    => $this->faker->unique()->numberBetween(1000000000,9999999999),
             'gender'            => fake()->randomElement(['male', 'female']),
             'phone'             => fake()->phoneNumber(),
-            'semester'          => $this->faker->numberBetween(1, 12),
             'email'             => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password'          => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
