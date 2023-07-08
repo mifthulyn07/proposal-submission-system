@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lecturers', function (Blueprint $table) {
+        Schema::create('user_role', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("user_id");
-            $table->string("nip")->nullable();
+            $table->unsignedBigInteger("role_id");
             $table->timestamps();
 
-            // "cascade" -> if row users is deleted, id student is deleted too  
-            $table->foreign("user_id")->references("id")->on("users")->cascadeOnDelete();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+            
+            $table->primary(['user_id', 'role_id']);
         });
     }
 
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lecturers');
+        Schema::dropIfExists('user_role');
     }
 };

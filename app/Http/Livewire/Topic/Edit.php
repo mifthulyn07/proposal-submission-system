@@ -30,32 +30,27 @@ class Edit extends Component
         return view('livewire.topic.edit');
     }
 
+    protected $rules = [
+        'name'  => ['required','max:100'],
+        'date'  => ['required'],
+    ];
+
     public function updated($propertyName)
     {
-        $this->validateOnly($propertyName,[
-            'name'  => ['required','max:100'],
-            'date'  => ['required'],
-        ]);
+        $this->validateOnly($propertyName);
     }
 
     public function update()
     {
        try{
-            $validatedData = $this->validate([
-                'name'  => ['required','max:100'],
-                'date'  => ['required'],
-            ]);
-
-            $topic = Topic::find($this->topic->id)->fill($validatedData);
-            
+            $validatedData = $this->validate();
+            $topic = Topic::findOrFail($this->topic->id)->fill($validatedData);
             $topic->save();
 
             session()->flash('success', 'Topic successfully updated.');
-
             return;
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
-
             return;
         }
     }

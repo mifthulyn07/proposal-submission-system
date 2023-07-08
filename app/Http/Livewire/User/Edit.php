@@ -3,22 +3,22 @@
 namespace App\Http\Livewire\User;
 
 use App\Models\User;
+use App\Models\Student;
 use Livewire\Component;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
+use App\Models\Lecturer;
+use Illuminate\Validation\Rules;
+
 
 class Edit extends Component
 {
     public $user;
     public $empty = false;
 
-    public $role;
     public $name;
-    public $unique_numbers;
+    public $email;
+    public $role;
     public $gender;
     public $phone;
-    public $semester;
-    public $email;
     public $password;
     public $password_confirmation;
 
@@ -31,15 +31,11 @@ class Edit extends Component
     {
         $user = User::find($this->user->id);
         if(!empty($user)){
-            $this->role                 = $user->role;
             $this->name                 = $user->name;
-            $this->unique_numbers       = $user->unique_numbers;
+            $this->email                = $user->email;
+            $this->role                 = $user->role;
             $this->gender               = $user->gender;
             $this->phone                = $user->phone;
-            $this->semester             = $user->semester;
-            $this->email                = $user->email;
-            // $this->password             = $user->password;
-            // $this->password_confirmation= $user->password_confirmati;
         }else{
             // for 404 not found
             $this->empty = true;
@@ -48,36 +44,38 @@ class Edit extends Component
 
     public function updated($propertyName)
     {
-        $this->validateOnly($propertyName,[
-            'role'                  => ['required', 'in:admin,lecturer,student'],
-            'name'                  => ['required', 'max:100'],
-            'unique_numbers'        => ['max_digits:12', 'numeric', 'unique:users,unique_numbers,'.$this->user->id],
-            'gender'                => ['in:male,female'],
-            'phone'                 => ['numeric', 'unique:users,phone,'.$this->user->id],
-            // 'semester'              => ['max:2', 'numeric'],
-            'email'                 => ['required', 'email', 'max:255', 'unique:users,email,'.$this->user->id],
-            'password'              => ['confirmed'],
-            'password_confirmation' => ['same:password'],
+        $validatedData = $this->validateOnly($propertyName, [
+            'name'   => ['required', 'max:100'],
+            'email'  => ['required', 'email', 'max:255', 'unique:users,email,'.$this->user->id],
+            'role'   => ['required', 'in:coordinator,lecturer,student'],
+            'gender' => ['in:male,female'],
+            'phone'  => ['numeric', 'unique:users,phone,'.$this->user->id],
         ]);
+
+        if (isset($validatedData['password']) || isset($validatedData['password_confirmation'])) {
+            $validatedData['password'] = Rules\Password::defaults();
+            $validatedData['password_confirmation'] = ['same:password'];
+        }
     }
 
     public function update()
     {
        try{
             $validatedData = $this->validate([
-                'role'                  => ['required', 'in:admin,lecturer,student'],
-                'name'                  => ['required', 'max:100'],
-                'unique_numbers'        => ['max_digits:12', 'numeric', 'unique:users,unique_numbers,'.$this->user->id],
-                'gender'                => ['in:male,female'],
-                'phone'                 => ['numeric', 'unique:users,phone,'.$this->user->id],
-                // 'semester'              => ['max:2', 'numeric'],
-                'email'                 => ['required', 'email', 'max:255', 'unique:users,email,'.$this->user->id],
-                'password'              => ['confirmed'],
-                'password_confirmation' => ['same:password'],
+            'name'   => ['required', 'max:100'],
+            'email'  => ['required', 'email', 'max:255', 'unique:users,email,'.$this->user->id],
+            'role'   => ['required', 'in:coordinator,lecturer,student'],
+            'gender' => ['in:male,female'],
+            'phone'  => ['numeric', 'unique:users,phone,'.$this->user->id],
             ]);
 
-            $user = User::find($this->user->id);
+            // jika password diisi saja
+            if (isset($validatedData['password']) || isset($validatedData['password_confirmation'])) {
+                $validatedData['password'] = Rules\Password::defaults();
+                $validatedData['password_confirmation'] = ['same:password'];
+            }
 
+            $user = User::findOrFail($this->user->id);
             if (!empty($validatedData['password'])) {
                 // Jika password baru diisi, update password
                 $user->password = $validatedData['password'];
@@ -86,13 +84,41 @@ class Edit extends Component
                 $validatedData['password'] = $this->user->password;
             }
             $user->fill($validatedData);
-
-            $this->reset(['password', 'password_confirmation']);
-
+            // jika ada perubahan di database 
+            if($user->isDirty('role')){
+                if($user->role == 'lecturer'){
+                    $lecturer = new Lecturer();
+                    $lecturer->user_id = $user->id;
+                    $lecturer->save();
+                    
+                    $student = Student::where('user_id', $user->id);
+                    if($student->exists()){
+                        $student->delete();
+                    }
+                }elseif($user->role == 'student'){
+                    $student = new Student();
+                    $student->user_id = $user->id;
+                    $student->save();
+                    
+                    $lecturer = Lecturer::where('user_id', $user->id);
+                    if($lecturer->exists()){
+                        $lecturer->delete();
+                    }
+                }else{
+                    $student = Student::where('user_id', $user->id);
+                    $lecturer = Lecturer::where('user_id', $user->id);
+                    
+                    if($student->exists()){
+                        $student->delete();
+                    }elseif($lecturer->exists()){
+                        $lecturer->delete();
+                    }
+                }
+            }
             $user->save();
 
-            session()->flash('success', 'Proposal successfully updated.');
-
+            $this->reset(['password', 'password_confirmation']);
+            session()->flash('success', 'User successfully updated.');
             return;
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());

@@ -26,9 +26,9 @@ class Student extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function lecturer(): BelongsTo
+    public function dosen_pa(): BelongsTo
     {
-        return $this->belongsTo(Lecturer::class);
+        return $this->belongsTo(Lecturer::class, 'foreign_key');
     }
 
     public function proposal(): HasOne

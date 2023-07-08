@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use App\Models\Lecturer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,8 +19,10 @@ class StudentFactory extends Factory
     public function definition(): array
     {
         return [
-            'unique_numbers'    => $this->faker->unique()->numberBetween(1000000000,9999999999),
-            
+            'user_id'       => User::factory(),
+            'dosen_pa_id'   => Lecturer::factory(),
+            'nim'           => fake()->unique()->numberBetween(1000000000,9999999999),
+            'class'         => "Sistem Informasi-".fake()->numberBetween(1, 6),
         ];
     }
 }

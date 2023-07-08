@@ -40,13 +40,13 @@ class Read extends Component
     {
         try{
             User::find($this->deleteIdUser)->delete();
-            session()->flash('success', 'Proposal successfully deleted.');
+            session()->flash('success', 'User successfully deleted.');
 
             // for hide alert for 3 sec
             $this->emit('alert_remove');
             return;
         } catch (\Exception $e){
-            session()->flash('error', 'An error occurred while deleting the Proposal: '.$e->getMessage());
+            session()->flash('error', 'An error occurred while deleting the User: '.$e->getMessage());
 
             // for hide alert for 3 sec
             $this->emit('alert_remove');

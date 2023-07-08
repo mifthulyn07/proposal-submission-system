@@ -18,10 +18,10 @@ class ProposalFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'  => $this->faker->name(),
-            'nim'   => $this->faker->unique()->numberBetween(1000000000,9999999999),
-            'year'  => $this->faker->year(),
-            'title' => $this->faker->sentence(),
+            'name'  => fake()->name(),
+            'nim'   => fake()->unique()->numberBetween(1000000000,9999999999),
+            'year'  => fake()->year(),
+            'title' => fake()->sentence(),
         ];
     }
 }

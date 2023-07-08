@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->enum('role', ['coordinator', 'lecturer', 'student']);
             $table->string('name');
             $table->enum('gender', ['male', 'female'])->nullable();
             $table->string('phone')->nullable();

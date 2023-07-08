@@ -3,18 +3,18 @@
 namespace App\Http\Livewire\User;
 
 use App\Models\User;
+use App\Models\Student;
 use Livewire\Component;
+use App\Models\Lecturer;
 use Illuminate\Validation\Rules;
 
 class Create extends Component
 {
-    public $role;
     public $name;
-    public $unique_numbers;
+    public $email;
+    public $role;
     public $gender;
     public $phone;
-    public $semester;
-    public $email;
     public $password;
     public $password_confirmation;
     
@@ -26,14 +26,12 @@ class Create extends Component
     public function updated($propertyName)
     {
         $this->validateOnly($propertyName, [
-            'role'                  => ['required', 'in:admin,lecturer,student'],
             'name'                  => ['required', 'max:100'],
-            'unique_numbers'        => ['max_digits:12', 'numeric', 'unique:users,unique_numbers'],
+            'email'                 => ['required', 'email', 'max:255', 'unique:users,email'],
+            'role'                  => ['required', 'in:coordinator,lecturer,student'],
             'gender'                => ['in:male,female'],
             'phone'                 => ['numeric', 'unique:users,phone'],
-            // 'semester'              => ['max:2', 'numeric'],
-            'email'                 => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password'              => ['confirmed', Rules\Password::defaults(), ],
+            'password'              => [Rules\Password::defaults()],
             'password_confirmation' => ['same:password'],
         ]);
     }
@@ -42,20 +40,29 @@ class Create extends Component
     {
         try{
             $validatedData = $this->validate([
-                'role'                  => ['required', 'in:admin,lecturer,student'],
                 'name'                  => ['required', 'max:100'],
-                'unique_numbers'        => ['max_digits:12', 'numeric', 'unique:users,unique_numbers'],
+                'email'                 => ['required', 'email', 'max:255', 'unique:users,email'],
+                'role'                  => ['required', 'in:admin,lecturer,student'],
                 'gender'                => ['in:male,female'],
                 'phone'                 => ['numeric', 'unique:users,phone'],
-                // 'semester'              => ['max:2', 'numeric'],
-                'email'                 => ['required', 'email', 'max:255', 'unique:users,email'],
-                'password'              => ['confirmed', Rules\Password::defaults(), ],
+                'password'              => [Rules\Password::defaults()],
                 'password_confirmation' => ['same:password'],
             ]);
             
             $user = new User();
             $user->fill($validatedData);
             $user->save();
+
+            // buat class lecturer atau student 
+            if($user->role == 'lecturer'){
+                $lecturer = new Lecturer();
+                $lecturer->user_id = $user->id;
+                $lecturer->save();
+            }elseif($user->role == 'student'){
+                $student = new Student();
+                $student->user_id = $user->id;
+                $student->save();
+            }
 
             $this->reset();
 

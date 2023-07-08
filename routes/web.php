@@ -2,6 +2,8 @@
 
 use App\Models\User;
 use App\Models\Topic;
+use App\Models\Student;
+use App\Models\Lecturer;
 use App\Models\Proposal;
 use App\Http\Livewire\Proposal\Edit;
 use App\Http\Livewire\Proposal\Read;
@@ -51,6 +53,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/edit-user/{user}', function(User $user){
         return view('user.edit', ['user' => $user]);
     })->name('user.edit');
+
+    Route::view('/add-lecturer', 'lecturer.create')->name('lecturer.create');
+    Route::view('/list-lecturer', 'lecturer.read')->name('lecturer.read');
+    Route::get('/edit-lecturer/{lecturer}', function(Lecturer $lecturer){
+        return view('lecturer.edit', ['lecturer' => $lecturer]);
+    })->name('lecturer.edit');
+
+    Route::view('/add-student', 'student.create')->name('student.create');
+    Route::view('/list-student', 'student.read')->name('student.read');
+    Route::get('/edit-student/{student}', function(Student $student){
+        return view('student.edit', ['student' => $student]);
+    })->name('student.edit');
 
     Route::view('/similarity', 'similarity.check')->name('similarity.check');
 });

@@ -44,7 +44,7 @@ class Create extends Component
 
             $this->reset('name');
 
-            session()->flash('success', 'Proposal successfully stored.');
+            session()->flash('success', 'Topic successfully stored.');
 
             return;
         } catch (\Exception $e){

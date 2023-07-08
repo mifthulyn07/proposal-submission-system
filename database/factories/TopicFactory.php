@@ -2,13 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Lecturer>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Topic>
  */
-class LecturerFactory extends Factory
+class TopicFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,8 +17,8 @@ class LecturerFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
-            'nim'     => fake()->unique()->numberBetween(1000000000,9999999999),
+            'name'  => fake()->sentence(),
+            'date'  => fake()->date(),
         ];
     }
 }

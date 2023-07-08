@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Role;
 use App\Models\Student;
 use App\Models\Lecturer;
 use Laravel\Scout\Searchable;
@@ -11,6 +12,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -23,7 +25,6 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'role',
         'name',
         'gender',
         'phone',
@@ -52,6 +53,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'role_user');
+    }
+    
     public function lecturer(): HasOne
     {
         return $this->hasOne(Lecturer::class);
@@ -65,7 +71,6 @@ class User extends Authenticatable
     public function toSearchableArray(): array
     {
         return [
-            'role'          => $this->role,
             'name'          => $this->name,
             'gender'        => $this->gender,
             'phone'         => $this->phone,
