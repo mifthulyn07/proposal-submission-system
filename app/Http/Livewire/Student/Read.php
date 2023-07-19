@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Student;
 
+use App\Models\Role;
 use App\Models\Student;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -13,6 +14,7 @@ class Read extends Component
     
     public $search = '';
     public $deleteIdStudent;
+    public $deleteIdStudentName;
 
     // for realtime pagination
     public function updatingSearch()
@@ -29,11 +31,11 @@ class Read extends Component
                 $query->orWhere('gender', 'like', $this->search.'%');
                 $query->orWhere('phone', 'like', $this->search.'%');
             })
-            // ->orwhereHas('dosen_pa', function (Builder $query) {
-            //     $query->orWhereHas('user', function (Builder $query) {
-            //         $query->orWhere('name', 'like', $this->search.'%');
-            //     });
-            // })
+            ->orwhereHas('lecturer', function (Builder $query) {
+                $query->orWhereHas('user', function (Builder $query) {
+                    $query->orWhere('name', 'like', $this->search.'%');
+                });
+            })
             ->orWhere('nim', 'like', $this->search.'%')
             ->orWhere('class', 'like', $this->search.'%')
             ->paginate(12)
@@ -43,5 +45,42 @@ class Read extends Component
     public function editIdStudent($id)
     {
         return redirect()->route('student.edit', ['student' => $id]);
+    }
+
+    public function deleteIdStudent($id)
+    {        
+        $student = Student::findOrFail($id);
+        $this->deleteIdStudentName = $student->user->name;
+        $this->deleteIdStudent = $student->id;
+    }
+
+    public function deleteStudent()
+    {
+        try{
+            $student = Student::findOrFail($this->deleteIdStudent);
+            $student->delete();
+            
+            $studentRole = Role::where('name', 'student')->first();
+            if ($studentRole) {
+                $student->user->roles()->detach($studentRole->id);
+
+                // Jika pengguna tidak memiliki peran lain selain "student", hapus juga pengguna
+                if ($student->user->roles()->count() === 0) {
+                    $student->user->delete();
+                }
+            }
+
+            session()->flash('success', 'Student successfully deleted.');
+            
+            // for hide alert for 3 sec
+            $this->emit('alert_remove');
+            return;
+        } catch (\Exception $e){
+            session()->flash('error', 'An error occurred while deleting the Student: '.$e->getMessage());
+
+            // for hide alert for 3 sec
+            $this->emit('alert_remove');
+            return;
+        }
     }
 }

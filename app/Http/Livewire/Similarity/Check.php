@@ -52,6 +52,7 @@ class Check extends Component
         ];
         $new_cospus = array_merge_recursive($text, $corpus);
 
+        // dd($new_cospus);
         // encode->run->decode
         $all_similarities = json_encode($new_cospus);
         $command = "C:/Users/Administrator/anaconda3/python.exe " . public_path("\cosine_similarity\cosim.py 2>&1 ") . json_encode($all_similarities);
@@ -65,7 +66,7 @@ class Check extends Component
         // ambil semua index kecuali index pertama 
         $similarities = $all_similarities->slice(1)->sortByDesc('cosim')->values();
         $this->similarities = $similarities;
-        dd($similarities);
+        // dd($similarities);
 
         // nilai cosim yg paling tinggi 
         $result_cosim1 = $similarities->first()->cosim;

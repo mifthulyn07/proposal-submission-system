@@ -9,11 +9,13 @@
 
                 <form class="mt-6" wire:submit.prevent="store">
                     <div class="mb-6">
-                        <label for="user_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Gender</label>
+                        <label for="user_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">User Account</label>
                         <select id="user_id" name="user_id" wire:model="user_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <option selected>Choose User Account</option>
                             @foreach ($users as $user)
-                                <option value="{{$user->id}}">{{ $user->name }} ({{$user->role}})</option>
+                                @foreach ($user->roles as $role)
+                                    <option value="{{ $user->id }}">{{ $user->name }} ({{$role->name}})</option>
+                                @endforeach
                             @endforeach
                         </select>
                         @error('user_id') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror

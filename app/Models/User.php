@@ -68,6 +68,26 @@ class User extends Authenticatable
         return $this->hasOne(Student::class);
     }
 
+    public function hasRole($role)
+    {
+        return $this->roles()->where('name', $role)->exists();
+    }
+
+    public function isCoordinator()
+    {
+        return $this->role_user == 1;
+    }
+
+    public function isLecturer()
+    {
+        return $this->role_user == 2;
+    }
+
+    public function isStudent()
+    {
+        return $this->role_user == 3;
+    }
+
     public function toSearchableArray(): array
     {
         return [

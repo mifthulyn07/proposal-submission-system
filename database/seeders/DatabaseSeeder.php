@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Topic;
 use App\Models\Proposal;
@@ -16,32 +17,44 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Proposal::factory(5)->create();
-
-        User::factory()->create([
-            'role'              => 'coordinator',
+        $user1 = User::factory()->create([
             'name'              => 'Developer',
             'gender'            => 'female',
             'phone'             => '08131234567',
             'email'             => 'developer@example.com',
             'password'          => Hash::make('developer'),
         ]);
-        User::factory()->create([
-            'role'              => 'lecturer',
+        $user1->roles()->attach(Role::create(['name' => 'coordinator']));
+        $user1->roles()->attach(Role::create(['name' => 'lecturer']));
+        $user1->lecturer()->create([
+            'nip' => '100023022110123',
+        ]);
+
+        $user2 = User::factory()->create([
             'name'              => 'John Doe',
             'gender'            => 'male',
             'phone'             => '08123456743',
             'email'             => 'johndoe@example.com',
             'password'          => Hash::make('johndoe123'),
         ]);
-        User::factory()->create([
-            'role'              => 'student',
+        $user2->roles()->attach(Role::where('name', 'lecturer')->first());
+        $user2->lecturer()->create([
+            'nip' => '100023022110122',
+        ]);
+
+        $user3 = User::factory()->create([
             'name'              => 'Miftahul Ulyana Hutabarat',
             'gender'            => 'female',
             'phone'             => '08598098765',
             'email'             => 'mifthulyn07@example.com',
             'password'          => Hash::make('miftahul123'),
         ]);
+        $user3->roles()->attach(Role::create(['name' => 'student']));
+        $user3->student()->create([
+            'nim'           => '0702192031',
+            'class'         => 'Sistem Informasi-3',
+            'lecturer_id'   => '2',
+        ]); 
 
         Topic::factory()->create([
             'name'              => 'Sistem Informasi Geografis',
@@ -55,13 +68,5 @@ class DatabaseSeeder extends Seeder
             'name'              => 'Machine Learning',
             'date'              => '2023-07-06',
         ]);
-
-        // User::factory()->count(6)->create()->each(function ($user) {
-        //     Proposal::factory()->create([
-        //         'user_id'   => $user->id,
-        //         'name'      => $user->name,
-        //         'nim'       => $user->unique_numbers,
-        //     ]);
-        // });
     }
 }

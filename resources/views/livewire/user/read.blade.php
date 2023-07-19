@@ -94,13 +94,15 @@
                                         {{ $users->firstItem() + $index }}
                                     </th>
                                     <td class="px-6 py-4">
-                                        @if( $user->role == 'coordinator')
-                                            <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Coordinator</span>
-                                        @elseif($user->role == 'lecturer')
-                                            <span class="bg-purple-100 text-purple-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300">Lecturer</span>
-                                        @elseif($user->role == 'student')
-                                            <span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Student</span>
-                                        @endif
+                                        @foreach ($user->roles as $role)
+                                            @if( $role->name == 'coordinator')
+                                                <span class="bg-green-100 text-green-800 text-xs font-medium mr-0.5 mb-1 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Cor</span>
+                                            @elseif($role->name == 'lecturer')
+                                                <span class="bg-purple-100 text-purple-800 text-xs font-medium mr-0.5 mb-1 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300">Lec</span>
+                                            @elseif($role->name == 'student')
+                                                <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-0.5 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Stu</span>
+                                            @endif
+                                        @endforeach
                                     </td>
                                     <th scope="row" class="px-6 py-4">
                                         <div class="text-light font-semibold text-gray-900">{{ $user->name }}</div>
@@ -116,7 +118,7 @@
                                     <td class="px-6 py-4">
                                         {{ $user->phone }}
                                     </td>
-                                    <td class="p-4 space-x-2 whitespace-nowrap">
+                                    <td class="p-4 space-x-1 whitespace-nowrap">
                                         <a wire:click="editIdUser({{ $user->id }})" wire:click.prevent class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-yellow-300 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-300 dark:hover:bg-yellow-300 dark:focus:ring-yellow-300">
                                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
                                         </a>
@@ -141,7 +143,7 @@
                 <div class="p-6">
                     <div class="p-2 text-center">
                         <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this user?</h3>
+                        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete {{ $deleteIdUserName }}?</h3>
                     </div>
 
                     <div class="flex justify-end">

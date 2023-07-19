@@ -20,7 +20,7 @@ class StudentFactory extends Factory
     {
         return [
             'user_id'       => User::factory(),
-            'dosen_pa_id'   => Lecturer::factory(),
+            'lecturer_id'   => Lecturer::factory(),
             'nim'           => fake()->unique()->numberBetween(1000000000,9999999999),
             'class'         => "Sistem Informasi-".fake()->numberBetween(1, 6),
         ];

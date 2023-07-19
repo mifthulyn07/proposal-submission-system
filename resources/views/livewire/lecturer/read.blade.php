@@ -116,9 +116,12 @@
                                     <td class="px-6 py-4">
                                         
                                     </td>
-                                    <td class="p-4 flex justify-center whitespace-nowrap">
+                                    <td class="p-4 space-x-1 whitespace-nowrap">
                                         <a wire:click="editIdLecturer({{ $lecturer->id }})" wire:click.prevent class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-yellow-300 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-300 dark:hover:bg-yellow-300 dark:focus:ring-yellow-300">
                                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
+                                        </a>
+                                        <a wire:click="deleteIdLecturer({{ $lecturer->id }})" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900" x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-lecturer-deletion')">
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
                                         </a>
                                     </td>
                                 </tr>
@@ -132,6 +135,26 @@
             <div class="m-4">
                 {{ $lecturers->links() }}
             </div>
+
+            {{-- delete modal --}}
+            <x-modal wire:ignore.self name="confirm-lecturer-deletion" :show="$errors->lecturerDeletion->isNotEmpty()" focusable>
+                <div class="p-6">
+                    <div class="p-2 text-center">
+                        <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete {{ $deleteIdLecturerName }} from lecturer role?</h3>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <x-secondary-button x-on:click="$dispatch('close')">
+                            {{ __('Cancel') }}
+                        </x-secondary-button>
+
+                        <x-danger-button class="ml-3" wire:click.prevent="deleteLecturer()" x-on:click="$dispatch('close')">
+                            {{ __('Delete') }}
+                        </x-danger-button>
+                    </div>
+                </div>
+            </x-modal>
 
         </div>
     </div>

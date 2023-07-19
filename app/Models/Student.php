@@ -16,7 +16,7 @@ class Student extends Model
 
     protected $fillable = [
         'user_id',
-        'dosen_pa_id',
+        'lecturer_id',
         'nim',
         'class',
     ];
@@ -26,9 +26,9 @@ class Student extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function dosen_pa(): BelongsTo
+    public function lecturer(): BelongsTo
     {
-        return $this->belongsTo(Lecturer::class, 'foreign_key');
+        return $this->belongsTo(Lecturer::class);
     }
 
     public function proposal(): HasOne

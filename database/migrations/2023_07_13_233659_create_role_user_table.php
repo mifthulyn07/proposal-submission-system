@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('students', function (Blueprint $table) {
+        Schema::create('role_user', function (Blueprint $table) {
             $table->id();
+            // digunakan constrained untuk menggantikan references table, otomatis terlibat dengan tabel user, dan tabel role
             $table->foreignId("user_id")->constrained()->cascadeOnDelete();
-            // for dosen PA 
-            $table->foreignId('lecturer_id')->nullable()->constrained()->nullOnDelete(); 
-            $table->string("nim")->nullable();
-            $table->string("class")->nullable();
+            $table->foreignId("role_id")->constrained();
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('role_user');
     }
 };

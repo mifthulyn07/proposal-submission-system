@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\User;
 
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Student;
 use Livewire\Component;
@@ -16,15 +17,18 @@ class Edit extends Component
 
     public $name;
     public $email;
-    public $role;
     public $gender;
     public $phone;
     public $password;
     public $password_confirmation;
 
+    public $selected_roles;
+
     public function render()
     {
-        return view('livewire.user.edit');
+        return view('livewire.user.edit', [
+            'roles' => Role::all()
+        ]);
     }
 
     public function mount()
@@ -33,9 +37,9 @@ class Edit extends Component
         if(!empty($user)){
             $this->name                 = $user->name;
             $this->email                = $user->email;
-            $this->role                 = $user->role;
             $this->gender               = $user->gender;
             $this->phone                = $user->phone;
+            $this->selected_roles       = $user->roles->pluck('id')->toArray();
         }else{
             // for 404 not found
             $this->empty = true;
@@ -45,11 +49,11 @@ class Edit extends Component
     public function updated($propertyName)
     {
         $validatedData = $this->validateOnly($propertyName, [
-            'name'   => ['required', 'max:100'],
-            'email'  => ['required', 'email', 'max:255', 'unique:users,email,'.$this->user->id],
-            'role'   => ['required', 'in:coordinator,lecturer,student'],
-            'gender' => ['in:male,female'],
-            'phone'  => ['numeric', 'unique:users,phone,'.$this->user->id],
+            'name'              => ['required', 'max:100'],
+            'email'             => ['required', 'email', 'max:255', 'unique:users,email,'.$this->user->id],
+            'gender'            => ['in:male,female'],
+            'phone'             => ['numeric', 'unique:users,phone,'.$this->user->id],
+            'selected_roles'    => ['required', 'array', 'exists:roles,id'],
         ]);
 
         if (isset($validatedData['password']) || isset($validatedData['password_confirmation'])) {
@@ -62,14 +66,14 @@ class Edit extends Component
     {
        try{
             $validatedData = $this->validate([
-            'name'   => ['required', 'max:100'],
-            'email'  => ['required', 'email', 'max:255', 'unique:users,email,'.$this->user->id],
-            'role'   => ['required', 'in:coordinator,lecturer,student'],
-            'gender' => ['in:male,female'],
-            'phone'  => ['numeric', 'unique:users,phone,'.$this->user->id],
+                'name'              => ['required', 'max:100'],
+                'email'             => ['required', 'email', 'max:255', 'unique:users,email,'.$this->user->id],
+                'gender'            => ['in:male,female'],
+                'phone'             => ['numeric', 'unique:users,phone,'.$this->user->id],
+                'selected_roles'    => ['required', 'array', 'exists:roles,id'],
             ]);
 
-            // jika password diisi saja
+            // validation jika password diisi saja
             if (isset($validatedData['password']) || isset($validatedData['password_confirmation'])) {
                 $validatedData['password'] = Rules\Password::defaults();
                 $validatedData['password_confirmation'] = ['same:password'];
@@ -79,43 +83,78 @@ class Edit extends Component
             if (!empty($validatedData['password'])) {
                 // Jika password baru diisi, update password
                 $user->password = $validatedData['password'];
-            }else {
+            }elseif(empty($validatedData['password'])) {
                 // Jika password baru tidak diisi, gunakan password lama
                 $validatedData['password'] = $this->user->password;
             }
+            
+            $user->roles()->sync($validatedData['selected_roles']);
             $user->fill($validatedData);
-            // jika ada perubahan di database 
-            if($user->isDirty('role')){
-                if($user->role == 'lecturer'){
-                    $lecturer = new Lecturer();
-                    $lecturer->user_id = $user->id;
-                    $lecturer->save();
-                    
-                    $student = Student::where('user_id', $user->id);
-                    if($student->exists()){
-                        $student->delete();
-                    }
-                }elseif($user->role == 'student'){
+            $user->save();
+
+            $student = Student::where('user_id', $user->id)->exists();
+            $lecturer = Lecturer::where('user_id', $user->id)->exists();
+            if($user->hasRole('student')){
+                if(!$student){
                     $student = new Student();
                     $student->user_id = $user->id;
                     $student->save();
-                    
-                    $lecturer = Lecturer::where('user_id', $user->id);
-                    if($lecturer->exists()){
-                        $lecturer->delete();
-                    }
-                }else{
-                    $student = Student::where('user_id', $user->id);
-                    $lecturer = Lecturer::where('user_id', $user->id);
-                    
-                    if($student->exists()){
-                        $student->delete();
-                    }elseif($lecturer->exists()){
-                        $lecturer->delete();
-                    }
+                }
+            }elseif($user->hasRole('lecturer')){
+                if(!$lecturer){
+                    $lecturer = new Lecturer();
+                    $lecturer->user_id = $user->id;
+                    $lecturer->save();
+                }
+            }elseif(!$user->hasRole('student')){
+                if($student){
+                    $student->delete();
+                }
+            }elseif(!$user->hasRole('lecturer')){
+                if($lecturer){
+                    $lecturer->delete();
+                }
+            }elseif($user->hasRole('lecturer') && !$user->hasRole('student')){
+                if(!$lecturer){
+                    $lecturer = new Lecturer();
+                    $lecturer->user_id = $user->id;
+                    $lecturer->save();
+                }
+                
+                if($student){
+                    $student->delete();
+                }
+            }elseif($user->hasRole('student') && !$user->hasRole('lecturer')){
+                if(!$student){
+                    $student = new Student();
+                    $student->user_id = $user->id;
+                    $student->save();
+                }
+            
+                if($lecturer){
+                    $lecturer->delete();
+                }
+            }elseif($user->hasRole('lecturer') && $user->hasRole('student')){
+                if(!$lecturer){
+                    $lecturer = new Lecturer();
+                    $lecturer->user_id = $user->id;
+                    $lecturer->save();
+                }
+
+                if(!$student){
+                    $student = new Student();
+                    $student->user_id = $user->id;
+                    $student->save();
+                }
+            }elseif(!$user->hasRole('lecturer') && !$user->hasRole('student')){
+                if($lecturer){
+                    $lecturer->delete();
+                }
+
+                if($student){
+                    $student->delete();
                 }
             }
-            $user->save();
 
             $this->reset(['password', 'password_confirmation']);
             session()->flash('success', 'User successfully updated.');

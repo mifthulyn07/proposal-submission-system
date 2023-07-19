@@ -5,6 +5,7 @@ namespace App\Http\Livewire\User;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Database\Eloquent\Builder;
 
 class Read extends Component
 {
@@ -12,6 +13,7 @@ class Read extends Component
     
     public $search = '';
     public $deleteIdUser;
+    public $deleteIdUserName;
 
     // for realtime pagination
     public function updatingSearch()
@@ -22,7 +24,14 @@ class Read extends Component
     public function render()
     {
         return view('livewire.user.read', [
-            'users' => User::search($this->search)->paginate(12),
+            'users' => User::whereHas('roles', function (Builder $query) {
+                $query->where('name', 'like', $this->search.'%');
+            })
+            ->orWhere('name', 'like', $this->search.'%')
+            ->orWhere('gender', 'like', $this->search.'%')
+            ->orWhere('phone', 'like', $this->search.'%')
+            ->orWhere('email', 'like', $this->search.'%')
+            ->paginate(12),
         ]);
     }
 
@@ -32,16 +41,19 @@ class Read extends Component
     }
 
     public function deleteIdUser($id)
-    {
-        $this->deleteIdUser = $id;
+    {        
+        $user = User::findOrFail($id);
+        $this->deleteIdUserName = $user->name;
+        $this->deleteIdUser = $user->id;
     }
 
     public function deleteUser()
     {
         try{
-            User::find($this->deleteIdUser)->delete();
-            session()->flash('success', 'User successfully deleted.');
+            User::findOrFail($this->deleteIdUser)->delete();
 
+            session()->flash('success', 'User successfully deleted.');
+            
             // for hide alert for 3 sec
             $this->emit('alert_remove');
             return;
