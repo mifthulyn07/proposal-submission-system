@@ -12,6 +12,7 @@ class Read extends Component
     use WithPagination;
 
     public $search = '';
+    public $deleteIdProposalTitle;
     public $deleteIdProposal;
 
     // for realtime pagination
@@ -43,7 +44,9 @@ class Read extends Component
 
     public function deleteIdProposal($id)
     {
-        $this->deleteIdProposal = $id;
+        $proposal = Proposal::findOrFail($id);
+        $this->deleteIdProposalTitle = $proposal->title;
+        $this->deleteIdProposal = $proposal->id;
     }
 
     public function deleteProposal()

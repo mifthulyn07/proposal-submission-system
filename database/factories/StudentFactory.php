@@ -19,8 +19,8 @@ class StudentFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'       => User::factory(),
-            'lecturer_id'   => Lecturer::factory(),
+            'user_id'       => User::all()->random()->id,
+            'lecturer_id'   => Lecturer::all()->random()->id,
             'nim'           => fake()->unique()->numberBetween(1000000000,9999999999),
             'class'         => "Sistem Informasi-".fake()->numberBetween(1, 6),
         ];

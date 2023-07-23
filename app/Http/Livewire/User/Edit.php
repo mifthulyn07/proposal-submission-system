@@ -33,7 +33,7 @@ class Edit extends Component
 
     public function mount()
     {
-        $user = User::find($this->user->id);
+        $user = User::findorFail($this->user->id);
         if(!empty($user)){
             $this->name                 = $user->name;
             $this->email                = $user->email;

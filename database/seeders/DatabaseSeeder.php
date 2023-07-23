@@ -6,6 +6,8 @@ namespace Database\Seeders;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Topic;
+use App\Models\Student;
+use App\Models\Lecturer;
 use App\Models\Proposal;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -56,6 +58,25 @@ class DatabaseSeeder extends Seeder
             'lecturer_id'   => '2',
         ]); 
 
+        User::factory()->count(10)->create()->each(function ($user) {
+            $roles = Role::all()->random()->id;
+            $user->roles()->attach($roles);
+
+            if($user->hasRole('student')){
+                $student = new Student();
+                $student->user_id = $user->id;
+                $student->nim  = fake()->unique()->numberBetween(1000000000,9999999999);
+                $student->class = "Sistem Informasi-".fake()->numberBetween(1, 6);
+                $student->save();
+            }
+            if($user->hasRole('lecturer')){
+                $lecturer = new Lecturer();
+                $lecturer->user_id = $user->id;
+                $lecturer->nip  = fake()->unique()->numberBetween(1000000000,9999999999);
+                $lecturer->save();
+            }
+        });
+
         Topic::factory()->create([
             'name'              => 'Sistem Informasi Geografis',
             'date'              => '2023-07-06',
@@ -68,5 +89,7 @@ class DatabaseSeeder extends Seeder
             'name'              => 'Machine Learning',
             'date'              => '2023-07-06',
         ]);
+
+        Proposal::factory()->count(3)->create();
     }
 }

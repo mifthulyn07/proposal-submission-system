@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Lecturer extends Model
 {
@@ -25,6 +26,11 @@ class Lecturer extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function proposals(): BelongsToMany
+    {
+        return $this->belongsToMany(Proposal::class, 'lecturer_proposal');
     }
 
     public function proposal(): HasOne

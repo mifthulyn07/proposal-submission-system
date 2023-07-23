@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Models\Topic;
+use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,11 +19,16 @@ class ProposalFactory extends Factory
      */
     public function definition(): array
     {
+        $randomStudent = Student::all()->random();
         return [
-            'name'  => fake()->name(),
-            'nim'   => fake()->unique()->numberBetween(1000000000,9999999999),
-            'year'  => fake()->year(),
-            'title' => fake()->sentence(),
+            'topic_id'  => Topic::all()->random()->id,
+            'student_id'=> $randomStudent->id,
+            'name'      => $randomStudent->user->name,
+            'nim'       => $randomStudent->nim,
+            'type'      => fake()->randomElement(['skripsi', 'teknologi_tepat_guna', 'jurnal']),
+            'title'     => fake()->sentence(),
+            'year'      => fake()->year(),
+            'status'    => fake()->randomElement(['done', 'on_process']),
         ];
     }
 }

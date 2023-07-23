@@ -9,6 +9,7 @@ use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Proposal extends Model
 {
@@ -17,15 +18,18 @@ class Proposal extends Model
     protected $fillable = [
         'topic_id',
         'student_id',
-        'lecturer1_id',
-        'lecturer2_id',
         'name',
         'nim',
         'type',
         'title',
         'year',
-        'status_proposal',
+        'status',
     ];
+
+    public function lecturers(): BelongsToMany
+    {
+        return $this->belongsToMany(Lecturer::class, 'lecturer_proposal');
+    }
 
     public function topic(): BelongsTo
     {
@@ -35,11 +39,6 @@ class Proposal extends Model
     public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class);
-    }
-
-    public function lecturer() : BelongsTo
-    {
-        return $this->belongsTo(Lecturer::class);
     }
 
     public function toSearchableArray(): array

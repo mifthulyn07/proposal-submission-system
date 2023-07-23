@@ -12,6 +12,7 @@ class Read extends Component
     
     public $search = '';
     public $deleteIdTopic;
+    public $deleteIdTopicName;
 
     // for realtime pagination
     public function updatingSearch()
@@ -33,7 +34,9 @@ class Read extends Component
 
     public function deleteIdTopic($id)
     {
-        $this->deleteIdTopic = $id;
+        $topic = Topic::findOrFail($id);
+        $this->deleteIdTopicName = $topic->name;
+        $this->deleteIdTopic = $topic->id;
     }
 
     public function deleteTopic()

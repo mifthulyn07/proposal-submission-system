@@ -13,7 +13,7 @@ class Read extends Component
     
     public $search = '';
     public $deleteIdUser;
-    public $deleteIdUserName;
+    public $deleteIdUserEmail;
 
     // for realtime pagination
     public function updatingSearch()
@@ -43,7 +43,7 @@ class Read extends Component
     public function deleteIdUser($id)
     {        
         $user = User::findOrFail($id);
-        $this->deleteIdUserName = $user->name;
+        $this->deleteIdUserEmail = $user->email;
         $this->deleteIdUser = $user->id;
     }
 

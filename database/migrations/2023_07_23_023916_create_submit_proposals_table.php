@@ -11,16 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('proposals', function (Blueprint $table) {
+        Schema::create('submit_proposals', function (Blueprint $table) {
             $table->id();
             $table->foreignId("topic_id")->nullable()->constrained()->onDelete('set null');
-            $table->foreignId("student_id")->nullable()->constrained()->cascadeOnDelete();
-            $table->string('name');
-            $table->string('nim');
-            $table->enum('type', ['skripsi', 'teknologi_tepat_guna', 'jurnal'])->nullable();
-            $table->string('title');
-            $table->year('year');
-            $table->enum('status', ['done', 'on_process']);
+            $table->string("title");
+            $table->date("date");
+            $table->string("pdf");
             $table->timestamps();
         });
     }
@@ -30,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('proposals');
+        Schema::dropIfExists('submit_proposals');
     }
 };
