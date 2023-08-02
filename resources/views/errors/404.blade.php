@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>@yield('title', 'Proposal Submission')</title>
+        <title>@yield('title', 'Errors')</title>
 
         {{-- favicon --}}
         <link rel="shortcut icon" type="image/png" sizes="32x32" href="{{ asset('assets/img/favicon-uinsu.png') }}">

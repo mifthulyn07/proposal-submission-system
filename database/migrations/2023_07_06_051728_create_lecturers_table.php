@@ -16,9 +16,6 @@ return new class extends Migration
             $table->foreignId("user_id")->constrained()->cascadeOnDelete();
             $table->string("nip")->nullable();
             $table->timestamps();
-
-            // "cascade" -> if row users is deleted, id student is deleted too  
-            // $table->foreign("user_id")->references("id")->on("users")->cascadeOnDelete();
         });
     }
 

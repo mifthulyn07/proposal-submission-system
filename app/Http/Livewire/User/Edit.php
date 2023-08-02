@@ -8,13 +8,16 @@ use App\Models\Student;
 use Livewire\Component;
 use App\Models\Lecturer;
 use Illuminate\Validation\Rules;
-
+use Livewire\WithFileUploads;
 
 class Edit extends Component
 {
+    use WithFileUploads;
+
     public $user;
     public $empty = false;
 
+    public $avatar;
     public $name;
     public $email;
     public $gender;
@@ -24,6 +27,25 @@ class Edit extends Component
 
     public $selected_roles;
 
+    public $filename;
+    public $isUploaded =false;
+
+    public function mount()
+    {
+        $user = User::findorFail($this->user->id);
+        if(!empty($user)){
+            $this->avatar         = $user->avatar;
+            $this->name           = $user->name;
+            $this->email          = $user->email;
+            $this->gender         = $user->gender;
+            $this->phone          = $user->phone;
+            $this->selected_roles = $user->roles->pluck('id')->toArray();
+        }else{
+            // for 404 not found
+            $this->empty = true;
+        }
+    }
+
     public function render()
     {
         return view('livewire.user.edit', [
@@ -31,21 +53,7 @@ class Edit extends Component
         ]);
     }
 
-    public function mount()
-    {
-        $user = User::findorFail($this->user->id);
-        if(!empty($user)){
-            $this->name                 = $user->name;
-            $this->email                = $user->email;
-            $this->gender               = $user->gender;
-            $this->phone                = $user->phone;
-            $this->selected_roles       = $user->roles->pluck('id')->toArray();
-        }else{
-            // for 404 not found
-            $this->empty = true;
-        }
-    }
-
+    // realtime validation the property that have classes
     public function updated($propertyName)
     {
         $validatedData = $this->validateOnly($propertyName, [
@@ -62,10 +70,25 @@ class Edit extends Component
         }
     }
 
+    // realtime validation file 
+    public function updatedAvatar()
+    {
+        $validatedData = $this->validate([
+            'avatar' => 'nullable|image|max:1024|mimes:jpeg,png,jpg', // 1MB Max
+        ]);
+
+        $this->isUploaded=true;
+        
+        // menggunakan store untuk mengatur nama scara bebas di storage/avatars/blabla.png
+        $this->filename = $validatedData['avatar']->store('avatars', 'public');
+    }
+
     public function update()
     {
-       try{
+        try{
+            // for validation
             $validatedData = $this->validate([
+                'avatar'            => ['nullable','image','max:1024','mimes:jpeg,png,jpg'], // 1MB Max
                 'name'              => ['required', 'max:100'],
                 'email'             => ['required', 'email', 'max:255', 'unique:users,email,'.$this->user->id],
                 'gender'            => ['in:male,female'],
@@ -80,6 +103,8 @@ class Edit extends Component
             }
 
             $user = User::findOrFail($this->user->id);
+
+            // update password 
             if (!empty($validatedData['password'])) {
                 // Jika password baru diisi, update password
                 $user->password = $validatedData['password'];
@@ -88,10 +113,16 @@ class Edit extends Component
                 $validatedData['password'] = $this->user->password;
             }
             
+            // update roles 
             $user->roles()->sync($validatedData['selected_roles']);
+
+            // update avatar 
+            $validatedData['avatar'] = $this->filename;
+
             $user->fill($validatedData);
             $user->save();
 
+            // update di table lecturer/student 
             $student = Student::where('user_id', $user->id)->exists();
             $lecturer = Lecturer::where('user_id', $user->id)->exists();
             if($user->hasRole('student')){
@@ -158,8 +189,8 @@ class Edit extends Component
 
             $this->reset(['password', 'password_confirmation']);
             session()->flash('success', 'User successfully updated.');
-            return;
-        } catch (\Exception $e){
+            return redirect()->to('edit-user/'.$user->id);
+        }catch (\Exception $e){
             session()->flash('error', $e->getMessage());
             return;
         }

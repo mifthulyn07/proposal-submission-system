@@ -7,12 +7,15 @@ use App\Models\User;
 use App\Models\Student;
 use Livewire\Component;
 use App\Models\Lecturer;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Hash;
+use Livewire\WithFileUploads;
 
 class Create extends Component
 {
+    use WithFileUploads; 
+
+    public $avatar;
     public $name;
     public $email;
     public $gender;
@@ -21,6 +24,8 @@ class Create extends Component
     public $password_confirmation;
 
     public $selected_roles = [];
+
+    public $filename;
     
     public function render()
     {
@@ -29,6 +34,7 @@ class Create extends Component
         ]);
     }
 
+    // realtime validation property if use classes
     public function updated($propertyName)
     {
         $this->validateOnly($propertyName, [
@@ -42,10 +48,23 @@ class Create extends Component
         ]);
     }
 
+    // realtime validation file 
+    public function updatedAvatar()
+    {
+        $validatedData = $this->validate([
+            'avatar' => 'nullable|image|max:1024|mimes:jpeg,png,jpg', // 1MB Max
+        ]);
+
+        // menggunakan store untuk mengatur nama scara bebas di storage/public/avatars/blabla.png
+        $this->filename = $validatedData['avatar']->store('public/avatars');
+    }
+
     public function store()
     {
         try{
+            // realtime validation property if use classes, must do this twice
             $validatedData = $this->validate([
+                'avatar'                => ['nullable','image','max:1024','mimes:jpeg,png,jpg'],
                 'name'                  => ['required', 'max:100'],
                 'email'                 => ['required', 'email', 'max:255', 'unique:users,email'],
                 'gender'                => ['in:male,female'],
@@ -54,8 +73,10 @@ class Create extends Component
                 'password_confirmation' => ['same:password'],
                 'selected_roles'        => ['required', 'exists:roles,id'],
             ]);
-            
+
+            // create 
             $user = User::create([
+                'avatar'    => $this->filename,
                 'name'      => $validatedData['name'],
                 'email'     => $validatedData['email'],
                 'gender'    => $validatedData['gender'],
@@ -63,8 +84,10 @@ class Create extends Component
                 'password'  => Hash::make($validatedData['password'])
             ]);
 
+            // buat role 
             $user->roles()->attach($validatedData['selected_roles']);
 
+            // isi tabel student/lecturer 
             if($user->hasRole('student')){
                 $student = new Student();
                 $student->user_id = $user->id;

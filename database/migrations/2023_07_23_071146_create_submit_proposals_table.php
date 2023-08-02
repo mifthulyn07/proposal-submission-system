@@ -13,10 +13,14 @@ return new class extends Migration
     {
         Schema::create('submit_proposals', function (Blueprint $table) {
             $table->id();
+            $table->foreignId("proposal_process_id")->constrained()->cascadeOnDelete();
             $table->foreignId("topic_id")->nullable()->constrained()->onDelete('set null');
             $table->string("title");
-            $table->date("date");
-            $table->string("pdf");
+            $table->boolean("proposal_pdf");
+            $table->boolean("acc_advisor");
+            $table->string("desc_advisor");
+            $table->boolean("acc_coordinator");
+            $table->string("desc_coordinator");
             $table->timestamps();
         });
     }

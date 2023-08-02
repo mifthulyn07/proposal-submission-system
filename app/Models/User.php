@@ -2,21 +2,24 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Role;
 use App\Models\Student;
 use App\Models\Lecturer;
 use Laravel\Scout\Searchable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+// class User extends Authenticatable implements MustVerifyEmail
 class User extends Authenticatable
+
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasRoles, HasApiTokens, HasFactory, Notifiable;
     use Searchable;
 
     /**
@@ -28,7 +31,7 @@ class User extends Authenticatable
         'name',
         'gender',
         'phone',
-        'image',
+        'avatar',
         'email',
         'password',
     ];
@@ -53,10 +56,10 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function roles(): BelongsToMany
-    {
-        return $this->belongsToMany(Role::class, 'role_user');
-    }
+    // public function roles(): BelongsToMany
+    // {
+    //     return $this->belongsToMany(Role::class, 'role_user');
+    // }
     
     public function lecturer(): HasOne
     {
@@ -68,25 +71,25 @@ class User extends Authenticatable
         return $this->hasOne(Student::class);
     }
 
-    public function hasRole($role)
-    {
-        return $this->roles()->where('name', $role)->exists();
-    }
+    // public function hasRole($role)
+    // {
+    //     return $this->roles()->where('name', $role)->exists();
+    // }
 
-    public function isCoordinator()
-    {
-        return $this->role_user == 1;
-    }
+    // public function isCoordinator()
+    // {
+    //     return $this->role_user == 1;
+    // }
 
-    public function isLecturer()
-    {
-        return $this->role_user == 2;
-    }
+    // public function isLecturer()
+    // {
+    //     return $this->role_user == 2;
+    // }
 
-    public function isStudent()
-    {
-        return $this->role_user == 3;
-    }
+    // public function isStudent()
+    // {
+    //     return $this->role_user == 3;
+    // }
 
     public function toSearchableArray(): array
     {

@@ -2,8 +2,9 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Spatie\Permission\Exceptions\UnauthorizedException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
@@ -26,5 +27,13 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    // larangan role di spatie 
+    public function render($request, Throwable $e){
+        if($e instanceof UnauthorizedException){
+            return response()->view('errors.403', ['exception' => $e->getMessage()], 403);
+        }
+        return parent::render($request, $e);
     }
 }

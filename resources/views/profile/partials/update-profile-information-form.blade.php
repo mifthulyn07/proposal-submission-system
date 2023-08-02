@@ -13,10 +13,18 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="mt-6 space-y-6">
         @csrf
         @method('patch')
 
+        {{-- avatar --}}
+        <div>
+            <x-input-label for="avatar" :value="__('Avatar')" />
+            <input id="avatar" name="avatar" type="file" />
+            <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
+        </div>
+
+        {{-- email --}}
         <div>
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
@@ -41,18 +49,14 @@
             @endif
         </div>
         
+        {{-- name --}}
         <div>
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
-        <div>
-            <x-input-label for="unique_numbers" :value="__('NIM')" />
-            <x-text-input id="unique_numbers" name="unique_numbers" type="text" class="mt-1 block w-full" :value="old('unique_numbers', $user->unique_numbers)" required autofocus autocomplete="unique_numbers" />
-            <x-input-error class="mt-2" :messages="$errors->get('unique_numbers')" />
-        </div>
-
+        {{-- gender --}}
         <div>
             <x-input-label for="gender" :value="__('Gender')" />
             <select name="gender" id="gender" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" autofocus>
@@ -67,20 +71,50 @@
             <x-input-error class="mt-2" :messages="$errors->get('gender')" />
         </div>
 
+        {{-- phone --}}
         <div>
             <x-input-label for="phone" :value="__('Phone')" />
             <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" :value="old('phone', $user->phone)" required autofocus autocomplete="phone" />
             <x-input-error class="mt-2" :messages="$errors->get('phone')" />
         </div>
 
-        <div>
-            <x-input-label for="semester" :value="__('Semester')" />
-            <x-text-input id="semester" name="semester" type="text" class="mt-1 block w-full" :value="old('semester', $user->semester)" required autofocus autocomplete="semester" />
-            <x-input-error class="mt-2" :messages="$errors->get('semester')" />
-        </div>
+        {{-- form srudent & lecturer --}}
+        @if($lecturer->isNotEmpty())
+            <div>
+                <x-input-label for="nip" :value="__('NIP')" />
+                <x-text-input id="nip" name="nip" type="text" class="mt-1 block w-full" :value="old('nip', $lecturer->first()->nip)" required autofocus autocomplete="nip" />
+                <x-input-error class="mt-2" :messages="$errors->get('nip')" />
+            </div>
+        @elseif($student->isNotEmpty())
+            <div>
+                <x-input-label for="nim" :value="__('NIM')" />
+                <x-text-input id="nim" name="nim" type="text" class="mt-1 block w-full" :value="old('nim', $student->first()->nim)" required autofocus autocomplete="nim" />
+                <x-input-error class="mt-2" :messages="$errors->get('nim')" />
+            </div>
 
+            <div>
+                <x-input-label for="class" :value="__('Semester')" />
+                <x-text-input id="class" name="class" type="text" class="mt-1 block w-full" :value="old('class', $student->first()->class)" required autofocus autocomplete="class" />
+                <x-input-error class="mt-2" :messages="$errors->get('class')" />
+            </div>
+
+            <div>
+                <x-input-label for="lecturer_id" :value="__('Supervisor')" />
+                <select name="lecturer_id" id="lecturer_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" autofocus>
+                    @foreach($lecturers as $lecturer)
+                        @if($student->first()->lecturer_id == $lecturer->id)
+                            <option selected value="{{ $lecturer->id }}">{{ $lecturer->user->name }}</option>    
+                            <?php continue; ?>
+                        @endif
+                        <option value="{{ $lecturer->id }}">{{ $lecturer->user->name }}</option>
+                    @endforeach
+                </select>
+                <x-input-error class="mt-2" :messages="$errors->get('lecturer_id')" />
+            </div>
+        @endif
+        
         <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
 
             @if (session('status') === 'profile-updated')
                 <p
@@ -94,3 +128,23 @@
         </div>
     </form>
 </section>
+
+@push('scripts')
+    <script>
+        // Get a reference to the file input element
+        const inputElement = document.querySelector('input[id="image"]');
+
+        // Create a FilePond instance
+        const pond = FilePond.create(inputElement);
+
+        FilePond.setOptions({
+            server: {
+            url:  '/upload',
+            headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+            }
+        });
+    </script>
+@endpush
+

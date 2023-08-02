@@ -15,8 +15,13 @@
             </div>
             <div class="flex items-center">
                 <div class="flex items-center ml-3">
+                    @if($avatar = Auth::user()->avatar)
+                        <img class="object-cover w-8 h-8 rounded-full" src="{{ asset('storage/'.$avatar) }}" alt="avatar"/>
+                    @else                    
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=e6f0ff&rounded=true" alt="avatar" width="32">
+                    @endif
                     <div>
-                        <button aria-expanded="false" data-dropdown-toggle="dropdown-user" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                        <button aria-expanded="false" data-dropdown-toggle="dropdown-user" class="inline-flex items-center px-1 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                             <div>{{ Auth::user()->name }}</div>
 
                             <div class="ml-1">
@@ -27,26 +32,26 @@
                         </button>
                     </div>
                     <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
-                    <div class="px-4 py-3" role="none">
-                        <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                            {{ Auth::user()->email }}
-                        </p>
-                    </div>
-                    <ul class="py-1" role="none">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
-
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                        <div class="px-4 py-3" role="none">
+                            <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                                {{ Auth::user()->email }}
+                            </p>
+                        </div>
+                        <ul class="py-1" role="none">
+                            <x-dropdown-link :href="route('profile.edit')">
+                                {{ __('Profile') }}
                             </x-dropdown-link>
-                        </form>
-                    </ul>
+
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+
+                                <x-dropdown-link :href="route('logout')"
+                                        onclick="event.preventDefault();
+                                                    this.closest('form').submit();">
+                                    {{ __('Log Out') }}
+                                </x-dropdown-link>
+                            </form>
+                        </ul>
                     </div>
                 </div>
             </div>

@@ -26,6 +26,9 @@
         {{-- flowbite --}}
         <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
 
+        {{-- filepond --}}
+        <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
+        
         @stack('styles')
     </head>
     <body class="font-sans antialiased">
@@ -50,12 +53,15 @@
             </div>
         </div>
 
-        @stack('scripts')
-
         @livewireScripts
 
         {{-- flowbite --}}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
         <script src="https://unpkg.com/flowbite@1.5.5/dist/flowbite.js"></script>
+
+        {{-- filepond --}}
+        <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+        
+        @stack('scripts')
     </body>
 </html>
