@@ -11,12 +11,15 @@ class Edit extends Component
     public $lecturer;
     public $empty = false;
 
+    public $name;
+    public $email;
     public $nip;
 
-    public function mount()
+    public function mount($lecturer)
     {
-        $lecturer = Lecturer::find($this->lecturer->id);
         if(!empty($lecturer)){
+            $this->name     = $lecturer->user->name;
+            $this->email    = $lecturer->user->email;
             $this->nip      = $lecturer->nip;
         }else{
             // for 404 not found
@@ -42,15 +45,14 @@ class Edit extends Component
             $validatedData = $this->validate([
                 'nip'  => ['required', 'numeric', 'unique:lecturers,nip,'.$this->lecturer->id],
             ]);
-            $lecturer = Lecturer::find($this->lecturer->id);
+
+            $lecturer = Lecturer::findOrFail($this->lecturer->id);
             $lecturer->fill($validatedData);
             $lecturer->save();
 
             session()->flash('success', 'Lecturer successfully updated.');
-            return;
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
-            return;
         }
     }
 }

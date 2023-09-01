@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('proposal_processes', function (Blueprint $table) {
             $table->id();
             $table->foreignId("student_id")->constrained()->cascadeOnDelete();
-            $table->enum('type', ['skripsi', 'teknologi_tepat_guna', 'jurnal']);
+            $table->enum('type', ['skripsi', 'teknologi_tepat_guna', 'jurnal'])->nullable();
             // transkrip nilai, krs 
-            $table->string("requirements_pdf");
-            $table->date("date");
+            $table->string("requirement_pdf")->nullable();
+            $table->date("date")->nullable();
             $table->timestamps();
         });
     }

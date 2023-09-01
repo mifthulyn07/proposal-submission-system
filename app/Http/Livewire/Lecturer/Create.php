@@ -16,7 +16,7 @@ class Create extends Component
     {
         return view('livewire.lecturer.create',[
             'users' => User::whereDoesntHave('roles', function ($query) {
-                $query->where('name', 'lecturer');
+                $query->whereIn('name', ['lecturer', 'student']);
             })->get(),
         ]);
     }

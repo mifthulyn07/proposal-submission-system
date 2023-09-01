@@ -17,13 +17,6 @@
         @csrf
         @method('patch')
 
-        {{-- avatar --}}
-        <div>
-            <x-input-label for="avatar" :value="__('Avatar')" />
-            <input id="avatar" name="avatar" type="file" />
-            <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
-        </div>
-
         {{-- email --}}
         <div>
             <x-input-label for="email" :value="__('Email')" />
@@ -52,14 +45,14 @@
         {{-- name --}}
         <div>
             <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
+            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
         {{-- gender --}}
         <div>
             <x-input-label for="gender" :value="__('Gender')" />
-            <select name="gender" id="gender" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" autofocus>
+            <select name="gender" id="gender" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                 @if (old('gender', $user->gender) == "female")
                     <option value="male">Male</option>
                     <option value="female" selected>Female</option>
@@ -74,7 +67,7 @@
         {{-- phone --}}
         <div>
             <x-input-label for="phone" :value="__('Phone')" />
-            <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" :value="old('phone', $user->phone)" required autofocus autocomplete="phone" />
+            <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" :value="old('phone', $user->phone)" required autocomplete="phone" />
             <x-input-error class="mt-2" :messages="$errors->get('phone')" />
         </div>
 
@@ -82,25 +75,25 @@
         @if($lecturer->isNotEmpty())
             <div>
                 <x-input-label for="nip" :value="__('NIP')" />
-                <x-text-input id="nip" name="nip" type="text" class="mt-1 block w-full" :value="old('nip', $lecturer->first()->nip)" required autofocus autocomplete="nip" />
+                <x-text-input id="nip" name="nip" type="text" class="mt-1 block w-full" :value="old('nip', $lecturer->first()->nip)" required autocomplete="nip" />
                 <x-input-error class="mt-2" :messages="$errors->get('nip')" />
             </div>
         @elseif($student->isNotEmpty())
             <div>
                 <x-input-label for="nim" :value="__('NIM')" />
-                <x-text-input id="nim" name="nim" type="text" class="mt-1 block w-full" :value="old('nim', $student->first()->nim)" required autofocus autocomplete="nim" />
+                <x-text-input id="nim" name="nim" type="text" class="mt-1 block w-full" :value="old('nim', $student->first()->nim)" required autocomplete="nim" />
                 <x-input-error class="mt-2" :messages="$errors->get('nim')" />
             </div>
 
             <div>
                 <x-input-label for="class" :value="__('Semester')" />
-                <x-text-input id="class" name="class" type="text" class="mt-1 block w-full" :value="old('class', $student->first()->class)" required autofocus autocomplete="class" />
+                <x-text-input id="class" name="class" type="text" class="mt-1 block w-full" :value="old('class', $student->first()->class)" required autocomplete="class" />
                 <x-input-error class="mt-2" :messages="$errors->get('class')" />
             </div>
 
             <div>
                 <x-input-label for="lecturer_id" :value="__('Supervisor')" />
-                <select name="lecturer_id" id="lecturer_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" autofocus>
+                <select name="lecturer_id" id="lecturer_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                     @foreach($lecturers as $lecturer)
                         @if($student->first()->lecturer_id == $lecturer->id)
                             <option selected value="{{ $lecturer->id }}">{{ $lecturer->user->name }}</option>    
@@ -114,7 +107,7 @@
         @endif
         
         <div class="flex items-center gap-4">
-            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
+            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
 
             @if (session('status') === 'profile-updated')
                 <p
@@ -128,23 +121,3 @@
         </div>
     </form>
 </section>
-
-@push('scripts')
-    <script>
-        // Get a reference to the file input element
-        const inputElement = document.querySelector('input[id="image"]');
-
-        // Create a FilePond instance
-        const pond = FilePond.create(inputElement);
-
-        FilePond.setOptions({
-            server: {
-            url:  '/upload',
-            headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            }
-            }
-        });
-    </script>
-@endpush
-

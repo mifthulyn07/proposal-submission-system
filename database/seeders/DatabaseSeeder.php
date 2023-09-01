@@ -10,7 +10,10 @@ use App\Models\Student;
 use App\Models\Lecturer;
 use App\Models\Proposal;
 use Illuminate\Database\Seeder;
+use Database\Seeders\UserSeeder;
+use Database\Seeders\TopicSeeder;
 use Illuminate\Support\Facades\Hash;
+use Database\Seeders\RolePermissionSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,6 +22,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call([
+            RolePermissionSeeder::class,
+            UserSeeder::class,
+            TopicSeeder::class,
+        ]);
 
         // User::factory()->create([
         //     'name'              => 'Developer',

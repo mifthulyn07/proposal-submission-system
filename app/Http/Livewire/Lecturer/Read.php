@@ -13,8 +13,12 @@ class Read extends Component
     use WithPagination;
     
     public $search = '';
+
     public $deleteIdLecturer;
     public $deleteIdLecturerName;
+
+    public $students;
+    public $supervisor;
 
     // for realtime pagination
     public function updatingSearch()
@@ -76,5 +80,13 @@ class Read extends Component
             $this->emit('alert_remove');
             return;
         }
+    }
+
+    public function showStudents($id)
+    {        
+        $lecturer = Lecturer::findOrFail($id);
+        $this->students = $lecturer->students;
+        $this->supervisor = $lecturer->user->name;
+        // return view('livewire.lecturer.read', compact('students'));
     }
 }

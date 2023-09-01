@@ -4,16 +4,16 @@
 
             {{-- form --}}
             <div class="m-4 ">
-                <h5 class="text-xl font-medium text-gray-900 dark:text-white">Add proposal</h5>
+                <h5 class="text-xl font-medium text-gray-900 dark:text-white">Edit proposal</h5>
                 <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">you must add proposal</p></p>
 
-                <form class="mt-6" wire:submit.prevent="store">
+                <form class="mt-6" wire:submit.prevent="update">
                     
                     {{-- topic --}}
                     <div class="mb-4">
                         <label for="topic_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Topic of proposal</label>
                         <select id="topic_id" name="topic_id" wire:model="topic_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option hidden>Choose Topic</option>
+                            <option selected>Choose Topic</option>
                             @foreach ($topics as $topic)
                                 <option value="{{ $topic->id }}">{{ $topic->name }}</option>
                             @endforeach

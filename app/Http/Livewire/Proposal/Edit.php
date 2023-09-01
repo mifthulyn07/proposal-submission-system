@@ -6,7 +6,6 @@ use App\Models\Topic;
 use App\Models\Student;
 use Livewire\Component;
 use App\Models\Proposal;
-use Illuminate\Support\Facades\Auth;
 
 class Edit extends Component
 {
@@ -22,9 +21,8 @@ class Edit extends Component
     public $year;
     public $status;
 
-    public function mount()
+    public function mount($proposal)
     {
-        $proposal = Proposal::find($this->proposal->id);
         if(!empty($proposal)){
             $this->topic_id     = $proposal->topic_id;
             $this->student_id   = $proposal->student_id;
@@ -89,10 +87,8 @@ class Edit extends Component
             $proposal->save();
 
             session()->flash('success', 'Proposal successfully updated.');
-            return;
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
-            return;
         }
     }
 }

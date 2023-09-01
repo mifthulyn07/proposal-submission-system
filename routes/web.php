@@ -82,11 +82,14 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('role:student')->group(function () {
+
+        // submit proposal 
         Route::view('/list-submit-proposal', 'submit-proposal.read')->name('submit-proposal.read');
         Route::view('/add-submit-proposal', 'submit-proposal.create')->name('submit-proposal.create');
-        Route::get('/edit-submit-proposal{submitProposal}', function(SubmitProposal $submitProposal){
+        Route::get('/edit-submit-proposal/{submitProposal}', function(SubmitProposal $submitProposal){
             return view('submit-proposal.edit', ['submitProposal' => $submitProposal]);
         })->name('submit-proposal.edit');
+
     });
     
 });

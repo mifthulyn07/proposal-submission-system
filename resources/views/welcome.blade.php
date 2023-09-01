@@ -6,7 +6,7 @@
             <div class="flex justify-center">
                 <img src="assets/img/Logo-UINSU.png" alt="Uinsu" width="250px">
             </div>
-            <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Proposal Submission</h1>
+            <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">SI-PANJUL</h1>
             <p class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-400">
                 This website is specifically designed for information systems students from the State Islamic University of North Sumatra. This website is a tool to facilitate the proposal submission process.
             </p>

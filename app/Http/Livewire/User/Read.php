@@ -56,13 +56,11 @@ class Read extends Component
             
             // for hide alert for 3 sec
             $this->emit('alert_remove');
-            return;
         } catch (\Exception $e){
             session()->flash('error', 'An error occurred while deleting the User: '.$e->getMessage());
 
             // for hide alert for 3 sec
             $this->emit('alert_remove');
-            return;
         }
     }
 }

@@ -13,9 +13,8 @@ class Edit extends Component
     public $name;
     public $date;
 
-    public function mount()
+    public function mount($topic)
     {
-        $topic = Topic::find($this->topic->id);
         if(!empty($topic)){
             $this->name     = $topic->name;
             $this->date     = $topic->date;
@@ -48,10 +47,8 @@ class Edit extends Component
             $topic->save();
 
             session()->flash('success', 'Topic successfully updated.');
-            return;
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
-            return;
         }
     }
 }

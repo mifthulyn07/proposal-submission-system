@@ -9,7 +9,7 @@
 
         {{-- favicon --}}
         <link rel="shortcut icon" type="image/png" sizes="32x32" href="{{ asset('assets/img/favicon-uinsu.png') }}">
-        <link rel="stylesheet" type="text/css" href="{{ url('css/style.css') }}">
+        {{-- <link rel="stylesheet" type="text/css" href="{{ url('css/style.css') }}"> --}}
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

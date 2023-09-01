@@ -1,5 +1,5 @@
 <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-    <div class="px-3 py-3 lg:px-5 lg:pl-3">
+    <div class="px-3 py-1 lg:px-5 lg:pl-3">
         <div class="flex items-center justify-between">
             <div class="flex items-center justify-start">
                 {{-- logo-sidebar --}}
@@ -10,13 +10,13 @@
                     </svg>
                 </button>
                 <a href="{{ Route('dashboard') }}">
-                    <img src="{{ asset('assets/img/logouinsu.svg') }}" class="m-1" alt="Uinsu" width="70px">
+                    <img src="{{ asset('assets/img/Logo-UINSU.png') }}" class="m-1" alt="UINSU" width="65px">
                 </a>
             </div>
             <div class="flex items-center">
                 <div class="flex items-center ml-3">
                     @if($avatar = Auth::user()->avatar)
-                        <img class="object-cover w-8 h-8 rounded-full" src="{{ asset('storage/'.$avatar) }}" alt="avatar"/>
+                        <img class="object-cover w-8 h-8 rounded-full" src="{{ asset('storage/avatars/'.$avatar) }}" alt="avatar"/>
                     @else                    
                         <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=e6f0ff&rounded=true" alt="avatar" width="32">
                     @endif
@@ -52,7 +52,7 @@
                                 </x-dropdown-link>
                             </form>
                         </ul>
-                    </div>
+                    </div>  
                 </div>
             </div>
         </div>

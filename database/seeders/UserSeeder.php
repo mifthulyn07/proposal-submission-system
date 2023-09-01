@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             'gender'            => 'female',
             'phone'             => '08131234567',
             'email'             => 'developer@example.com',
-            'password'          => Hash::make('developer'),
+            'password'          => Hash::make('12345678'),
         ]);
         $coordinator->assignRole('coordinator');
 

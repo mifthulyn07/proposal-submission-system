@@ -40,6 +40,9 @@ class Create extends Component
             $student    = Student::where('id', $this->student_id)->first();
             $this->name = $student->user->name;
             $this->nim  = $student->nim;
+        }else{
+            $this->name = '';
+            $this->nim  = '';
         }
 
         return view('livewire.proposal.create', [

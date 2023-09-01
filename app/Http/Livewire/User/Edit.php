@@ -7,8 +7,9 @@ use App\Models\User;
 use App\Models\Student;
 use Livewire\Component;
 use App\Models\Lecturer;
-use Illuminate\Validation\Rules;
 use Livewire\WithFileUploads;
+use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Storage;
 
 class Edit extends Component
 {
@@ -25,24 +26,30 @@ class Edit extends Component
     public $password;
     public $password_confirmation;
 
-    public $selected_roles;
+    public $selected_roles = [];
 
-    public $filename;
-    public $isUploaded =false;
+    public $avatar_null = false;
+    public $make_avatar_null = false;
+    public $show_password;
+    public $oldAvatar;
 
-    public function mount()
+    public function mount($user)
     {
-        $user = User::findorFail($this->user->id);
         if(!empty($user)){
-            $this->avatar         = $user->avatar;
-            $this->name           = $user->name;
-            $this->email          = $user->email;
-            $this->gender         = $user->gender;
-            $this->phone          = $user->phone;
-            $this->selected_roles = $user->roles->pluck('id')->toArray();
+            $this->name             = $user->name;
+            $this->email            = $user->email;
+            $this->gender           = $user->gender;
+            $this->phone            = $user->phone;
+            $this->oldAvatar        = $user->avatar;
+            $this->selected_roles   = $user->roles->pluck('id')->toArray();
         }else{
             // for 404 not found
             $this->empty = true;
+        }
+
+        // Memeriksa apakah avatar sudah ada atau tidak
+        if($user->avatar == null){
+            $this->avatar_null = true;
         }
     }
 
@@ -53,8 +60,8 @@ class Edit extends Component
         ]);
     }
 
-    // realtime validation the property that have classes
-    public function updated($propertyName)
+    // realtime validation the property
+    protected function updated($propertyName)
     {
         $validatedData = $this->validateOnly($propertyName, [
             'name'              => ['required', 'max:100'],
@@ -66,21 +73,21 @@ class Edit extends Component
 
         if (isset($validatedData['password']) || isset($validatedData['password_confirmation'])) {
             $validatedData['password'] = Rules\Password::defaults();
-            $validatedData['password_confirmation'] = ['same:password'];
         }
     }
 
     // realtime validation file 
-    public function updatedAvatar()
+    protected function updatedAvatar()
     {
-        $validatedData = $this->validate([
+        $this->validate([
             'avatar' => 'nullable|image|max:1024|mimes:jpeg,png,jpg', // 1MB Max
         ]);
-
-        $this->isUploaded=true;
         
-        // menggunakan store untuk mengatur nama scara bebas di storage/avatars/blabla.png
-        $this->filename = $validatedData['avatar']->store('avatars', 'public');
+    }
+
+    public function make_avatar_null()
+    {
+        $this->make_avatar_null = true;
     }
 
     public function update()
@@ -117,7 +124,21 @@ class Edit extends Component
             $user->roles()->sync($validatedData['selected_roles']);
 
             // update avatar 
-            $validatedData['avatar'] = $this->filename;
+            if($this->make_avatar_null == true){
+                if($this->oldAvatar){
+                    Storage::disk('public')->delete('avatars/'.$this->oldAvatar);
+                }
+                $validatedData['avatar'] = null;
+            }elseif($this->avatar != $this->oldAvatar){
+                Storage::disk('public')->delete('avatars/'.$this->oldAvatar);
+            }
+            
+            if(isset($validatedData['avatar'])){
+                $extension = $validatedData['avatar']->getClientOriginalExtension();//mime:jpg,png,dll
+                $imageName = time().'-'.uniqid().'.'.$extension;
+                $validatedData['avatar']->storeAs('public/avatars', $imageName);
+                $validatedData['avatar'] = $imageName;
+            }
 
             $user->fill($validatedData);
             $user->save();
@@ -187,12 +208,11 @@ class Edit extends Component
                 }
             }
 
-            $this->reset(['password', 'password_confirmation']);
+            $this->reset(['password', 'password_confirmation', 'avatar']);
             session()->flash('success', 'User successfully updated.');
-            return redirect()->to('edit-user/'.$user->id);
+            redirect()->to('edit-user/'.$user->id);
         }catch (\Exception $e){
             session()->flash('error', $e->getMessage());
-            return;
         }
     }
 }

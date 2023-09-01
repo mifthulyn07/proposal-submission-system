@@ -8,17 +8,21 @@
                 <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">This proposal's title is for an information systems student from the State Islamic University of North Sumatra.</p>
 
                 <form class="mt-6" wire:submit.prevent="store">
-                    <div class="mb-6">
+                    
+                    {{-- student id --}}
+                    <div class="mb-4">
                         <label for="student_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Student Account</label>
                         <select id="student_id" name="student_id" wire:model="student_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected value="null" >Select Student</option>
+                            <option selected value="" >Select Student</option>
                             @foreach ($students as $student)
                                 <option value="{{$student->id}}">{{$student->user->name}} ({{$student->user->email}})</option>
                             @endforeach
                         </select>
                         @error('student_id') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
                     </div>
-                    <div class="grid gap-6 mb-6 md:grid-cols-2">
+                    
+                    {{-- name & nim--}}
+                    <div class="grid gap-4 mb-4 md:grid-cols-2">
                         <div>
                             <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Student's Name</label>
                             <input type="text" wire:model="name" id="name" @if(!empty($this->student_id)) disabled aria-label="disabled input" @endif class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John Doe" >
@@ -30,7 +34,9 @@
                             @error('nim') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
                         </div>
                     </div>
-                    <div class="grid gap-6 mb-6 md:grid-cols-2">
+
+                    {{-- topic & type --}}
+                    <div class="grid gap-4 mb-4 md:grid-cols-2">
                         <div>
                             <label for="topic_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Topic Proposal</label>
                             <select id="topic_id" name="topic_id" wire:model="topic_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -52,7 +58,9 @@
                             @error('type') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
                         </div>
                     </div>
-                    <div class="grid gap-6 mb-6 md:grid-cols-2">
+
+                    {{-- year & status --}}
+                    <div class="grid gap-4 mb-4 md:grid-cols-2">
                         <div>
                             <label for="year" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Year of Proposal</label>
                             <input type="text" id="year" wire:model="year" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="2023">
@@ -68,12 +76,16 @@
                             @error('status') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
                         </div>
                     </div>
-                    <div class="mb-6">
+
+                    {{-- title --}}
+                    <div class="mb-4">
                         <label for="Proposal's Title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Proposal's Title</label>
                         <input type="text" id="title" wire:model="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Implementation of Machine Learning for Attendance Tracking Application">
                         @error('title') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
                     </div>
-                    <div class="flex items-center gap-4">
+
+                    {{-- button submit --}}
+                    <div class="flex items-center gap-4 mt-6">
                         <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
                         @if (session()->has('success'))
                             <p
@@ -94,6 +106,7 @@
                             >{{ session('error') }}</p>
                         @endif
                     </div>
+
                 </form>
             </div>
         </div>

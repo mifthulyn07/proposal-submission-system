@@ -13,28 +13,22 @@ from serpapi import GoogleSearch
 #==================================================
 
 def preprocess_text(text):
-    # case folding: remover number, removing punctuation=tanda baca, removing whitespace
+    # lowercasing
+    lowercased_text = text.lower()
+
+    # cleaning 
     import re 
-    import string
-    text = re.sub(r"\d+", "", text)
-    text = text.translate(str.maketrans('','',string.punctuation))      
-    text = text.strip()
+    remove_punctuation = re.sub(r'[^\w\s]', '', lowercased_text)
+    remove_white_space = remove_punctuation.strip()
 
     # Tokenization = memecah tiap kalimat menjadi array
-    from nltk.tokenize import word_tokenize #tokenezing
-    tokenized_text = word_tokenize(text)
+    from nltk.tokenize import word_tokenize
+    tokenized_text = word_tokenize(remove_white_space)
 
     # Stop Words = menghapus kata kata yang tidak penting = filtering
     from nltk.corpus import stopwords
     stopwords_indonesia = set(stopwords.words('indonesian'))
     stopwords_removed = [word for word in tokenized_text if word not in stopwords_indonesia]
-
-    # from nltk.probability import FreqDist
-    # kemunculan = nltk.FreqDist(tokenized_text)
-    # kemunculan = kemunculan.most_common()
-    # import matplotlib.pyplot as plt
-    # kemunculan.plot(30,cumulative=False)
-    # plt.show()
 
     # Stemming = normalisasi data ke dalam bentuk dasar 
     from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
@@ -52,7 +46,6 @@ def calculate_tfidf(corpus):
     from sklearn.feature_extraction.text import TfidfVectorizer
     vectorizer = TfidfVectorizer()
     tfidf_result = vectorizer.fit_transform(stopwords_removed)
-    # feature_names = vectorizer.get_feature_names_out()
     
     return tfidf_result
 
@@ -108,18 +101,21 @@ def google_scholar_api(search):
 
     search  = GoogleSearch(params)
     results = search.get_dict()
-    gs_api  = results['organic_results']
+    if results["search_information"]["organic_results_state"] == "Results for exact spelling":
+        gs_api  = results['organic_results']
 
-    summary     = [item['publication_info']['summary'] for item in gs_api]
-    result_id   = [item['result_id'] for item in gs_api]
-    link        = [item.get('link') for item in gs_api]
-    title       = [item['title'] for item in gs_api]
+        summary     = [item['publication_info']['summary'] for item in gs_api]
+        result_id   = [item['result_id'] for item in gs_api]
+        link        = [item.get('link') for item in gs_api]
+        title       = [item['title'] for item in gs_api]
 
-    # make a list 
-    combined = zip(summary, result_id, link, title)
-    make_list = np.array(list(combined))
+        # make a list 
+        combined = zip(summary, result_id, link, title)
+        result = np.array(list(combined))
+    else:
+        result = none
     
-    return make_list
+    return result
 
 #=================================================
 
@@ -137,27 +133,33 @@ if __name__ == '__main__':
     corpus_laravel  = data[:, 3]
     # print(corpus_laravel)
 
-    # data from google scholar 
-    data_api    = google_scholar_api(data[0, 3])
-    corpus_api  = data_api[:, 3]
+    if google_scholar_api(data[0, 3]) == none:
+        # kirim ke laravel berbentuk list
+        cosim = json.dumps(none)
 
-    # satukan corpus_data dan corpus_api
-    corpus = np.concatenate((corpus_laravel, corpus_api))
+        print(cosim) 
+    else:
+        # data from google scholar 
+        data_api    = google_scholar_api(data[0, 3])
+        corpus_api  = data_api[:, 3]
 
-    # run
-    pool = mp.Pool()
-    preprocess_result = pool.map(preprocess_text, corpus)
-    tfidf_result = calculate_tfidf(preprocess_result)
-    cosim_result = cosineSimilarity(tfidf_result)
-    pool.close()
-    pool.join()
+        # satukan corpus_data dan corpus_api
+        corpus = np.concatenate((corpus_laravel, corpus_api))
 
-    stop = timeit.default_timer()
-    execution_time = stop - start
+        # run
+        pool = mp.Pool()
+        preprocess_result = pool.map(preprocess_text, corpus)
+        tfidf_result = calculate_tfidf(preprocess_result)
+        cosim_result = cosineSimilarity(tfidf_result)
+        pool.close()
+        pool.join()
 
-    # encode json
-    result = json_encode(data, data_api, cosim_result, execution_time)
+        stop = timeit.default_timer()
+        execution_time = stop - start
 
-    print(result)
-    # print(execution_time)
+        # encode json
+        result = json_encode(data, data_api, cosim_result, execution_time)
+
+        print(result)
+        # print(execution_time)
     

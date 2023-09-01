@@ -11,14 +11,17 @@ class Edit extends Component
     public $student;
     public $empty = false;
 
+    public $name;
+    public $email;
     public $nim;
     public $class;
     public $lecturer_id;
 
-    public function mount()
+    public function mount($student)
     {
-        $student = Student::findOrFail($this->student->id);
         if(!empty($student)){
+            $this->name         = $student->user->name;
+            $this->email        = $student->user->email;
             $this->nim          = $student->nim;
             $this->class        = $student->class;
             $this->lecturer_id  = $student->lecturer_id;
@@ -58,10 +61,8 @@ class Edit extends Component
             $student->save();
 
             session()->flash('success', 'Student successfully updated.');
-            return;
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
-            return;
         }
     }
 }

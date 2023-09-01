@@ -21,11 +21,11 @@ class Create extends Component
     public $gender;
     public $phone;
     public $password;
-    public $password_confirmation;
 
     public $selected_roles = [];
-
-    public $filename;
+    
+    public $password_confirmation;
+    public $show_password = false;
     
     public function render()
     {
@@ -34,8 +34,16 @@ class Create extends Component
         ]);
     }
 
-    // realtime validation property if use classes
-    public function updated($propertyName)
+    // realtime validation file 
+    protected function updatedAvatar()
+    {
+        $this->validate([
+            'avatar' => 'nullable|image|max:1024|mimes:jpeg,png,jpg', // 1MB Max
+        ]);
+    }
+
+    // realtime validation property
+    protected function updated($propertyName)
     {
         $this->validateOnly($propertyName, [
             'name'                  => ['required', 'max:100'],
@@ -43,26 +51,14 @@ class Create extends Component
             'gender'                => ['in:male,female'],
             'phone'                 => ['numeric', 'unique:users,phone'],
             'password'              => [Rules\Password::defaults()],
-            'password_confirmation' => ['same:password'],
             'selected_roles'        => ['required', 'array', 'exists:roles,id'],
         ]);
-    }
-
-    // realtime validation file 
-    public function updatedAvatar()
-    {
-        $validatedData = $this->validate([
-            'avatar' => 'nullable|image|max:1024|mimes:jpeg,png,jpg', // 1MB Max
-        ]);
-
-        // menggunakan store untuk mengatur nama scara bebas di storage/public/avatars/blabla.png
-        $this->filename = $validatedData['avatar']->store('public/avatars');
     }
 
     public function store()
     {
         try{
-            // realtime validation property if use classes, must do this twice
+            // every realtime validation, must do this for twice
             $validatedData = $this->validate([
                 'avatar'                => ['nullable','image','max:1024','mimes:jpeg,png,jpg'],
                 'name'                  => ['required', 'max:100'],
@@ -74,9 +70,14 @@ class Create extends Component
                 'selected_roles'        => ['required', 'exists:roles,id'],
             ]);
 
+            // store avatar ke avatars 
+            $extension = $validatedData['avatar']->getClientOriginalExtension();//mime:jpg,png,dll
+            $imageName = time().'-'.uniqid().'.'.$extension;
+            $validatedData['avatar']->storeAs('public/avatars', $imageName);
+
             // create 
             $user = User::create([
-                'avatar'    => $this->filename,
+                'avatar'    => $imageName,
                 'name'      => $validatedData['name'],
                 'email'     => $validatedData['email'],
                 'gender'    => $validatedData['gender'],
@@ -87,12 +88,14 @@ class Create extends Component
             // buat role 
             $user->roles()->attach($validatedData['selected_roles']);
 
-            // isi tabel student/lecturer 
+            // isi tabel student
             if($user->hasRole('student')){
                 $student = new Student();
                 $student->user_id = $user->id;
                 $student->save();
             }
+
+            // isi tabel lecturer 
             if($user->hasRole('lecturer')){
                 $lecturer = new Lecturer();
                 $lecturer->user_id = $user->id;
@@ -101,10 +104,8 @@ class Create extends Component
 
             $this->reset();
             session()->flash('success', 'User successfully stored.');
-            return;
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
-            return;
         }
     }
 }

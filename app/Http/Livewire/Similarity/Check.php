@@ -9,10 +9,9 @@ class Check extends Component
     public $text;
     public $similarities = [];
     public $result_cosim = null;
-    // public $me = [];
 
     protected $rules = [
-        'text' => 'required',
+        'text' => 'required|min:20',
     ];
 
     public function render()
@@ -34,7 +33,7 @@ class Check extends Component
             'title' => $this->text
         ];
 
-        // filter 
+        // cari title seperti text di database
         $search     = trim($this->text);
         $keywords   = explode(' ', $search);
         $query      = Proposal::query();
@@ -61,19 +60,23 @@ class Check extends Component
         $all_similarities = json_decode(json_decode($all_similarities));
 
         // Convert $all_similarities to a collection
-        $all_similarities = collect($all_similarities);
+        if($all_similarities == null){
+            $this->result_cosim = null;
+        }else{
+            $all_similarities = collect($all_similarities);
 
-        // ambil semua index kecuali index pertama 
-        $similarities = $all_similarities->slice(1)->sortByDesc('cosim')->values();
-        $this->similarities = $similarities;
-        // dd($similarities);
+            // ambil semua index kecuali index pertama 
+            $similarities = $all_similarities->slice(1)->sortByDesc('cosim')->values();
+            $this->similarities = $similarities;
+            // dd($similarities);
 
-        // nilai cosim yg paling tinggi 
-        $result_cosim1 = $similarities->first()->cosim;
-        $this->result_cosim = $result_cosim1;
-        
-        // ambil index pertama
-        $me = $all_similarities->first(); 
-        // $this->me = $me;
+            // nilai cosim yg paling tinggi 
+            $result_cosim1 = $similarities->first()->cosim;
+            $this->result_cosim = $result_cosim1;
+            
+            // ambil index pertama
+            $me = $all_similarities->first(); 
+            // $this->me = $me;
+        }
     }
 }

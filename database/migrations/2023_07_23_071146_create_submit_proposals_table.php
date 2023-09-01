@@ -16,11 +16,12 @@ return new class extends Migration
             $table->foreignId("proposal_process_id")->constrained()->cascadeOnDelete();
             $table->foreignId("topic_id")->nullable()->constrained()->onDelete('set null');
             $table->string("title");
-            $table->boolean("proposal_pdf");
-            $table->boolean("acc_advisor");
-            $table->string("desc_advisor");
-            $table->boolean("acc_coordinator");
-            $table->string("desc_coordinator");
+            $table->bigInteger("similarity")->nullable();
+            $table->string("proposal");
+            $table->boolean("acc_advisor")->nullable();
+            $table->string("desc_advisor")->nullable();
+            $table->boolean("acc_coordinator")->nullable();
+            $table->string("desc_coordinator")->nullable();
             $table->timestamps();
         });
     }

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\User;
 use App\Models\Lecturer;
 use App\Models\Proposal;
+use App\Models\ProposalProcess;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -34,5 +35,10 @@ class Student extends Model
     public function proposal(): HasOne
     {
         return $this->hasOne(Proposal::class);
+    }
+
+    public function proposal_process(): HasOne
+    {
+        return $this->hasOne(ProposalProcess::class);
     }
 }
