@@ -2,18 +2,21 @@
 
 namespace App\Http\Livewire\Lecturer;
 
-use App\Models\User;
 use Livewire\Component;
 use App\Models\Lecturer;
 
 class Edit extends Component
 {
+    // from parameter 
     public $lecturer;
     public $empty = false;
 
+    // modal lecturer
+    public $nip;
+
+    // modal user relationship 
     public $name;
     public $email;
-    public $nip;
 
     public function mount($lecturer)
     {
@@ -32,19 +35,24 @@ class Edit extends Component
         return view('livewire.lecturer.edit');
     }
 
+    protected function propertyValidation()
+    {
+        return [
+            'required', 'numeric', 'unique:lecturers,nip,'.$this->lecturer->id
+        ];
+    }
+
+    // realtime validation 
     public function updated($propertyName)
     {
-        $this->validateOnly($propertyName,[
-            'nip'   => ['required', 'numeric', 'unique:lecturers,nip,'.$this->lecturer->id],
-        ]);
+        $this->validateOnly($propertyName, $this->propertyValidation());
     }
 
     public function update()
     {
        try{
-            $validatedData = $this->validate([
-                'nip'  => ['required', 'numeric', 'unique:lecturers,nip,'.$this->lecturer->id],
-            ]);
+            // every realtime validation, must do this for twice
+            $validatedData = $this->validate($this->propertyValidation());
 
             $lecturer = Lecturer::findOrFail($this->lecturer->id);
             $lecturer->fill($validatedData);

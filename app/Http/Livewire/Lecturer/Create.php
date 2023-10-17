@@ -9,6 +9,7 @@ use App\Models\Lecturer;
 
 class Create extends Component
 {
+    // modal lecturer 
     public $user_id;
     public $nip;
 
@@ -26,6 +27,7 @@ class Create extends Component
         'nip'      => ['required', 'numeric', 'unique:lecturers,nip'],
     ];
 
+    // realtime validation 
     public function updated($propertyName)
     {
         $this->validateOnly($propertyName);
@@ -34,6 +36,7 @@ class Create extends Component
     public function store()
     {
         try{
+            // every realtime validation, must do this for twice
             $validatedData = $this->validate();
 
             $lecturer = Lecturer::create([
@@ -41,15 +44,13 @@ class Create extends Component
                 'user_id'   => $validatedData['user_id'],
             ]);
             
-            $lecturer_role = Role::where('name', 'lecturer')->first();
-            $lecturer->user->roles()->attach($lecturer_role);
+            // buat role lecturernya 
+            $lecturer->user->roles()->attach(Role::where('name', 'lecturer')->first());
 
             $this->reset();
             session()->flash('success', 'Lecturer successfully stored.');
-            return;
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
-            return;
         }
     }
 }

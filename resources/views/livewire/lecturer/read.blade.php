@@ -7,8 +7,11 @@
 @endpush
 
 <div>
+    {{-- popup if user offline  --}}
+    @include('components.offline')
+
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+        <div class="bg-white overflow-hidden rounded-lg shadow rounded-lg">
 
             {{-- alert --}}
             <div class="m-4 ">
@@ -29,7 +32,7 @@
                         x-show="show"
                         x-transition
                         x-init="setTimeout(() => show = false, 3000)"
-                        class="alert-remove p-4 mt-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" 
+                        class="alert-remove p-4 mt-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" 
                         role="alert"
                     >{{ session('error') }}</div>
                 @endif
@@ -68,7 +71,7 @@
             </div>
 
             {{-- table --}}
-            <div class="m-4 relative overflow-x-auto rounded-lg">
+            <div class="m-4 relative overflow-x-auto rounded-lg shadow-sm">
                 @if($lecturers->isEmpty())
                     <div class="m-4">
                         <div class="flex flex-col justify-center items-center px-6 mx-auto xl:px-0 dark:bg-gray-900">
@@ -113,7 +116,9 @@
                                     </th>
                                     <th class="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         @if($lecturer->user->avatar)
-                                            <img class="object-cover w-10 h-10 rounded-full" src="{{ asset('storage/avatars/'.$lecturer->user->avatar) }}" alt="avatar"/>
+                                            <div class="inline-block w-10 h-10 overflow-hidden bg-gray-300 rounded-full">
+                                                <img class="object-cover w-10 h-10" src="{{ asset('storage/avatars/'.$lecturer->user->avatar) }}" alt="avatar"/>
+                                            </div>
                                         @else                    
                                             <img src="https://ui-avatars.com/api/?name={{ urlencode($lecturer->user->name) }}&background=e6f0ff&rounded=true" alt="avatar" width="40">
                                         @endif
@@ -139,10 +144,14 @@
                                         {{ $lecturer->user->phone }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @if ($lecturer->students)
-                                            <a wire:click="showStudents({{ $lecturer->id }})" x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-students-show')" href="" class="font-medium text-blue-600 hover:underline dark:text-blue-500">
-                                                {{ $lecturer->students->count()}} students
-                                            </a>
+                                        @if ($lecturer->proposals->isNotEmpty())
+                                            @if ($lecturer->proposals->student->isEmpty())
+                                                <a wire:click="showStudents({{ $lecturer->id }})" x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-students-show')" href="" class="font-medium text-blue-600 hover:underline dark:text-blue-500">
+                                                    {{ $lecturer->proposals->student->count()}} students
+                                                </a>
+                                            @endif
+                                        @else
+                                            0 student
                                         @endif
                                     </td>
                                      @if (auth()->user()->hasRole('coordinator'))
@@ -201,8 +210,6 @@
                 <div class="p-6" wire:loading wire:target="showStudents()">
                     <p>loading...</p>
                 </div>
-
-                
 
                 {{-- table --}}
                 <div class="p-3">

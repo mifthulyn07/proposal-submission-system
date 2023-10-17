@@ -8,7 +8,7 @@
         <title>@yield('title', 'Proposal Submission')</title>
 
         {{-- favicon --}}
-        <link rel="shortcut icon" type="image/png" sizes="32x32" href="{{ asset('assets/img/favicon-uinsu.png') }}">
+        <link rel="shortcut icon" type="image/png" sizes="32x32" href="{{ asset('assets/img/favicon-si-panjul.png') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -30,7 +30,7 @@
 
         @livewireStyles
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased text-sm">
         <div class="min-h-screen bg-gray-100">
 
             @include('partials.navbar')

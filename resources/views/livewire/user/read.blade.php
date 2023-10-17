@@ -7,8 +7,12 @@
 @endpush
 
 <div>
+
+    {{-- popup if user offline  --}}
+    @include('components.offline')
+    
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+        <div class="bg-white overflow-hidden rounded-lg shadow rounded-lg">
 
             {{-- alert --}}
             <div class="m-4 ">
@@ -29,7 +33,7 @@
                         x-show="show"
                         x-transition
                         x-init="setTimeout(() => show = false, 3000)"
-                        class="alert-remove p-4 mt-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" 
+                        class="alert-remove p-4 mt-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" 
                         role="alert"
                     >{{ session('error') }}</div>
                 @endif
@@ -66,7 +70,7 @@
             </div>
 
             {{-- table --}}
-            <div class="m-4 relative overflow-x-auto rounded-lg">
+            <div class="m-4 relative overflow-x-auto rounded-lg shadow-sm">
                 @if($users->isEmpty())
                     <div class="m-4">
                         <div class="flex flex-col justify-center items-center px-6 mx-auto xl:px-0 dark:bg-gray-900">
@@ -110,23 +114,27 @@
                                     <th class="px-6 py-4">
                                         @foreach ($user->roles as $role)
                                             @if( $role->name == 'coordinator')
-                                                <p class="bg-green-100 text-green-800 text-xs font-medium mr-0.5 mb-1 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Coordinator</p>
+                                                <p class="flex justify-center bg-green-100 text-green-800 text-xs font-medium mr-0.5 mb-1 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Coordinator</p>
                                             @elseif($role->name == 'lecturer')
-                                                <p class="bg-purple-100 text-purple-800 text-xs font-medium mr-0.5 mb-1 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300">Lecturer</p>
+                                                <p class="flex justify-center bg-purple-100 text-purple-800 text-xs font-medium mr-0.5 mb-1 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300">Lecturer</p>
                                             @elseif($role->name == 'student')
-                                                <p class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-0.5 mb-1 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Student</p>
+                                                <p class="flex justify-center bg-yellow-100 text-yellow-800 text-xs font-medium mr-0.5 mb-1 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Student</p>
                                             @endif
                                         @endforeach
                                     </th>
-                                    <th class="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        @if($user->avatar)
-                                            <img class="object-cover w-10 h-10 rounded-full" src="{{ asset('storage/avatars/'.$user->avatar) }}" alt="avatar"/>
-                                        @else                    
-                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=e6f0ff&rounded=true" alt="avatar" width="40">
-                                        @endif
-                                        <div class="px-6">
-                                            <div class="text-light font-semibold text-gray-900">{{ $user->name }}</div>
-                                            <div class="font-normal text-gray-500">{{ $user->email }}</div>
+                                    <th class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        <div class="flex items-center">
+                                            @if($user->avatar)
+                                                <div class="inline-block w-10 h-10 overflow-hidden bg-gray-300 rounded-full">
+                                                    <img class="object-cover w-10 h-10" src="{{ asset('storage/avatars/'.$user->avatar) }}" alt="avatar"/>
+                                                </div>
+                                            @else                    
+                                                <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=e6f0ff&rounded=true" alt="avatar" width="40">
+                                            @endif
+                                            <div class="px-6">
+                                                <div class="text-light font-semibold text-gray-900">{{ $user->name }}</div>
+                                                <div class="font-normal text-gray-500">{{ $user->email }}</div>
+                                            </div>
                                         </div>
                                     </th>
                                     <td class="px-6 py-4">
@@ -193,4 +201,5 @@
 
         </div>
     </div>
+    
 </div>

@@ -7,8 +7,11 @@
 @endpush
 
 <div>
+    {{-- popup if user offline  --}}
+    @include('components.offline')
+
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+        <div class="bg-white overflow-hidden rounded-lg shadow rounded-lg">
 
             {{-- alert --}}
             <div class="m-4 ">
@@ -29,7 +32,7 @@
                         x-show="show"
                         x-transition
                         x-init="setTimeout(() => show = false, 3000)"
-                        class="alert-remove p-4 mt-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" 
+                        class="alert-remove p-4 mt-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" 
                         role="alert"
                     >{{ session('error') }}</div>
                 @endif
@@ -68,7 +71,7 @@
             </div>
 
             {{-- table --}}
-            <div class="m-4 relative overflow-x-auto rounded-lg">
+            <div class="m-4 relative overflow-x-auto rounded-lg shadow-sm">
                 @if($proposals->isEmpty())
                     <div class="m-4">
                         <div class="flex flex-col justify-center items-center px-6 mx-auto xl:px-0 dark:bg-gray-900">
@@ -76,7 +79,7 @@
                                 <img src="/assets/illustrations/no-data.svg" alt="astronaut image">
                             </div>
                             <div class="text-center xl:max-w-4xl">
-                                <h1 class="mb-3 text-2xl font-bold leading-tight text-gray-900 sm:text-4xl lg:text-5xl dark:text-white">Data not found</h1>
+                                <h1 class="mb-3 text-xl font-bold leading-tight text-gray-900 sm:text-2xl dark:text-white">Data not found</h1>
                                 <p class="mb-5 text-base font-normal text-gray-500 md:text-lg dark:text-gray-400">Oops! I'm sorry, cannot find the data you're searching for.</p>
                             </div>
                         </div>
@@ -135,17 +138,19 @@
                                         {{ $proposal->year }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        @if($proposal->topic_id)
+                                        @if($proposal->topic )
                                             {{ $proposal->topic->name }}
+                                        @else
+                                            {{ $proposal->adding_topic }}
                                         @endif
                                     </td>
                                     <td class="px-6 py-4">
-                                        @if($proposal->type == 'teknologi_tepat_guna')
-                                            Teknologi Tepat Guna
-                                        @elseif($proposal->type == 'skripsi')
-                                            Skripsi
-                                        @else
-                                            Jurnal
+                                        @if($proposal->type == 'thesis')
+                                            <p class="flex justify-center bg-green-100 text-green-800 text-xs font-medium mr-0.5 mb-1 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Thesis</p>
+                                        @elseif($proposal->type == 'appropriate_technology')
+                                            <p class="flex justify-center bg-purple-100 text-purple-800 text-xs font-medium mr-0.5 mb-1 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300">Appropriate_Technology</p>
+                                        @elseif($proposal->type == 'journal')
+                                            <p class="flex justify-center bg-yellow-100 text-yellow-800 text-xs font-medium mr-0.5 mb-1 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Journal</p>
                                         @endif
                                     </td>
                                     @if (auth()->user()->hasRole('coordinator'))

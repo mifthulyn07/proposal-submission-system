@@ -64,7 +64,7 @@ class Read extends Component
             if ($studentRole) {
                 $student->user->roles()->detach($studentRole->id);
 
-                // Jika pengguna tidak memiliki peran lain selain "student", hapus juga pengguna
+                // Jika pengguna tidak memiliki peran lain selain "student", hapus juga account pengguna
                 if ($student->user->roles()->count() === 0) {
                     $student->user->delete();
                 }
@@ -74,13 +74,11 @@ class Read extends Component
             
             // for hide alert for 3 sec
             $this->emit('alert_remove');
-            return;
         } catch (\Exception $e){
             session()->flash('error', 'An error occurred while deleting the Student: '.$e->getMessage());
 
             // for hide alert for 3 sec
             $this->emit('alert_remove');
-            return;
         }
     }
 }

@@ -1,10 +1,14 @@
 <div>
+
+    {{-- popup if user offline  --}}
+    @include('components.offline')
+
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+        <div class="bg-white overflow-hidden rounded-lg shadow rounded-lg">
 
             {{-- form --}}
             <div class="m-4 ">
-                <h5 class="text-xl font-medium text-gray-900 dark:text-white">Add Student</h5>
+                <h5 class="text-xl font-medium text-gray-900 dark:text-white">Add a new student</h5>
                 <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">This Feature can be use by Coordinator.</p>
 
                 <form class="mt-6" wire:submit.prevent="store">
@@ -74,4 +78,5 @@
             </div>
         </div>
     </div>
+
 </div>

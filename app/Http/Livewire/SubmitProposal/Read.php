@@ -4,80 +4,81 @@ namespace App\Http\Livewire\SubmitProposal;
 
 use App\Models\User;
 use Livewire\Component;
-use App\Models\SubmitProposal;
+use App\Models\Proposal;
 use App\Models\ProposalProcess;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class Read extends Component
 {
-    public $currentStep = 1;
-    public $deleteIdSubmitProposalTitle;
-    public $deleteIdSubmitProposal;
+    public $proposalProcess;
 
-    public function mount(){
-        $check_proposal_process = ProposalProcess::where('student_id', User::with('student')->find(Auth::id())->student->id)->first();
-        if($check_proposal_process == null){
-            $proposal_process = new ProposalProcess;
-            $proposal_process->student_id = User::with('student')->find(Auth::id())->student->id;
-            $proposal_process->save();
+    protected $listeners = [
+        'showSubmit'        => 'showSubmit',
+        'showFinishSubmit'  => 'showFinishSubmit',
+        'showResultSubmit'  => 'showResultSubmit',
+    ];
+
+    public $showSubmit          = false;
+    public $showFinishSubmit    = false;
+    public $showResultSubmit    = false;
+
+    public $submission_done = false;
+
+    public function mount()
+    {
+        $proposals_process  = ProposalProcess::where('student_id', auth()->user()->student->id)->get();
+        $proposal_onProcess = Proposal::where('student_id', auth()->user()->student->id)->get();
+
+        if($proposals_process->isEmpty() && $proposal_onProcess){
+            $this->submission_done = true;
+        }else{
+            foreach($proposals_process as $proposal_process){
+                if(!isset($proposal_process->type) && !isset($proposal_process->date) || !isset($proposal_process->explanation)){
+                    if(isset($proposal_process->type) && isset($proposal_process->date) && !isset($proposal_process->explanation)){
+                        $this->showSubmit       = false;
+                        $this->showFinishSubmit = false;
+                        $this->showResultSubmit = true;
+                    }else{
+                        $this->showSubmit       = true;
+                        $this->showFinishSubmit = false;
+                        $this->showResultSubmit = false;
+                    }
+                    
+                    $this->proposalProcess = $proposal_process;
+                }else{
+                    $this->showSubmit       = false;
+                    $this->showFinishSubmit = false;
+                    $this->showResultSubmit = true;
+    
+                    $this->proposalProcess = $proposal_process;
+                }
+            }
         }
     }
 
     public function render()
     {
-        $proposal_process = ProposalProcess::where('student_id', User::with('student')->find(Auth::id())->student->id)->first();
-
-        return view('livewire.submit-proposal.read', [
-            'submit_proposals' => SubmitProposal::where('proposal_process_id', $proposal_process->id)->get(),
-        ]);
+        return view('livewire.submit-proposal.read');
     }
 
-    public function export($id){
-        $user = User::findOrFail($id); 
-        // return Storage::disk("proposals/")->download($user->proposal_pdf);
-    }
-
-    public function editIdSubmitProposal($id)
+    public function showSubmit()
     {
-        return redirect()->route('submit-proposal.edit', ['submitProposal' => $id]);
+        $this->showSubmit       = true;
+        $this->showFinishSubmit = false;
+        $this->showResultSubmit = false;
     }
 
-    public function deleteIdSubmitProposal($id)
-    {        
-        $submit_proposal = SubmitProposal::findOrFail($id);
-        $this->deleteIdSubmitProposalTitle = $submit_proposal->title;
-        $this->deleteIdSubmitProposal = $submit_proposal->id;
-    }
-
-    public function deleteSubmitProposal()
+    public function showFinishSubmit()
     {
-        try{
-            SubmitProposal::findOrFail($this->deleteIdSubmitProposal)->delete();
-
-            session()->flash('success', 'Proposal successfully deleted.');
-            
-            // for hide alert for 3 sec
-            $this->emit('alert_remove');
-            return;
-        } catch (\Exception $e){
-            session()->flash('error', 'An error occurred while deleting the Proposal: '.$e->getMessage());
-
-            // for hide alert for 3 sec
-            $this->emit('alert_remove');
-            return;
-        }
+        $this->showSubmit       = false;
+        $this->showFinishSubmit = true;
+        $this->showResultSubmit = false;
     }
 
-    public function step_advisor()
+    public function showResultSubmit()
     {
-        $this->currentStep = 2;
+        $this->showSubmit       = false;
+        $this->showFinishSubmit = false;
+        $this->showResultSubmit = true;
     }
-
-    public function step_coordinator()
-    {
-        $this->currentStep = 3;
-    }
-
-
 }

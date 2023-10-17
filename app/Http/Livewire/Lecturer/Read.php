@@ -43,6 +43,7 @@ class Read extends Component
     public function editIdLecturer($id)
     {
         return redirect()->route('lecturer.edit', ['lecturer' => $id]);
+        
     }
 
     public function deleteIdLecturer($id)

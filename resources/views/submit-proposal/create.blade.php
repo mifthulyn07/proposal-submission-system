@@ -28,5 +28,13 @@
 @endsection
 
 @section('content')
-    @livewire('submit-proposal.create')
+    @if(isset($title) && isset($similarity))
+        @livewire('submit-proposal.create', [ 
+            'proposalProcess'   => $proposalProcess,
+            'title'             => $title, 
+            'similarity'        => $similarity
+        ])
+    @else
+        @livewire('submit-proposal.create', ['proposalProcess' => $proposalProcess])
+    @endif
 @endsection

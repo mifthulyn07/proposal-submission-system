@@ -22,5 +22,9 @@
 @endsection
 
 @section('content')
-    @livewire('similarity.check')
+    @if(isset($proposalProcess))
+        @livewire('similarity.check', ['proposalProcess' => $proposalProcess])
+    @else
+        @livewire('similarity.check')
+    @endif
 @endsection

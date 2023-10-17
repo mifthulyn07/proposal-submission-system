@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('temporary_files', function (Blueprint $table) {
+        Schema::create('pdf_requirements', function (Blueprint $table) {
             $table->id();
-            $table->string('folder');
-            $table->string('filename');
+            $table->foreignId("proposal_process_id")->constrained()->cascadeOnDelete();
+            $table->string('pdf_name');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('temporary_files');
+        Schema::dropIfExists('pdf_requirements');
     }
 };

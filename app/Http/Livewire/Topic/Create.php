@@ -39,17 +39,12 @@ class Create extends Component
 
             $proposal = new Topic();
             $proposal->fill($validatedData);
-            
             $proposal->save();
 
             $this->reset('name');
-
             session()->flash('success', 'Topic successfully stored.');
-
-            return;
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
-            return;
         }
     }
 }

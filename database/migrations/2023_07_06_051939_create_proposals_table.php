@@ -17,11 +17,11 @@ return new class extends Migration
             $table->foreignId("student_id")->nullable()->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('nim');
-            $table->enum('type', ['skripsi', 'teknologi_tepat_guna', 'jurnal'])->nullable();
+            $table->enum('type', ['thesis', 'appropriate_technology', 'journal'])->nullable();
             $table->string('title');
             $table->year('year');
             $table->enum('status', ['done', 'on_process']);
-            // $table->string('status')->default(1);
+            $table->string('adding_topic')->nullable();
             $table->timestamps();
         });
     }

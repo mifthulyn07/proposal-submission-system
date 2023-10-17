@@ -21,14 +21,15 @@ class ProposalFactory extends Factory
     {
         $randomStudent = Student::all()->random();
         return [
-            'topic_id'  => Topic::all()->random()->id,
-            'student_id'=> $randomStudent->id,
-            'name'      => $randomStudent->user->name,
-            'nim'       => $randomStudent->nim,
-            'type'      => fake()->randomElement(['skripsi', 'teknologi_tepat_guna', 'jurnal']),
-            'title'     => fake()->sentence(),
-            'year'      => fake()->year(),
-            'status'    => fake()->randomElement(['done', 'on_process']),
+            'topic_id'      => Topic::all()->random()->id,
+            'student_id'    => $randomStudent->id,
+            'name'          => $randomStudent->user->name,
+            'nim'           => $randomStudent->nim,
+            'type'          => fake()->randomElement(['thesis', 'appropriate_technology', 'journal']),
+            'title'         => fake()->sentence(),
+            'year'          => fake()->year(),
+            'status'        => fake()->randomElement(['done', 'on_process']),
+            'adding_topic'  => fake()->sentence(),
         ];
     }
 }

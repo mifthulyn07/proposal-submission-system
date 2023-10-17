@@ -6,9 +6,13 @@ use App\Models\Proposal;
 
 class Check extends Component
 {
+    // from parameter 
+    public $proposalProcess;
+
     public $text;
-    public $similarities = [];
-    public $result_cosim = null;
+    public $similarities    = [];
+    public $result_cosim    = null;
+    public $null_similarity = false;
 
     protected $rules = [
         'text' => 'required|min:20',
@@ -19,7 +23,8 @@ class Check extends Component
         return view('livewire.similarity.check');
     }
     
-    public function checkSimilarities(){
+    public function checkSimilarities()
+    {
         // make time limit for executing
         set_time_limit(240);
 
@@ -49,34 +54,29 @@ class Check extends Component
             'year'  => $query->pluck('year')->toArray(),
             'title' => $query->pluck('title')->toArray(),
         ];
-        $new_cospus = array_merge_recursive($text, $corpus);
 
-        // dd($new_cospus);
-        // encode->run->decode
-        $all_similarities = json_encode($new_cospus);
-        $command = "C:/Users/Administrator/anaconda3/python.exe " . public_path("\cosine_similarity\cosim.py 2>&1 ") . json_encode($all_similarities);
-        $all_similarities = exec($command, $output);
-        // dd($output);
-        $all_similarities = json_decode(json_decode($all_similarities));
+        
+        $new_cospus         = array_merge_recursive($text, $corpus);
+
+        $all_similarities   = json_encode($new_cospus);
+        $command            = "C:/Users/Administrator/anaconda3/python.exe " . public_path("\cosine_similarity\cosim.py 2>&1 ") . json_encode($all_similarities);
+        $all_similarities   = exec($command, $output);
+        $all_similarities   = json_decode(json_decode($all_similarities));
 
         // Convert $all_similarities to a collection
-        if($all_similarities == null){
-            $this->result_cosim = null;
+        if($all_similarities === null){
+            $this->null_similarity  = true;
+            $this->result_cosim     = 0;
         }else{
             $all_similarities = collect($all_similarities);
 
             // ambil semua index kecuali index pertama 
             $similarities = $all_similarities->slice(1)->sortByDesc('cosim')->values();
             $this->similarities = $similarities;
-            // dd($similarities);
 
             // nilai cosim yg paling tinggi 
             $result_cosim1 = $similarities->first()->cosim;
-            $this->result_cosim = $result_cosim1;
-            
-            // ambil index pertama
-            $me = $all_similarities->first(); 
-            // $this->me = $me;
+            $this->result_cosim = intval($result_cosim1);
         }
     }
 }

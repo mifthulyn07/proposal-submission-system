@@ -7,8 +7,12 @@
 @endpush
 
 <div>
+
+    {{-- popup if user offline  --}}
+    @include('components.offline')
+
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+        <div class="bg-white overflow-hidden rounded-lg shadow rounded-lg">
 
             {{-- alert --}}
             <div class="m-4 ">
@@ -29,7 +33,7 @@
                         x-show="show"
                         x-transition
                         x-init="setTimeout(() => show = false, 3000)"
-                        class="alert-remove p-4 mt-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" 
+                        class="alert-remove p-4 mt-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" 
                         role="alert"
                     >{{ session('error') }}</div>
                 @endif
@@ -66,7 +70,7 @@
             </div>
 
             {{-- table --}}
-            <div class="m-4 relative overflow-x-auto rounded-lg">
+            <div class="m-4 relative overflow-x-auto rounded-lg shadow-sm">
                 @if($topics->isEmpty())
                     <div class="m-4">
                         <div class="flex flex-col justify-center items-center px-6 mx-auto xl:px-0 dark:bg-gray-900">
@@ -104,7 +108,7 @@
                                     <th class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-light font-semibold text-gray-900">{{ $topic->name }}</div>
                                     </th>
-                                    <td class="px-6 py-4">
+                                    <td class="px-6 py-4 whitespace-nowrap">
                                         {{ $topic->date }}
                                     </td>
                                     <td class="px-6 py-4 space-x-1 whitespace-nowrap">
@@ -155,4 +159,5 @@
 
         </div>
     </div>
+
 </div>

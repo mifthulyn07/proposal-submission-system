@@ -8,7 +8,7 @@
         <title>@yield('title', 'Proposal Submission')</title>
 
         {{-- favicon --}}
-        <link rel="shortcut icon" type="image/png" sizes="32x32" href="{{ asset('assets/img/favicon-uinsu.png') }}">
+        <link rel="shortcut icon" type="image/png" sizes="32x32" href="{{ asset('assets/img/favicon-si-panjul.png') }}">
         <link rel="stylesheet" type="text/css" href="{{ url('css/style.css') }}">
 
         <!-- Fonts -->
@@ -27,7 +27,7 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
             <div>
                 <a href="/">
-                    <img src="assets/img/Logo-UINSU.png" class="m-1" alt="Uinsu" width="250px">
+                    <img src="assets/img/si-panjul-bgRemove.png" class="m-1" alt="Uinsu" width="250px">
                 </a>
             </div>
 

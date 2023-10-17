@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Student;
+use PHPUnit\Metadata\Api\Requirements;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,9 +16,8 @@ class ProposalProcess extends Model
     protected $fillable = [
         'student_id',
         'type',
-        'requirements_pdf',
-        'proposal',
         'date',
+        'explanation',
     ];
 
     public function student(): BelongsTo
@@ -28,5 +28,10 @@ class ProposalProcess extends Model
     public function submit_proposals(): HasMany
     {
         return $this->hasMany(SubmitProposal::class);
+    }
+
+    public function pdf_requirements(): HasMany
+    {
+        return $this->hasMany(PdfRequirement::class);
     }
 }

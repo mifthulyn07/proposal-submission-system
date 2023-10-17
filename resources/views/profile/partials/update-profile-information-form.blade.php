@@ -1,12 +1,26 @@
 <section>
     <header>
-        <h2 class="text-lg font-medium text-gray-900">
+        <h2 class="text-base font-medium text-gray-900">
             {{ __('Profile Information') }}
         </h2>
 
         <p class="mt-1 text-sm text-gray-600">
             {{ __("Update your account's profile information and email address.") }}
         </p>
+
+        @if (session()->has('warning'))
+        <div
+            x-data="{ show: true }"
+            x-show="show"
+            x-transition
+            x-init="setTimeout(() => show = false, 3000)"
+            class="mb-2 flex align-center justify-center alert-remove p-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-400" 
+            role="alert"
+        >
+            <svg class="flex-shrink-0 inline w-4 h-4 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"><path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/></svg>
+            <span class="font-semibold mr-1">Warning alert!</span> {{ session('warning') }}
+        </div>
+    @endif
     </header>
 
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
@@ -72,32 +86,35 @@
         </div>
 
         {{-- form srudent & lecturer --}}
-        @if($lecturer->isNotEmpty())
+        @if($user->lecturer)
             <div>
                 <x-input-label for="nip" :value="__('NIP')" />
-                <x-text-input id="nip" name="nip" type="text" class="mt-1 block w-full" :value="old('nip', $lecturer->first()->nip)" required autocomplete="nip" />
+                <x-text-input id="nip" name="nip" type="text" class="mt-1 block w-full" :value="old('nip', $user->lecturer->nip)" required autocomplete="nip" />
                 <x-input-error class="mt-2" :messages="$errors->get('nip')" />
             </div>
-        @elseif($student->isNotEmpty())
+        @elseif($user->student)
             <div>
                 <x-input-label for="nim" :value="__('NIM')" />
-                <x-text-input id="nim" name="nim" type="text" class="mt-1 block w-full" :value="old('nim', $student->first()->nim)" required autocomplete="nim" />
+                <x-text-input id="nim" name="nim" type="text" class="mt-1 block w-full" :value="old('nim', $user->student->nim)" required autocomplete="nim" />
                 <x-input-error class="mt-2" :messages="$errors->get('nim')" />
             </div>
 
             <div>
-                <x-input-label for="class" :value="__('Semester')" />
-                <x-text-input id="class" name="class" type="text" class="mt-1 block w-full" :value="old('class', $student->first()->class)" required autocomplete="class" />
+                <x-input-label for="class" :value="__('Class')" />
+                <x-text-input id="class" name="class" type="text" class="mt-1 block w-full" :value="old('class', $user->student->class)" required autocomplete="class" />
                 <x-input-error class="mt-2" :messages="$errors->get('class')" />
             </div>
-
+           
             <div>
                 <x-input-label for="lecturer_id" :value="__('Supervisor')" />
                 <select name="lecturer_id" id="lecturer_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                    <option selected hidden value="">Select Supervisor</option>
                     @foreach($lecturers as $lecturer)
-                        @if($student->first()->lecturer_id == $lecturer->id)
-                            <option selected value="{{ $lecturer->id }}">{{ $lecturer->user->name }}</option>    
-                            <?php continue; ?>
+                        @if($user->student->lecturer)
+                            @if($user->student->lecturer->id == $lecturer->id)
+                                <option selected value="{{ $lecturer->id }}">{{ $lecturer->user->name }}</option>    
+                                @php continue @endphp 
+                            @endif
                         @endif
                         <option value="{{ $lecturer->id }}">{{ $lecturer->user->name }}</option>
                     @endforeach

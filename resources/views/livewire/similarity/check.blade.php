@@ -1,19 +1,21 @@
 <div>
+
+    {{-- popup if user offline  --}}
+    @include('components.offline')
+
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+        <div class="bg-white overflow-hidden rounded-lg shadow rounded-lg">
 
             <div class="m-4 mb-4">
-                <h5 class="text-xl font-medium text-gray-900 dark:text-white">Check Similarity of Title</h5>
-                <p class="mt-1 mb-4 text-gray-500 dark:text-gray-400 font-normal text-sm">The data that will be compared are taken from the titles of the final assignment by Information Systems Student UINSU Medan and Google Scholar.</p>
+                <h5 class="text-base font-medium text-gray-900 dark:text-white">Title Similarity Check</h5>
+                <p class="mt-1 mb-4 text-gray-500 dark:text-gray-400 font-normal text-sm">We'll compare your title with final assignment titles from UINSU Medan's Information Systems students and Google Scholar.</p>
                 <label for="search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-                {{-- form  --}}
+                {{-- form  --}}                
                 <form wire:submit.prevent="checkSimilarities">
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                        </div>
-                        <input  wire:model.defer="text" type="search" id="search" class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Let's check your title here!">
-                        <button type="submit" class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Check</button>
+                    <label for="chat" class="sr-only">Check Similarity</label>
+                    <div class="flex items-center px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 shadow-sm">
+                        <textarea id="chat" wire:model.defer="text" rows="1" class="block mr-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Let's check your title here!"></textarea>
+                        <button type="submit" class="text-white items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Check</button>
                     </div>
                     @error('text') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
                 </form>
@@ -35,16 +37,18 @@
             {{-- result --}}
             @if (count($similarities) > 0)
                 <div class="m-4">
-                    <h5 class="text-xl font-medium text-gray-900 dark:text-white">The Result</h5>
-                    <p class="my-1 items-center  text-gray-500 dark:text-gray-400 font-normal text-sm">Show your result for the next step: submit a proposal. This result can be read by lecturers for proposal submission process.</p>
-                    <div class="flex">
-                        <button type="button" class="inline-flex items-center justify-center text-white bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 mt-1 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#4285F4]/55 mb-6">
-                            <svg class="w-6 h-6 mr-2 -ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25H15M9 12l3 3m0 0l3-3m-3 3V2.25" /></svg>
-                            Next to Submitting Proposal
-                        </button>
-                        <h5 class="inline-flex items-center mx-4 mb-4 text-2xl font-bold text-gray-700 dark:text-white">{{ $result_cosim }}%</h5>
-                    </div>
-                    <div class="relative overflow-x-auto rounded-lg">
+                    @if(isset($proposalProcess))
+                        <h5 class="text-xl font-medium text-gray-900 dark:text-white">Your Result</h5>
+                        <p class="my-1 items-center  text-gray-500 dark:text-gray-400 font-normal text-sm">See your result for proposal submission. It's considered by lecturers for acceptance.</p>
+                        @if (auth()->user()->hasRole('student'))
+                            <a href="{{ route('submit-proposal-2.create', ['proposalProcess' => $proposalProcess->id, 'title' => $text, 'similarity' => $result_cosim]) }}" type="button" wire:click="proposalSubmit()" class="my-2 inline-flex items-center justify-center text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                <svg class="w-6 h-6 mr-2 -ml-1 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"><path d="M18.017 15.002h-1.5v-1.5a1 1 0 0 0-2 0v1.5h-1.5a1 1 0 0 0 0 2h1.5v1.5a1 1 0 1 0 2 0v-1.5h1.5a1 1 0 1 0 0-2Z"/><path d="m17.74 4.758-7.476 8.409a1 1 0 0 1-.718.335h-.029a1 1 0 0 1-.707-.293l-4-4a1 1 0 0 1 1.414-1.413l3.25 3.25L16.53 3.11a9.5 9.5 0 1 0-3.885 15.355 2.495 2.495 0 0 1 .373-4.963 2.5 2.5 0 0 1 5 0c.035 0 .068.01.1.01a9.43 9.43 0 0 0-.38-8.754h.002Z"/></svg>
+                                Next to Submitting Proposal
+                            </a>
+                            <h5 class="inline-flex items-center mx-4 mb-4 text-2xl font-bold text-gray-700 dark:text-white">{{ $result_cosim }}% Similarity</h5>
+                        @endif
+                    @endif
+                    <div class="relative overflow-x-auto rounded-lg shadow-sm">
                         <table class="rounded-lg w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="rounded-lg text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
@@ -55,20 +59,20 @@
                                         Title
                                     </th>
                                     <th scope="col" class="px-6 py-3">
-                                        Name/Summary
+                                        Summary
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Nim
                                     </th>
                                     <th scope="col" class="px-6 py-3">
                                         Year/Link
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Nim/Result_id
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($similarities as $key => $similarity)
                                     @php
-                                        $percent = $similarity->cosim;
+                                        $percent = intval($similarity->cosim);
                                         $colorClass = '';
                                 
                                         if ($percent >= 0 && $percent <= 60) {
@@ -80,26 +84,57 @@
                                         }
                                     @endphp
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row" class="{{$colorClass}} px-6 py-4 font-medium whitespace-nowrap dark:text-white">
-                                            {{$similarity->cosim}}%
+                                        <th scope="row" class="{{$colorClass}} px-6 py-4 text-2xl whitespace-nowrap dark:text-white">
+                                            {{intval($similarity->cosim)}}%
                                         </th>
-                                        <td class="px-6 py-4">
-                                            {{$similarity->title}}
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-light font-semibold text-gray-900">{{$similarity->title}}</div>
                                         </td>
                                         <td class="px-6 py-4">
                                             {{$similarity->name_summary}}
                                         </td>
                                         <td class="px-6 py-4">
-                                            {{$similarity->nim_uniquecode}}
+                                            @if(is_numeric($similarity->nim_uniquecode))
+                                                {{$similarity->nim_uniquecode}}
+                                            @else
+                                                -
+                                            @endif
                                         </td>
                                         <td class="px-6 py-4">
-                                            {{$similarity->year_link}}
+                                            @if(is_numeric($similarity->year_link))
+                                                {{$similarity->year_link}}
+                                            @else
+                                                <a href="{{$similarity->year_link}}" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Open link</a>
+                                            @endif
                                         </td>
                                     </tr>
-                                    @if ($key == 9) @break @endif
+                                    @if ($key == 19) @break @endif
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            @elseif($null_similarity)
+                <div class="m-4">
+                    @if(isset($proposalProcess))
+                        <h5 class="text-xl font-medium text-gray-900 dark:text-white">Your Result</h5>
+                        <p class="my-1 items-center  text-gray-500 dark:text-gray-400 font-normal text-sm">See your result for proposal submission. It's considered by lecturers for acceptance.</p>
+                        @if (auth()->user()->hasRole('student'))
+                            <a href="{{ route('submit-proposal-2.create', ['proposalProcess' => $proposalProcess->id, 'title' => $text, 'similarity' => $result_cosim]) }}" type="button" wire:click="proposalSubmit()" class="my-2 inline-flex items-center justify-center text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                <svg class="w-6 h-6 mr-2 -ml-1 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"><path d="M18.017 15.002h-1.5v-1.5a1 1 0 0 0-2 0v1.5h-1.5a1 1 0 0 0 0 2h1.5v1.5a1 1 0 1 0 2 0v-1.5h1.5a1 1 0 1 0 0-2Z"/><path d="m17.74 4.758-7.476 8.409a1 1 0 0 1-.718.335h-.029a1 1 0 0 1-.707-.293l-4-4a1 1 0 0 1 1.414-1.413l3.25 3.25L16.53 3.11a9.5 9.5 0 1 0-3.885 15.355 2.495 2.495 0 0 1 .373-4.963 2.5 2.5 0 0 1 5 0c.035 0 .068.01.1.01a9.43 9.43 0 0 0-.38-8.754h.002Z"/></svg>
+                                Next to Submitting Proposal
+                            </a>
+                            <h5 class="inline-flex items-center mx-4 mb-4 text-2xl font-bold text-gray-700 dark:text-white">{{ $result_cosim }}% Similarity</h5>
+                        @endif
+                    @endif
+                    <div class="flex flex-col justify-center items-center px-6 mx-auto xl:px-0 dark:bg-gray-900">
+                        <div class="block max-w-sm">
+                            <img src="/assets/illustrations/waiting0.svg" alt="light bulb image">
+                        </div>
+                        <div class="mt-2 text-center xl:max-w-4xl">
+                            <h1 class="mb-3 text-md font-bold leading-tight text-indigo-700 sm:text-4xl lg:text-5xl dark:text-purple-500">💡 No Matching Articles Found</h1>
+                            <p class="text-base font-normal text-gray-600 dark:text-gray-400">It seems there are no articles that match your search criteria. Get inspired and explore new ideas!</p>
+                        </div>
                     </div>
                 </div>
             @else
@@ -107,12 +142,17 @@
                 <div class="m-4">
                     <div class="flex flex-col justify-center items-center px-6 mx-auto xl:px-0 dark:bg-gray-900">
                         <div class="block max-w-sm">
-                            <img src="/assets/illustrations/saly1.svg" alt="astronaut image">
+                            <img src="/assets/illustrations/saly1.svg" alt="light bulb image">
+                        </div>
+                        <div class="text-center xl:max-w-4xl">
+                            <h1 class="mb-3 text-md font-bold leading-tight text-indigo-700 sm:text-4xl lg:text-5xl dark:text-purple-500">💡 Spark Your Creativity!</h1>
+                            <p class="text-base font-normal text-gray-600 dark:text-gray-400">Get inspired and ensure your proposal shines by checking its similarity with others. Unleash your unique ideas!</p>
                         </div>
                     </div>
-                </div>
+                </div>                   
             @endif
 
         </div>
     </div>
+
 </div>

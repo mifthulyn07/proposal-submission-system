@@ -16,11 +16,9 @@ class SubmitProposal extends Model
         'topic_id',
         'title',
         'similarity',
-        'proposal_pdf',
-        'acc_advisor',
-        'desc_advisor',
-        'acc_coordinator',
-        'desc_coordinator',
+        'proposal',
+        'adding_topic',
+        'accord',
     ];
 
     public function proposal_process(): BelongsTo

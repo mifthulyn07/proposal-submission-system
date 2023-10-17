@@ -7,17 +7,16 @@ use App\Models\User;
 use App\Models\Student;
 use Livewire\Component;
 use App\Models\Lecturer;
+use App\Models\ProposalProcess;
 
 class Create extends Component
 {
-    public $student;
-    public $empty = false;
-
+    // student modal 
     public $user_id;
     public $nim;
     public $class;
     public $lecturer_id;
-
+    
     public function render()
     {
         return view('livewire.student.create', [
@@ -35,6 +34,7 @@ class Create extends Component
         'lecturer_id'   => ['required', 'exists:lecturers,id']
     ];
 
+    // realtime validation property
     public function updated($propertyName)
     {
         $this->validateOnly($propertyName);
@@ -43,24 +43,29 @@ class Create extends Component
     public function store()
     {
         try{
+            // every realtime validation, must do this for twice
             $validatedData = $this->validate();
 
-            $student = Student::create([
-                'user_id'       => $validatedData['user_id'],
-                'nim'           => $validatedData['nim'],
-                'class'         => $validatedData['class'],
-                'lecturer_id'   => $validatedData['lecturer_id'],
-            ]);
+            $validatedData['class'] = ucwords($validatedData['class']);
+
+            $student = new Student;
+            $student->fill($validatedData);
+            $student->save();
             
-            $student_role = Role::where('name', 'student')->first();
-            $student->user->roles()->attach($student_role);
+            // buat role studentnya 
+            $student->user->roles()->attach(Role::where('name', 'student')->first());
+
+            // buat proposal processnya 
+            if(!$student->proposal_process){
+                $proposal_process = new ProposalProcess;
+                $proposal_process->student_id = $student->id;
+                $proposal_process->save();
+            }
 
             $this->reset();
             session()->flash('success', 'Student successfully stored.');
-            return;
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
-            return;
         }
     }
 }

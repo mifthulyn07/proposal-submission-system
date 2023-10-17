@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Student;
 use Livewire\Component;
 use App\Models\Lecturer;
+use App\Models\ProposalProcess;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -56,9 +57,15 @@ class Register extends Component
         $user->roles()->attach($validatedData['role']);
 
         if($user->hasRole('student')){
+            // buat student 
             $student = new Student();
             $student->user_id = $user->id;
             $student->save();
+
+            // buat proposal process 
+            $proposal_process = new ProposalProcess;
+            $proposal_process->student_id = User::with('student')->find($student->user_id)->student->id;
+            $proposal_process->save();
         }elseif($user->hasRole('lecturer')){
             $lecturer = new Lecturer();
             $lecturer->user_id = $user->id;

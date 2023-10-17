@@ -7,14 +7,16 @@ use App\Models\User;
 use App\Models\Student;
 use Livewire\Component;
 use App\Models\Lecturer;
+use Livewire\WithFileUploads;
+use App\Models\ProposalProcess;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Hash;
-use Livewire\WithFileUploads;
 
 class Create extends Component
 {
     use WithFileUploads; 
 
+    // User model 
     public $avatar;
     public $name;
     public $email;
@@ -22,6 +24,7 @@ class Create extends Component
     public $phone;
     public $password;
 
+    // many to many 
     public $selected_roles = [];
     
     public $password_confirmation;
@@ -34,65 +37,62 @@ class Create extends Component
         ]);
     }
 
-    // realtime validation file 
-    protected function updatedAvatar()
+    protected function propertyValidation()
     {
-        $this->validate([
-            'avatar' => 'nullable|image|max:1024|mimes:jpeg,png,jpg', // 1MB Max
-        ]);
+        return [
+            'name'                  => ['required', 'max:100'],
+            'gender'                => ['in:male,female'],
+            'phone'                 => ['numeric', 'unique:users,phone'],
+            'avatar'                => ['nullable','image','max:1024','mimes:jpeg,png,jpg'],
+            'email'                 => ['required', 'email', 'max:255', 'unique:users,email'],
+            'password'              => [Rules\Password::defaults()],
+            'password_confirmation' => ['same:password'],
+            'selected_roles'        => ['required', 'exists:roles,id'],
+        ];
     }
 
     // realtime validation property
     protected function updated($propertyName)
     {
-        $this->validateOnly($propertyName, [
-            'name'                  => ['required', 'max:100'],
-            'email'                 => ['required', 'email', 'max:255', 'unique:users,email'],
-            'gender'                => ['in:male,female'],
-            'phone'                 => ['numeric', 'unique:users,phone'],
-            'password'              => [Rules\Password::defaults()],
-            'selected_roles'        => ['required', 'array', 'exists:roles,id'],
-        ]);
+        $this->validateOnly($propertyName, $this->propertyValidation());
     }
 
     public function store()
     {
         try{
             // every realtime validation, must do this for twice
-            $validatedData = $this->validate([
-                'avatar'                => ['nullable','image','max:1024','mimes:jpeg,png,jpg'],
-                'name'                  => ['required', 'max:100'],
-                'email'                 => ['required', 'email', 'max:255', 'unique:users,email'],
-                'gender'                => ['in:male,female'],
-                'phone'                 => ['numeric', 'unique:users,phone'],
-                'password'              => [Rules\Password::defaults()],
-                'password_confirmation' => ['same:password'],
-                'selected_roles'        => ['required', 'exists:roles,id'],
-            ]);
+            $validatedData = $this->validate($this->propertyValidation());
 
-            // store avatar ke avatars 
-            $extension = $validatedData['avatar']->getClientOriginalExtension();//mime:jpg,png,dll
-            $imageName = time().'-'.uniqid().'.'.$extension;
-            $validatedData['avatar']->storeAs('public/avatars', $imageName);
-
-            // create 
-            $user = User::create([
-                'avatar'    => $imageName,
-                'name'      => $validatedData['name'],
-                'email'     => $validatedData['email'],
-                'gender'    => $validatedData['gender'],
-                'phone'     => $validatedData['phone'],
-                'password'  => Hash::make($validatedData['password'])
-            ]);
+            $validatedData['name'] = ucwords($validatedData['name']);
+            $validatedData['email'] = strtolower($validatedData['email']);
+            $validatedData['password'] = Hash::make($validatedData['password']);
+            
+            // letak file avatar ke folder avatars
+            if(isset($this->avatar)){
+                $extension = $validatedData['avatar']->getClientOriginalExtension();//mime:jpg,png,dll
+                $imageName = 'avatar'.time().'-'.str_replace(' ', '', $validatedData['name']).'.'.$extension;
+                $validatedData['avatar']->storeAs('public/avatars', $imageName);
+                $validatedData['avatar'] = $imageName;
+            }
+            
+            $user = new User();
+            $user->fill($validatedData);
+            $user->save();
 
             // buat role 
             $user->roles()->attach($validatedData['selected_roles']);
 
             // isi tabel student
             if($user->hasRole('student')){
+                // buat student 
                 $student = new Student();
                 $student->user_id = $user->id;
                 $student->save();
+
+                // buat proposal process
+                $proposal_process = new ProposalProcess;
+                $proposal_process->student_id = User::with('student')->find($student->user_id)->student->id;
+                $proposal_process->save();
             }
 
             // isi tabel lecturer 
@@ -103,7 +103,7 @@ class Create extends Component
             }
 
             $this->reset();
-            session()->flash('success', 'User successfully stored.');
+            session()->flash('success', 'User account successfully stored.');
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
         }

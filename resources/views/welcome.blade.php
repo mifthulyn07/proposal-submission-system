@@ -1,12 +1,11 @@
 @extends('layouts/app')
 
 @section('content')
-    <section class="bg-white dark:bg-gray-900">
+    <section class="flex flex-col justify-center items-center p-6 mx-auto h-lg dark:bg-gray-900">
         <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
             <div class="flex justify-center">
-                <img src="assets/img/Logo-UINSU.png" alt="Uinsu" width="250px">
+                <img src="assets/img/si-panjul-bgRemove.png" alt="Uinsu" width="250px">
             </div>
-            <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">SI-PANJUL</h1>
             <p class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-400">
                 This website is specifically designed for information systems students from the State Islamic University of North Sumatra. This website is a tool to facilitate the proposal submission process.
             </p>
@@ -17,5 +16,5 @@
                 </a>
             </div>
         </div>
-</section>
+    </section>
 @endsection

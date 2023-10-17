@@ -6,6 +6,7 @@ use App\Models\Student;
 use App\Models\Lecturer;
 use App\Models\Proposal;
 use App\Models\SubmitProposal;
+use App\Models\ProposalProcess;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\ProfileController;
@@ -32,22 +33,20 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
 
     Route::middleware('role:coordinator|lecturer|student')->group(function () {
-        Route::view('/list-lecturer', 'lecturer.read')->name('lecturer.read');
-       
-        Route::view('/list-student', 'student.read')->name('student.read');
-       
-        Route::view('/list-proposal', 'proposal.read')->name('proposal.read');
+        Route::middleware('complete.profile')->group(function(){
+            Route::view('/list-lecturer', 'lecturer.read')->name('lecturer.read');
+            Route::view('/list-student', 'student.read')->name('student.read');
+            Route::view('/list-proposal', 'proposal.read')->name('proposal.read');
+            Route::view('/similarity', 'similarity.check')->name('similarity.check');
+        });
 
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-        Route::view('/similarity', 'similarity.check')->name('similarity.check');
-
-        Route::post('upload', [UploadController::class, 'store']);
     });
 
-    Route::middleware('role:coordinator')->group(function () {
+    Route::middleware('role:coordinator', 'complete.profile')->group(function () {
         // users 
         Route::view('/add-user', 'user.create')->name('user.create');
         Route::view('/list-user', 'user.read')->name('user.read');
@@ -79,17 +78,32 @@ Route::middleware('auth')->group(function () {
         Route::get('/edit-proposal/{proposal}', function(Proposal $proposal){
             return view('proposal.edit', ['proposal'=> $proposal]);
         })->name('proposal.edit');
+
+        // check proposal 
+        Route::view('/list-proposal-submission', 'check-proposal.read')->name('check-proposal.read');
+        Route::get('/check-proposal-submission/{proposalProcess}', function(ProposalProcess $proposalProcess){
+            return view('check-proposal.check', ['proposalProcess' => $proposalProcess]);
+        })->name('check-proposal.check');
     });
 
-    Route::middleware('role:student')->group(function () {
-
+    Route::middleware('role:student', 'complete.profile')->group(function(){
         // submit proposal 
         Route::view('/list-submit-proposal', 'submit-proposal.read')->name('submit-proposal.read');
-        Route::view('/add-submit-proposal', 'submit-proposal.create')->name('submit-proposal.create');
+        Route::get('/add-submit-proposal/{proposalProcess}', function(ProposalProcess $proposalProcess) {
+            return view('submit-proposal.create', ['proposalProcess' => $proposalProcess]);
+        })->name('submit-proposal.create');
+        Route::get('/submit-proposal/similarity/{proposalProcess}', function(ProposalProcess $proposalProcess){
+            return view('similarity.check', ['proposalProcess' => $proposalProcess]);
+        })->name('submit-proposal.similarity.create');
+        Route::get('/add-submit-proposal/{proposalProcess}/{title}/{similarity}', function(ProposalProcess $proposalProcess, $title, $similarity){
+            return view('submit-proposal.create', compact('proposalProcess', 'title', 'similarity'));
+        })->name('submit-proposal-2.create');
+        
+        // Route::view('/add-submit-proposal/{title}/{similarity}', 'submit-proposal.create')->name('submit-proposal2.create');
         Route::get('/edit-submit-proposal/{submitProposal}', function(SubmitProposal $submitProposal){
             return view('submit-proposal.edit', ['submitProposal' => $submitProposal]);
         })->name('submit-proposal.edit');
-
+        
     });
     
 });

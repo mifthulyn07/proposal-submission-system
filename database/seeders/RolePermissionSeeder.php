@@ -76,5 +76,21 @@ class RolePermissionSeeder extends Seeder
         $roleCoordinator->givePermissionTo('edit-proposal');
         $roleCoordinator->givePermissionTo('delete-proposal');
 
+        $roleStudent = Role::findByName('student');
+        // lecturer 
+        $roleStudent->givePermissionTo('read-lecturer');
+        // student 
+        $roleStudent->givePermissionTo('read-student');
+        // proposal 
+        $roleStudent->givePermissionTo('read-proposal');
+
+        $roleLecturer = Role::findByName('lecturer');
+        // lecturer 
+        $roleLecturer->givePermissionTo('read-lecturer');
+        // student 
+        $roleLecturer->givePermissionTo('read-student');
+        // proposal 
+        $roleLecturer->givePermissionTo('read-proposal');
+
     }
 }

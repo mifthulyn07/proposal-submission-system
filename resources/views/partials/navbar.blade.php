@@ -10,7 +10,7 @@
                     </svg>
                 </button>
                 <a href="{{ Route('dashboard') }}">
-                    <img src="{{ asset('assets/img/Logo-UINSU.png') }}" class="m-1" alt="UINSU" width="65px">
+                    <img src="{{ asset('assets/img/si-panjul-bgRemove.png') }}" class="m-1" alt="UINSU" width="75px">
                 </a>
             </div>
             <div class="flex items-center">
@@ -31,7 +31,7 @@
                             </div>
                         </button>
                     </div>
-                    <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
+                    <div class="z-50 hidden my-4 text-sm list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
                         <div class="px-4 py-3" role="none">
                             <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
                                 {{ Auth::user()->email }}

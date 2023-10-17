@@ -8,29 +8,34 @@ use App\Models\Student;
 use Livewire\Component;
 use App\Models\Lecturer;
 use Livewire\WithFileUploads;
+use App\Models\ProposalProcess;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class Edit extends Component
 {
     use WithFileUploads;
 
+    // from parameter
     public $user;
-    public $empty = false;
 
+    // User model 
     public $avatar;
     public $name;
     public $email;
     public $gender;
     public $phone;
     public $password;
-    public $password_confirmation;
 
+    // many to many 
     public $selected_roles = [];
 
     public $avatar_null = false;
     public $make_avatar_null = false;
-    public $show_password;
+    public $show_password = false;
+    public $empty = false;
+    public $password_confirmation;
     public $oldAvatar;
 
     public function mount($user)
@@ -60,29 +65,35 @@ class Edit extends Component
         ]);
     }
 
-    // realtime validation the property
-    protected function updated($propertyName)
+    protected function propertyValidation()
     {
-        $validatedData = $this->validateOnly($propertyName, [
-            'name'              => ['required', 'max:100'],
-            'email'             => ['required', 'email', 'max:255', 'unique:users,email,'.$this->user->id],
-            'gender'            => ['in:male,female'],
-            'phone'             => ['numeric', 'unique:users,phone,'.$this->user->id],
-            'selected_roles'    => ['required', 'array', 'exists:roles,id'],
-        ]);
-
-        if (isset($validatedData['password']) || isset($validatedData['password_confirmation'])) {
-            $validatedData['password'] = Rules\Password::defaults();
+        if(isset($this->password) || isset($this->password_confirmation)){
+            return [
+                'name'                  => ['required', 'max:100'],
+                'gender'                => ['in:male,female'],
+                'phone'                 => ['numeric', 'unique:users,phone,'.$this->user->id],
+                'avatar'                => ['nullable','image','max:1024','mimes:jpeg,png,jpg'],
+                'email'                 => ['required', 'email', 'max:255', 'unique:users,email,'.$this->user->id],
+                'password'              => [Rules\Password::defaults()],
+                'password_confirmation' => ['same:password'],
+                'selected_roles'        => ['required', 'exists:roles,id'],
+            ];
+        }else{
+            return [
+                'name'                  => ['required', 'max:100'],
+                'gender'                => ['in:male,female'],
+                'phone'                 => ['numeric', 'unique:users,phone,'.$this->user->id],
+                'avatar'                => ['nullable','image','max:1024','mimes:jpeg,png,jpg'],
+                'email'                 => ['required', 'email', 'max:255', 'unique:users,email,'.$this->user->id],
+                'selected_roles'        => ['required', 'exists:roles,id'],
+            ];
         }
     }
 
-    // realtime validation file 
-    protected function updatedAvatar()
+    // realtime validation the property
+    protected function updated($propertyName)
     {
-        $this->validate([
-            'avatar' => 'nullable|image|max:1024|mimes:jpeg,png,jpg', // 1MB Max
-        ]);
-        
+        $this->validateOnly($propertyName, $this->propertyValidation());
     }
 
     public function make_avatar_null()
@@ -90,127 +101,98 @@ class Edit extends Component
         $this->make_avatar_null = true;
     }
 
+    protected function fixingRoles($user)
+    {
+        if($user->hasRole('student')){
+            if(!$user->student){
+                $student = new Student();
+                $student->user_id = $user->id;
+                $student->save();
+    
+                if(!$student->proposal_process){
+                    $proposal_process = new ProposalProcess;
+                    $proposal_process->student_id = $student->id;
+                    $proposal_process->save();
+                }
+            }
+        }
+
+        if($user->hasRole('lecturer')){
+            if(!$user->lecturer){
+                $lecturer = new Lecturer();
+                $lecturer->user_id = $user->id;
+                $lecturer->save();
+            }
+        }
+        
+        if(!$user->hasRole('student')){
+            if($user->student){
+                if($user->student->proposal_process){
+                    $user->student->proposal_process->delete();
+                }
+
+                $user->student->delete();
+            }
+        }
+        
+        if(!$user->hasRole('lecturer')){
+            if($user->lecturer){
+                $user->lecturer->delete();
+            }
+        }
+    }
+
     public function update()
     {
         try{
-            // for validation
-            $validatedData = $this->validate([
-                'avatar'            => ['nullable','image','max:1024','mimes:jpeg,png,jpg'], // 1MB Max
-                'name'              => ['required', 'max:100'],
-                'email'             => ['required', 'email', 'max:255', 'unique:users,email,'.$this->user->id],
-                'gender'            => ['in:male,female'],
-                'phone'             => ['numeric', 'unique:users,phone,'.$this->user->id],
-                'selected_roles'    => ['required', 'array', 'exists:roles,id'],
-            ]);
-
-            // validation jika password diisi saja
-            if (isset($validatedData['password']) || isset($validatedData['password_confirmation'])) {
-                $validatedData['password'] = Rules\Password::defaults();
-                $validatedData['password_confirmation'] = ['same:password'];
+            // for bug 
+            if($this->password == ""){
+                $this->password = null;
             }
 
-            $user = User::findOrFail($this->user->id);
+            // every realtime validation, must do this for twice
+            $validatedData = $this->validate($this->propertyValidation());
+
+            $validatedData['name'] = ucwords($validatedData['name']);
+            $validatedData['email'] = strtolower($validatedData['email']);
 
             // update password 
-            if (!empty($validatedData['password'])) {
-                // Jika password baru diisi, update password
-                $user->password = $validatedData['password'];
-            }elseif(empty($validatedData['password'])) {
+            if(!isset($this->password)) {
                 // Jika password baru tidak diisi, gunakan password lama
                 $validatedData['password'] = $this->user->password;
+            }else{
+                // Jika password baru diisi, update password
+                $validatedData['password'] = Hash::make($validatedData['password']);
             }
             
-            // update roles 
-            $user->roles()->sync($validatedData['selected_roles']);
-
             // update avatar 
             if($this->make_avatar_null == true){
                 if($this->oldAvatar){
                     Storage::disk('public')->delete('avatars/'.$this->oldAvatar);
                 }
                 $validatedData['avatar'] = null;
-            }elseif($this->avatar != $this->oldAvatar){
-                Storage::disk('public')->delete('avatars/'.$this->oldAvatar);
             }
             
-            if(isset($validatedData['avatar'])){
+            if(isset($this->avatar)){
                 $extension = $validatedData['avatar']->getClientOriginalExtension();//mime:jpg,png,dll
-                $imageName = time().'-'.uniqid().'.'.$extension;
+                $imageName = 'avatar'.time().'-'.str_replace(' ', '', $validatedData['name']).'.'.$extension;
                 $validatedData['avatar']->storeAs('public/avatars', $imageName);
                 $validatedData['avatar'] = $imageName;
             }
-
+            
+            $user = User::findOrFail($this->user->id);
             $user->fill($validatedData);
             $user->save();
 
-            // update di table lecturer/student 
-            $student = Student::where('user_id', $user->id)->exists();
-            $lecturer = Lecturer::where('user_id', $user->id)->exists();
-            if($user->hasRole('student')){
-                if(!$student){
-                    $student = new Student();
-                    $student->user_id = $user->id;
-                    $student->save();
-                }
-            }elseif($user->hasRole('lecturer')){
-                if(!$lecturer){
-                    $lecturer = new Lecturer();
-                    $lecturer->user_id = $user->id;
-                    $lecturer->save();
-                }
-            }elseif(!$user->hasRole('student')){
-                if($student){
-                    $student->delete();
-                }
-            }elseif(!$user->hasRole('lecturer')){
-                if($lecturer){
-                    $lecturer->delete();
-                }
-            }elseif($user->hasRole('lecturer') && !$user->hasRole('student')){
-                if(!$lecturer){
-                    $lecturer = new Lecturer();
-                    $lecturer->user_id = $user->id;
-                    $lecturer->save();
-                }
-                
-                if($student){
-                    $student->delete();
-                }
-            }elseif($user->hasRole('student') && !$user->hasRole('lecturer')){
-                if(!$student){
-                    $student = new Student();
-                    $student->user_id = $user->id;
-                    $student->save();
-                }
-            
-                if($lecturer){
-                    $lecturer->delete();
-                }
-            }elseif($user->hasRole('lecturer') && $user->hasRole('student')){
-                if(!$lecturer){
-                    $lecturer = new Lecturer();
-                    $lecturer->user_id = $user->id;
-                    $lecturer->save();
-                }
-
-                if(!$student){
-                    $student = new Student();
-                    $student->user_id = $user->id;
-                    $student->save();
-                }
-            }elseif(!$user->hasRole('lecturer') && !$user->hasRole('student')){
-                if($lecturer){
-                    $lecturer->delete();
-                }
-
-                if($student){
-                    $student->delete();
-                }
-            }
+            // update roles 
+            $user->roles()->sync($validatedData['selected_roles']);
+            $this->fixingRoles($user);
 
             $this->reset(['password', 'password_confirmation', 'avatar']);
-            session()->flash('success', 'User successfully updated.');
-            redirect()->to('edit-user/'.$user->id);
+            session()->flash('success', 'User account successfully updated.');
+            
+            // harus dilakukan refresh untuk dir file 
+            redirect()->to('edit-user/'.$this->user->id);
         }catch (\Exception $e){
             session()->flash('error', $e->getMessage());
         }

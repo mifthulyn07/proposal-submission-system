@@ -18,10 +18,8 @@ return new class extends Migration
             $table->string("title");
             $table->bigInteger("similarity")->nullable();
             $table->string("proposal");
-            $table->boolean("acc_advisor")->nullable();
-            $table->string("desc_advisor")->nullable();
-            $table->boolean("acc_coordinator")->nullable();
-            $table->string("desc_coordinator")->nullable();
+            $table->string("adding_topic")->nullable();
+            $table->boolean("accord")->nullable();
             $table->timestamps();
         });
     }

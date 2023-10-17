@@ -9,6 +9,7 @@ use App\Models\Proposal;
 
 class Create extends Component
 {
+    // model proposal 
     public $topic_id;
     public $student_id;
     public $name;
@@ -17,44 +18,81 @@ class Create extends Component
     public $title;
     public $year;
     public $status;
+    public $adding_topic;
 
-    protected $rules = [
-        'topic_id'      => 'exists:topics,id|nullable',
-        'student_id'    => 'exists:students,id|nullable',
-        'name'          => 'required|max:100',
-        'nim'           => 'required|max_digits:12|numeric|unique:proposals,nim',
-        'type'          => 'in:skripsi,teknologi_tepat_guna,jurnal',
-        'title'         => 'required|max:255|unique:proposals,title',
-        'year'          => 'required|max_digits:4|numeric',
-        'status'        => 'in:done,on_process',
-    ];
-
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
-    }
+    public $another_topic = false;
 
     public function render()
     {
-        if(!empty($this->student_id)){
-            $student    = Student::where('id', $this->student_id)->first();
-            $this->name = $student->user->name;
-            $this->nim  = $student->nim;
-        }else{
-            $this->name = '';
-            $this->nim  = '';
-        }
-
         return view('livewire.proposal.create', [
             'students'  => Student::whereDoesntHave('proposal')->get(),
             'topics'    => Topic::all(), 
         ]);
     }
 
+    protected function propertyValidation()
+    {
+        if(!$this->another_topic){
+            return [
+                'topic_id'      => 'required|exists:topics,id',
+                'student_id'    => 'nullable|exists:students,id',
+                'name'          => 'required|max:100',
+                'nim'           => 'required|max_digits:12|numeric|unique:proposals,nim',
+                'type'          => 'in:thesis,appropriate_technology,journal',
+                'title'         => 'required|max:255|unique:proposals,title',
+                'year'          => 'required|max_digits:4|numeric|min:2016',
+                'status'        => 'in:done,on_process',
+                'adding_topic'  => 'nullable|string|unique:topics,name'
+            ];
+        }else{
+            return [
+                'topic_id'      => 'nullable|exists:topics,id',
+                'student_id'    => 'nullable|exists:students,id',
+                'name'          => 'required|max:100',
+                'nim'           => 'required|max_digits:12|numeric|unique:proposals,nim',
+                'type'          => 'in:thesis,appropriate_technology,journal',
+                'title'         => 'required|max:255|unique:proposals,title',
+                'year'          => 'required|max_digits:4|numeric|min:2016',
+                'status'        => 'in:done,on_process',
+                'adding_topic'  => 'required|string|unique:topics,name'
+            ];
+        }
+    }
+
+    public function updatedAnotherTopic()
+    {
+        $this->reset('adding_topic', 'topic_id');
+    }
+
+    // realtime validation 
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName, $this->propertyValidation());
+    }
+
+    public function updatedStudentId()
+    {
+        if(!empty($this->student_id)){
+            $student    = Student::where('id', $this->student_id)->first();
+            $this->name = $student->user->name;
+            $this->nim  = $student->nim;
+        }else{
+            $this->reset(['name', 'nim']);
+        }
+    }
+
     public function store()
     {
         try{
-            $validatedData = $this->validate();
+            // for bug 
+            if($this->student_id == ""){
+                $this->student_id = null;
+            }
+
+            // every realtime validation, must do this for twice
+            $validatedData = $this->validate($this->propertyValidation());
+
+            $validatedData['name'] = ucwords($validatedData['name']);
 
             $proposal = new Proposal();
             $proposal->fill($validatedData);
@@ -62,10 +100,8 @@ class Create extends Component
 
             $this->reset();
             session()->flash('success', 'Proposal successfully stored.');
-            return;
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
-            return;
         }
     }
 }

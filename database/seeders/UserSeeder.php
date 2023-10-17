@@ -14,39 +14,42 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $coordinator = User::create([
+        $user1 = User::create([
             'name'              => 'Developer',
             'gender'            => 'female',
             'phone'             => '08131234567',
             'email'             => 'developer@example.com',
             'password'          => Hash::make('12345678'),
         ]);
-        $coordinator->assignRole('coordinator');
+        $user1->assignRole('coordinator');
 
-        $lecturer = User::create([
+        $user2 = User::create([
             'name'              => 'John Doe',
             'gender'            => 'male',
             'phone'             => '08123456743',
             'email'             => 'johndoe@example.com',
             'password'          => Hash::make('12345678'),
         ]);
-        $lecturer->assignRole('lecturer');
-        $lecturer->lecturer()->create([
+        $user2->assignRole('lecturer');
+        $user2->lecturer()->create([
             'nip' => '100023022110122',
         ]);
 
-        $student = User::create([
+        $user3 = User::create([
             'name'              => 'Miftahul Ulyana Hutabarat',
             'gender'            => 'female',
             'phone'             => '08598098765',
             'email'             => 'miftahululyana@example.com',
             'password'          => Hash::make('12345678'),
         ]);
-        $student->assignRole('student');
-        $student->student()->create([
+        $user3->assignRole('student');
+        $user3student = $user3->student()->create([
             'nim'           => '0702192031',
             'class'         => 'SI-3',
-            // 'lecturer_id'   => '2',
+            'lecturer_id'   => '1',
+        ]);
+        $user3student->proposal_process()->create([
+            'student_id'    => $user3student->id,
         ]);
     }
 }

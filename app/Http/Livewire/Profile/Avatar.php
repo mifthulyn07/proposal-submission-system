@@ -51,7 +51,8 @@ class Avatar extends Component
         $this->isUploaded = true;
     }
 
-    public function update(){
+    public function update()
+    {
         try{
             // for validation
             $validatedData = $this->validate([
@@ -70,7 +71,7 @@ class Avatar extends Component
 
             if(isset($validatedData['avatar'])){
                 $extension = $validatedData['avatar']->getClientOriginalExtension();//mime:jpg,png,dll
-                $imageName = time().'-'.uniqid().'.'.$extension;
+                $imageName = 'avatar'.time().'-'.str_replace(' ', '', Auth::user()->name).'.'.$extension;
                 $validatedData['avatar']->storeAs('public/avatars', $imageName);
                 $validatedData['avatar'] = $imageName;
             }
@@ -81,6 +82,7 @@ class Avatar extends Component
 
             $this->reset();
             session()->flash('success', 'Avatar successfully updated.');
+            // harus dilakukan refresh untuk dir file 
             return redirect()->to('/profile');
         }catch (\Exception $e){
             session()->flash('error', $e->getMessage());

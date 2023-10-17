@@ -43,8 +43,8 @@
         </div>
     </form>
     <div class="mt-1">
-            <a class="p-1 underline text-gray-600 text-sm hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('register') }}">
-                {{ __("Don't have an account?") }}
-            </a>
+        <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+            Don't have an account? <a href="{{ route('register') }}" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Register here</a>
+        </p>
     </div>
 </x-guest-layout>
