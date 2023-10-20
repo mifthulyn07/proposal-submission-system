@@ -85,9 +85,6 @@ class Read extends Component
 
     public function showStudents($id)
     {        
-        $lecturer = Lecturer::findOrFail($id);
-        $this->students = $lecturer->students;
-        $this->supervisor = $lecturer->user->name;
-        // return view('livewire.lecturer.read', compact('students'));
+        return redirect()->route('lecturer.show', ['lecturer' => $id]);
     }
 }

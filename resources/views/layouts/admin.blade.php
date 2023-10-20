@@ -32,7 +32,6 @@
     </head>
     <body class="font-sans antialiased text-sm">
         <div class="min-h-screen bg-gray-100">
-
             @include('partials.navbar')
 
             @include('partials.sidebar')
@@ -48,6 +47,9 @@
                 </div>
 
                 @include('partials.footer')
+
+                {{-- popup if user offline --}}
+                @livewire('components.offline')
 
             </div>
         </div>

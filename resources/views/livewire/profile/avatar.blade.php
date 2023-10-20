@@ -1,7 +1,4 @@
 <div>
-    {{-- popup if user offline  --}}
-    @include('components.offline')
-
     <form class="mt-6" wire:submit.prevent="update">
         
         {{-- avatar  --}}

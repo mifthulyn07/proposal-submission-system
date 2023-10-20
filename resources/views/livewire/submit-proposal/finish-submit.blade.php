@@ -1,6 +1,6 @@
 <div>
     <div class="m-4">
-        <h5 class="text-xl font-medium text-gray-900 dark:text-white">Finish Your Proposal</h5>
+        <h5 class="text-base font-medium text-gray-900 dark:text-white">Finish Your Proposal</h5>
         <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">You're almost there! Just fill out the form below to complete your proposal submission.</p>
         
         {{-- form proposal process --}}

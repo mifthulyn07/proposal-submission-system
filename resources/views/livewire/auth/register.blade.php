@@ -1,7 +1,4 @@
 <div>
-    {{-- popup if user offline  --}}
-    @include('components.offline')
-
     <form wire:submit.prevent="store">
         <!-- Name -->
         <div class="mt-4">

@@ -1,7 +1,4 @@
 <div>
-    {{-- popup if user offline  --}}
-    @include('components.offline')
-
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
         
         {{-- desc --}}
@@ -145,10 +142,14 @@
                     @endif
 
                     {{-- for download requirements --}}
-                    <button wire:click="exportRequirements({{ $proposalProcess->id }})" class="inline-flex items-center py-2 px-3 text-sm hover:text-blue-700 font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                    <button data-tooltip-target="tooltip-download-requirements" wire:click="exportRequirements({{ $proposalProcess->id }})" class="inline-flex items-center py-2 px-3 text-sm hover:text-blue-700 font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                         <svg class="w-4 h-4 mr-2 hover:text-blue-700 text-gray-700 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"><path d="M14.707 7.793a1 1 0 0 0-1.414 0L11 10.086V1.5a1 1 0 0 0-2 0v8.586L6.707 7.793a1 1 0 1 0-1.414 1.414l4 4a1 1 0 0 0 1.416 0l4-4a1 1 0 0 0-.002-1.414Z"/><path d="M18 12h-2.55l-2.975 2.975a3.5 3.5 0 0 1-4.95 0L4.55 12H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2Zm-3 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>
                         Requirements
                     </button>
+                    <div id="tooltip-download-requirements" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                        Download
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
 
                     {{-- list --}}
                     <div class="relative overflow-x-auto rounded-lg shadow-sm">
@@ -213,7 +214,7 @@
                                                 @endif
                                             </td>
                                             <td class="px-6 py-4">
-                                                <button wire:click="exportProposal({{ $submit_proposal->id }})" class="inline-flex items-center py-2 px-3 text-sm hover:text-blue-700 font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                                <button data-tooltip-target="tooltip-download-proposal" wire:click="exportProposal({{ $submit_proposal->id }})" class="inline-flex items-center py-2 px-3 text-sm hover:text-blue-700 font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                                                     <svg class="w-4 h-4 hover:text-blue-700 text-gray-700 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"><path d="M14.707 7.793a1 1 0 0 0-1.414 0L11 10.086V1.5a1 1 0 0 0-2 0v8.586L6.707 7.793a1 1 0 1 0-1.414 1.414l4 4a1 1 0 0 0 1.416 0l4-4a1 1 0 0 0-.002-1.414Z"/><path d="M18 12h-2.55l-2.975 2.975a3.5 3.5 0 0 1-4.95 0L4.55 12H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2Zm-3 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>
                                                 </button>
                                             </td>
@@ -221,6 +222,10 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            <div id="tooltip-download-proposal" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                Download
+                                <div class="tooltip-arrow" data-popper-arrow></div>
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -229,7 +234,6 @@
                 <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
                     <button wire:click="showAccept()" data-modal-hide="defaultModal" type="button" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">I accept</button>
                     <button wire:click="showDecline()" data-modal-hide="defaultModal" type="button" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Decline</button>
-                    {{-- <button wire:click="showReject()" data-modal-hide="defaultModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Decline</button> --}}
                 </div>
 
             </div>
@@ -333,5 +337,4 @@
         </div>
 
     </div>  
-
 </div>

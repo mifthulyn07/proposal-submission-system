@@ -25,6 +25,7 @@ class RolePermissionSeeder extends Seeder
         Permission::create(['name' => 'add-lecturer']);
         Permission::create(['name' => 'edit-lecturer']);
         Permission::create(['name' => 'delete-lecturer']);
+        Permission::create(['name' => 'show-lecturer']);
 
         // students 
         Permission::create(['name' => 'read-student']);
@@ -60,6 +61,7 @@ class RolePermissionSeeder extends Seeder
         $roleCoordinator->givePermissionTo('add-lecturer');
         $roleCoordinator->givePermissionTo('edit-lecturer');
         $roleCoordinator->givePermissionTo('delete-lecturer');
+        $roleCoordinator->givePermissionTo('show-lecturer');
         // student 
         $roleCoordinator->givePermissionTo('read-student');
         $roleCoordinator->givePermissionTo('add-student');
@@ -79,6 +81,7 @@ class RolePermissionSeeder extends Seeder
         $roleStudent = Role::findByName('student');
         // lecturer 
         $roleStudent->givePermissionTo('read-lecturer');
+        $roleStudent->givePermissionTo('show-lecturer');
         // student 
         $roleStudent->givePermissionTo('read-student');
         // proposal 
@@ -87,6 +90,7 @@ class RolePermissionSeeder extends Seeder
         $roleLecturer = Role::findByName('lecturer');
         // lecturer 
         $roleLecturer->givePermissionTo('read-lecturer');
+        $roleLecturer->givePermissionTo('show-lecturer');
         // student 
         $roleLecturer->givePermissionTo('read-student');
         // proposal 

@@ -1,13 +1,9 @@
 <div>
-
-    {{-- popup if user offline  --}}
-    @include('components.offline')
-
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden rounded-lg shadow rounded-lg">
 
             <div class="m-4 mb-4">
-                <h5 class="text-base font-medium text-gray-900 dark:text-white">Title Similarity Check</h5>
+                <h5 class="text-lg font-medium text-gray-900 dark:text-white">Title Similarity Check</h5>
                 <p class="mt-1 mb-4 text-gray-500 dark:text-gray-400 font-normal text-sm">We'll compare your title with final assignment titles from UINSU Medan's Information Systems students and Google Scholar.</p>
                 <label for="search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                 {{-- form  --}}                
@@ -104,7 +100,7 @@
                                             @if(is_numeric($similarity->year_link))
                                                 {{$similarity->year_link}}
                                             @else
-                                                <a href="{{$similarity->year_link}}" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Open link</a>
+                                                <a href="{{$similarity->year_link}}" target="_blank" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Open link</a>
                                             @endif
                                         </td>
                                     </tr>
@@ -132,8 +128,8 @@
                             <img src="/assets/illustrations/waiting0.svg" alt="light bulb image">
                         </div>
                         <div class="mt-2 text-center xl:max-w-4xl">
-                            <h1 class="mb-3 text-md font-bold leading-tight text-indigo-700 sm:text-4xl lg:text-5xl dark:text-purple-500">💡 No Matching Articles Found</h1>
-                            <p class="text-base font-normal text-gray-600 dark:text-gray-400">It seems there are no articles that match your search criteria. Get inspired and explore new ideas!</p>
+                            <h1 class="mb-3 text-base font-bold leading-tight text-indigo-700 sm:text-4xl lg:text-5xl dark:text-purple-500">💡 No Matching Articles Found</h1>
+                            <p class="text-sm font-normal text-gray-600 dark:text-gray-400">It seems there are no articles that match your search criteria. Get inspired and explore new ideas!</p>
                         </div>
                     </div>
                 </div>
@@ -145,8 +141,8 @@
                             <img src="/assets/illustrations/saly1.svg" alt="light bulb image">
                         </div>
                         <div class="text-center xl:max-w-4xl">
-                            <h1 class="mb-3 text-md font-bold leading-tight text-indigo-700 sm:text-4xl lg:text-5xl dark:text-purple-500">💡 Spark Your Creativity!</h1>
-                            <p class="text-base font-normal text-gray-600 dark:text-gray-400">Get inspired and ensure your proposal shines by checking its similarity with others. Unleash your unique ideas!</p>
+                            <h1 class="mb-3 text-base font-bold leading-tight text-indigo-700 sm:text-4xl lg:text-5xl dark:text-purple-500">💡 Spark Your Creativity!</h1>
+                            <p class="text-base font-sm text-gray-600 dark:text-gray-400">Get inspired and ensure your proposal shines by checking its similarity with others. Unleash your unique ideas!</p>
                         </div>
                     </div>
                 </div>                   
@@ -154,5 +150,4 @@
 
         </div>
     </div>
-
 </div>

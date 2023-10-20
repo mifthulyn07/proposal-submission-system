@@ -7,7 +7,7 @@
                         <img src="/assets/illustrations/waiting3.svg" alt="astronaut image" width="70%">
                     </div>
                     <div class="text-center xl:max-w-4xl mt-5">
-                        <h1 class="mb-2 text-xl font-bold leading-tight text-indigo-700 sm:text-4xl lg:text-5xl dark:text-purple-500">🔍 Awaits Confirmation</h1>
+                        <h1 class="mb-2 text-lg font-bold leading-tight text-indigo-700 sm:text-4xl lg:text-5xl dark:text-purple-500">🔍 Awaits Confirmation</h1>
                         <p class="text-base font-normal text-gray-600 dark:text-gray-400">You're eagerly awaiting the results of your submitted proposal. Stay tuned for updates!</p>
                     </div>
                 </div>  

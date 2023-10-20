@@ -87,7 +87,7 @@ class Create extends Component
             $submit_proposal->fill($validatedData);
             $submit_proposal->save();
 
-            $this->reset();
+            $this->resetExcept('proposalProcess');
             session()->flash('success', 'Proposal successfully stored.');
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());

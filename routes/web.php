@@ -66,6 +66,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/edit-lecturer/{lecturer}', function(Lecturer $lecturer){
             return view('lecturer.edit', ['lecturer' => $lecturer]);
         })->name('lecturer.edit');
+        Route::get('/show-project-student/{lecturer}', function(Lecturer $lecturer){
+            return view('lecturer.show-student', ['lecturer' => $lecturer]);
+        })->name('lecturer.show');
 
         // students 
         Route::view('/add-student', 'student.create')->name('student.create');

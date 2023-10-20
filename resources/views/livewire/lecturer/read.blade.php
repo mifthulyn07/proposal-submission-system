@@ -7,9 +7,6 @@
 @endpush
 
 <div>
-    {{-- popup if user offline  --}}
-    @include('components.offline')
-
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden rounded-lg shadow rounded-lg">
 
@@ -99,13 +96,8 @@
                                     Phone
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Students
+                                    Action
                                 </th>
-                                @if (auth()->user()->hasRole('coordinator'))
-                                    <th scope="col" class="px-6 py-3">
-                                        Action
-                                    </th>
-                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -143,31 +135,37 @@
                                     <td class="px-6 py-4">
                                         {{ $lecturer->user->phone }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        @if ($lecturer->proposals->isNotEmpty())
-                                            @if ($lecturer->proposals->student->isEmpty())
-                                                <a wire:click="showStudents({{ $lecturer->id }})" x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-students-show')" href="" class="font-medium text-blue-600 hover:underline dark:text-blue-500">
-                                                    {{ $lecturer->proposals->student->count()}} students
-                                                </a>
-                                            @endif
-                                        @else
-                                            0 student
-                                        @endif
-                                    </td>
-                                     @if (auth()->user()->hasRole('coordinator'))
-                                        <td class="px-6 py-4 space-x-1 whitespace-nowrap">
-                                            <a href="" wire:click="editIdLecturer({{ $lecturer->id }})" wire:click.prevent class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-yellow-300 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-300 dark:hover:bg-yellow-300 dark:focus:ring-yellow-300">
+                                    <td class="px-6 py-4 space-x-1 whitespace-nowrap">
+                                        @if (auth()->user()->hasRole('coordinator'))
+                                            <a data-tooltip-target="tooltip-edit" href="" wire:click="editIdLecturer({{ $lecturer->id }})" wire:click.prevent class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-yellow-300 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-300 dark:hover:bg-yellow-300 dark:focus:ring-yellow-300">
                                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
                                             </a>
-                                            <a href="" wire:click="deleteIdLecturer({{ $lecturer->id }})" x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-lecturer-deletion')" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900">
+                                            <a data-tooltip-target="tooltip-delete" href="" wire:click="deleteIdLecturer({{ $lecturer->id }})" x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-lecturer-deletion')" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900">
                                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
                                             </a>
-                                        </td>
-                                    @endif
+                                        @endif
+                                        @if ($lecturer->proposals)
+                                            <a data-tooltip-target="tooltip-show" href="" wire:click="showStudents({{ $lecturer->id }})" wire:click.prevent class="inline-flex items-center py-2 px-3 text-sm hover:text-blue-700 font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                                <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 14"><g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M10 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M10 13c4.97 0 9-2.686 9-6s-4.03-6-9-6-9 2.686-9 6 4.03 6 9 6Z"/></g></svg>
+                                            </a>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    <div id="tooltip-edit" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                        Edit
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
+                    <div id="tooltip-delete" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                        Delete
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
+                    <div id="tooltip-show" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                        Show project student
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
                 @endif
             </div>
 
@@ -219,7 +217,7 @@
                     </div>
 
                     <div class="p-2 text-center">
-                        <div class="relative overflow-x-auto sm:rounded-lg">
+                        {{-- <div class="relative overflow-x-auto sm:rounded-lg">
                             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
                                     <tr>
@@ -246,7 +244,26 @@
                                     @endif
                                 </tbody>
                             </table>
+                        </div> --}}
+                        
+                        <div class="grid mb-8 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700">
+                            {{-- @foreach($students as $student)
+                                <figure class="flex flex-col items-center justify-center p-8 text-center bg-white border-b border-gray-200 rounded-t-lg md:rounded-t-none md:rounded-tl-lg md:border-r dark:bg-gray-800 dark:border-gray-700">
+                                    <blockquote class="max-w-2xl mx-auto mb-4 text-gray-500 lg:mb-8 dark:text-gray-400">
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Very easy this was to integrate</h3>
+                                        <p class="my-4">If you care for your time, I hands down would go with this."</p>
+                                    </blockquote>
+                                    <figcaption class="flex items-center justify-center space-x-3">
+                                        <img class="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png" alt="profile picture">
+                                        <div class="space-y-0.5 font-medium dark:text-white text-left">
+                                            <div>Bonnie Green</div>
+                                            <div class="text-sm text-gray-500 dark:text-gray-400">Developer at Open AI</div>
+                                        </div>
+                                    </figcaption>    
+                                </figure>
+                            @endforeach --}}
                         </div>
+
                     </div>
 
                     <div class="p-2 flex justify-end">

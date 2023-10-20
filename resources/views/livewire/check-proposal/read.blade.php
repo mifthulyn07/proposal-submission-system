@@ -7,15 +7,12 @@
 @endpush
 
 <div>
-    {{-- popup if user offline  --}}
-    @include('components.offline')
-
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden rounded-lg shadow rounded-lg">
 
             {{-- table header --}}
             <div class="m-4">
-                <h5 class="text-xl font-medium text-gray-900 dark:text-white">List Submission</h5>
+                <h5 class="text-lg font-medium text-gray-900 dark:text-white">List Submission</h5>
                 <p class="mt-1 mb-4 text-gray-500 dark:text-gray-400 font-normal text-sm">TThis feature is available exclusively for Coordinators</p>
                 
                 {{-- search  --}}
@@ -44,8 +41,8 @@
                             <img src="/assets/illustrations/waiting1.svg" alt="astronaut image">
                         </div>
                         <div class="text-center xl:max-w-4xl mt-5">
-                            <h1 class="mb-3 text-md font-bold leading-tight text-indigo-700 sm:text-4xl lg:text-5xl dark:text-purple-500">📢 No Student Proposals Submitted Yet</h1>
-                            <p class="text-lg text-gray-600 dark:text-gray-400">Currently, there are no submitted student proposals. We encourage students to take the initiative and submit their innovative ideas!</p>
+                            <h1 class="mb-3 text-base font-bold leading-tight text-indigo-700 sm:text-4xl lg:text-5xl dark:text-purple-500">📢 No Student Proposals Submitted Yet</h1>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Currently, there are no submitted student proposals. We encourage students to take the initiative and submit their innovative ideas!</p>
                         </div>
                     </div>
                 @else
