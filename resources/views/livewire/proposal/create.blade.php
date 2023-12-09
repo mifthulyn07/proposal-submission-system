@@ -4,8 +4,8 @@
 
             {{-- form --}}
             <div class="m-4 ">
-                <h5 class="text-lg font-medium text-gray-900 dark:text-white">Add a new proposal's title</h5>
-                <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">This proposal's title is for an information systems student from the State Islamic University of North Sumatra.</p>
+                <h5 class="text-lg font-medium text-gray-900 dark:text-white">Add New proposal title</h5>
+                <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">This proposal title is for an information systems student from the State Islamic University of North Sumatra.</p>
 
                 <form class="mt-6" wire:submit.prevent="store">
                     
@@ -14,7 +14,7 @@
                         <label for="student_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Student Account</label>
                         <select id="student_id" name="student_id" wire:model="student_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <option selected hidden value="" >Select Student</option>
-                            <option value="" >Student dont have an account</option>
+                            <option value="" >Student doesn't have an account</option>
                             @foreach ($students as $student)
                                 <option value="{{$student->id}}">{{$student->user->name}} ({{$student->user->email}})</option>
                             @endforeach

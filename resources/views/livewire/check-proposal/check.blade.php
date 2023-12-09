@@ -2,7 +2,7 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
         
         {{-- desc --}}
-        <div class="bg-white overflow-hidden rounded-lg shadow rounded-lg">
+        <div class="@if($showResultSubmit == true) hidden @endif bg-white overflow-hidden rounded-lg shadow rounded-lg">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 
                 <!-- Modal header -->
@@ -63,7 +63,7 @@
                                                 Gender <div class="tooltip-arrow" data-popper-arrow></div>
                                             </div>
                                             @if($proposalProcess->student->user)
-                                                {{ $proposalProcess->student->user->gender }}
+                                                {{ ucfirst($proposalProcess->student->user->gender) }}
                                             @endif
                                         </li>
                                         <li class="flex items-center">
@@ -94,30 +94,6 @@
                                             @endif
                                         </li>
                                     </ul>
-                                    <div class="flex justify-between">
-                                        <button type="button" class="inline-flex items-center justify-center w-full px-5 py-2 mr-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"><svg class="w-3.5 h-3.5 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
-                                            <path d="M3 7H1a1 1 0 0 0-1 1v8a2 2 0 0 0 4 0V8a1 1 0 0 0-1-1Zm12.954 0H12l1.558-4.5a1.778 1.778 0 0 0-3.331-1.06A24.859 24.859 0 0 1 6 6.8v9.586h.114C8.223 16.969 11.015 18 13.6 18c1.4 0 1.592-.526 1.88-1.317l2.354-7A2 2 0 0 0 15.954 7Z"/></svg>Like page
-                                        </button>
-                                        <button id="dropdown-button" data-dropdown-toggle="dropdown-menu" data-dropdown-placement="right" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg shrink-0 focus:outline-none hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" type="button"> 
-                                            <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 3"><path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/></svg>
-                                        </button>
-                                    </div>
-                                    <div id="dropdown-menu" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-button">
-                                            <li>
-                                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Report this page</a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Add to favorites</a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Block this page</a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Invite users</a>
-                                            </li>
-                                        </ul>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -125,9 +101,11 @@
                     </div>
 
                     {{-- see others button --}}
-                    <a href="#" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
-                        See others
-                    </a>
+                    @if($count_submission > 1)
+                        <a href="{{ route('check-proposal.submission-history', $proposalProcess->id) }}" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
+                            Submission History
+                        </a>
+                    @endif
                 </div>
                 
                 <!-- Modal body -->
@@ -152,7 +130,7 @@
                     </div>
 
                     {{-- list --}}
-                    <div class="relative overflow-x-auto rounded-lg shadow-sm">
+                    <div class="relative overflow-x-auto overflow-y-hidden rounded-lg shadow-sm">
                         @if($submit_proposals->isEmpty())
                             <div class="flex flex-col justify-center items-center px-6 mx-auto xl:px-0 dark:bg-gray-900">
                                 <div class="block max-w-sm">
@@ -214,9 +192,11 @@
                                                 @endif
                                             </td>
                                             <td class="px-6 py-4">
-                                                <button data-tooltip-target="tooltip-download-proposal" wire:click="exportProposal({{ $submit_proposal->id }})" class="inline-flex items-center py-2 px-3 text-sm hover:text-blue-700 font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                                <a href="{{ route('print.view-pdf', $submit_proposal->proposal)}}" target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</a>
+
+                                                {{-- <button data-tooltip-target="tooltip-download-proposal" wire:click="exportProposal({{ $submit_proposal->id }})" class="inline-flex items-center py-2 px-3 text-sm hover:text-blue-700 font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                                                     <svg class="w-4 h-4 hover:text-blue-700 text-gray-700 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"><path d="M14.707 7.793a1 1 0 0 0-1.414 0L11 10.086V1.5a1 1 0 0 0-2 0v8.586L6.707 7.793a1 1 0 1 0-1.414 1.414l4 4a1 1 0 0 0 1.416 0l4-4a1 1 0 0 0-.002-1.414Z"/><path d="M18 12h-2.55l-2.975 2.975a3.5 3.5 0 0 1-4.95 0L4.55 12H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2Zm-3 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>
-                                                </button>
+                                                </button> --}}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -240,7 +220,7 @@
         </div>
 
         {{-- loading --}}
-        <div wire:loading wire:target="showAccept, showReject" class="w-full">
+        <div wire:loading wire:target="showAccept, showDecline" class="@if($showResultSubmit == true) hidden @endif w-full">
             <div class="flex items-center space-x-2 justify-center" role="status">
                 <svg aria-hidden="true" class="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -251,7 +231,7 @@
         </div>
         
         {{-- show form --}}
-        <div wire:loading.remove wire:target="showAccept, showReject" class="@if($show) bg-white overflow-hidden rounded-lg shadow rounded-lg @else hidden @endif">
+        <div wire:loading.remove wire:target="showAccept, showDecline" class="@if($showResultSubmit == true) hidden @endif @if($show) bg-white overflow-hidden rounded-lg shadow rounded-lg @else hidden @endif">
 
             {{-- form --}}
             <div class="m-4">
@@ -273,37 +253,13 @@
                             </select>
                             @error('proposal_selected') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
                         </div>
-
-                        {{-- 2 lecturer --}}
-                        <div class="@if($proposalProcess->type !=  'journal') grid gap-4 md:grid-cols-2 @endif mb-4">
-                            <div>
-                                <label for="lecturer_selected1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Lecturer 1</label>
-                                <select id="lecturer_selected1" name="lecturer_selected1" wire:model="lecturer_selected1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                    <option hidden selected value="null" >Select lecturer 1</option>
-                                    @foreach ($lecturers as $lecturer)
-                                        <option value="{{$lecturer->id}}">{{$lecturer->user->name}}</option>
-                                    @endforeach
-                                </select>
-                                @error('lecturer_selected1') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
-                            </div>
-                            <div @if($proposalProcess->type ==  'journal') class=hidden @endif>
-                                <label for="lecturer_selected2" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Lecturer 2</label>
-                                <select id="lecturer_selected2" name="lecturer_selected2" wire:model="lecturer_selected2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                    <option hidden selected value="null" >Select lecturer 2</option>
-                                    @foreach ($lecturers as $lecturer)
-                                        <option value="{{$lecturer->id}}">{{$lecturer->user->name}}</option>
-                                    @endforeach
-                                </select>
-                                @error('lecturer_selected2') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
-                            </div>
-                        </div>
                     @endif
 
                     {{-- Desc --}}
                     <div class="mb-4">
-                        <label for="explanation" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Comment</label>
-                        <textarea id="explanation" wire:model="explanation" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
-                        @error('explanation') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
+                        <label for="comment" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Comment</label>
+                        <textarea id="comment" wire:model="comment" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
+                        @error('comment') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
                     </div>
 
                     {{-- button submit --}}

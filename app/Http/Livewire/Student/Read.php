@@ -24,21 +24,22 @@ class Read extends Component
 
     public function render()
     {
-        return view('livewire.student.read', [
-            'students' => Student::whereHas('user', function (Builder $query) {
+        $students = Student::whereHas('user', function (Builder $query) {
                 $query->where('name', 'like', $this->search.'%');
-                $query->orWhere('email', 'like', $this->search.'%');
                 $query->orWhere('gender', 'like', $this->search.'%');
                 $query->orWhere('phone', 'like', $this->search.'%');
             })
-            ->orwhereHas('lecturer', function (Builder $query) {
-                $query->orWhereHas('user', function (Builder $query) {
-                    $query->orWhere('name', 'like', $this->search.'%');
+            ->orWhereHas('lecturer', function (Builder $query) {
+                $query->whereHas('user', function (Builder $query) {
+                    $query->where('name', 'like', '%' . $this->search . '%');
                 });
             })
             ->orWhere('nim', 'like', $this->search.'%')
             ->orWhere('class', 'like', $this->search.'%')
-            ->paginate(12)
+            ->paginate(12);
+
+        return view('livewire.student.read', [
+            'students'      => $students,
         ]);
     }
 

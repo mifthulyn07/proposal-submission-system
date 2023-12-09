@@ -27,16 +27,19 @@ class Read extends Component
     }
 
     public function render()
-    {
-        return view('livewire.lecturer.read', [
-            'lecturers' => Lecturer::whereHas('user', function (Builder $query) {
+    {   
+        $lecturers = Lecturer::whereHas('user', function (Builder $query) {
                 $query->where('name', 'like', $this->search.'%');
                 $query->orWhere('email', 'like', $this->search.'%');
                 $query->orWhere('gender', 'like', $this->search.'%');
                 $query->orWhere('phone', 'like', $this->search.'%');
+                $query->orWhere('expertise', 'like', $this->search.'%');
             })
             ->orWhere('nip', 'like', $this->search.'%')
-            ->paginate(12)
+            ->paginate(12);
+
+        return view('livewire.lecturer.read', [
+            'lecturers'         => $lecturers,
         ]);
     }
 

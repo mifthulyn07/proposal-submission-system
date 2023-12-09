@@ -4,8 +4,8 @@
 
             {{-- form --}}
             <div class="m-4 ">
-                <h5 class="text-lg font-medium text-gray-900 dark:text-white">Add a new lecturer</h5>
-                <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">You can change the coordinator role or student role here.</p>
+                <h5 class="text-lg font-medium text-gray-900 dark:text-white">Add New Lecturer</h5>
+                <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">Complete the form below to add a new academic lecturer to the records.</p>
 
                 <form class="mt-6" wire:submit.prevent="store">
                     
@@ -28,6 +28,13 @@
                         <label for="nip" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nip</label>
                         <input type="text" wire:model="nip" id="nip" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="201403120012908">
                         @error('nip') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
+                    </div>
+
+                    {{-- expertise --}}
+                    <div class="mb-4">
+                        <label for="expertise" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Expertise</label>
+                        <input type="text" wire:model="expertise" id="expertise" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="SIM, SIG, Machine Learning">
+                        @error('expertise') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
                     </div>
 
                     {{-- button submit --}}

@@ -12,6 +12,7 @@ use App\Models\Proposal;
 use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\TopicSeeder;
+use Database\Seeders\ProposalSeeder;
 use Illuminate\Support\Facades\Hash;
 use Database\Seeders\RolePermissionSeeder;
 
@@ -24,8 +25,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RolePermissionSeeder::class,
-            UserSeeder::class,
             TopicSeeder::class,
+            UserSeeder::class,
+            // ProposalSeeder::class,
         ]);
 
         // User::factory()->create([

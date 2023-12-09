@@ -7,7 +7,8 @@
 @endpush
 
 <div>
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+
         <div class="bg-white overflow-hidden rounded-lg shadow rounded-lg">
 
             {{-- alert --}}
@@ -37,6 +38,13 @@
 
             {{-- table header --}}
             <div class="m-4">
+                {{-- caption --}}
+                <div class="mb-4 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+                    <h5 class="text-lg font-medium text-gray-900 dark:text-white">List of Lecturers</h5>
+                    <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">Explore the comprehensive list of academic lecturers in the State Islamic University of North Sumatra.</p>
+                </div>
+
+                {{-- search and button add --}}
                 <div class="relative bg-white dark:bg-gray-800 rounded-lg">
                     <div class="flex flex-col items-center justify-between space-y-3 md:flex-row md:space-y-0 md:space-x-4">
                         
@@ -53,7 +61,7 @@
                             </form>
                         </div>
 
-                        @if (auth()->user()->hasRole('coordinator'))
+                        @if (auth()->user()->hasRole('coordinator') || auth()->user()->hasRole('kaprodi'))
                             {{-- button add --}}
                             <div class="flex flex-col items-stretch justify-end flex-shrink-0 w-full space-y-2 md:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3">
                                 <a href="{{ Route('lecturer.create') }}" type="button" class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
@@ -68,7 +76,7 @@
             </div>
 
             {{-- table --}}
-            <div class="m-4 relative overflow-x-auto rounded-lg shadow-sm">
+            <div class="m-4 relative overflow-x-auto rounded-lg shadow-sm overflow-y-hidden">
                 @if($lecturers->isEmpty())
                     <div class="m-4">
                         <div class="flex flex-col justify-center items-center px-6 mx-auto xl:px-0 dark:bg-gray-900">
@@ -94,6 +102,9 @@
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Phone
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Expertise
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Action
@@ -135,8 +146,11 @@
                                     <td class="px-6 py-4">
                                         {{ $lecturer->user->phone }}
                                     </td>
+                                    <td class="px-6 py-4">
+                                        {{ $lecturer->expertise }}
+                                    </td>
                                     <td class="px-6 py-4 space-x-1 whitespace-nowrap">
-                                        @if (auth()->user()->hasRole('coordinator'))
+                                        @if (auth()->user()->hasRole('coordinator') || auth()->user()->hasRole('kaprodi'))
                                             <a data-tooltip-target="tooltip-edit" href="" wire:click="editIdLecturer({{ $lecturer->id }})" wire:click.prevent class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-yellow-300 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-300 dark:hover:bg-yellow-300 dark:focus:ring-yellow-300">
                                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
                                             </a>
@@ -154,6 +168,8 @@
                             @endforeach
                         </tbody>
                     </table>
+
+                    {{-- tooltip --}}
                     <div id="tooltip-edit" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
                         Edit
                         <div class="tooltip-arrow" data-popper-arrow></div>
@@ -275,5 +291,6 @@
             </x-modal>
 
         </div>
+
     </div>
 </div>

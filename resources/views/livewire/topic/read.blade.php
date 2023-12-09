@@ -37,6 +37,13 @@
 
             {{-- table header --}}
             <div class="m-4">
+                {{-- caption --}}
+                <div class="mb-4 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+                    <h5 class="text-lg font-medium text-gray-900 dark:text-white">Manage Proposal Topics</h5>
+                    <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">Browse and manage a variety of research topics for final assignment proposals.</p>
+                </div>
+
+                {{-- search and button add --}}
                 <div class="relative bg-white dark:bg-gray-800 rounded-lg">
                     <div class="flex flex-col items-center justify-between space-y-3 md:flex-row md:space-y-0 md:space-x-4">
                         
@@ -66,7 +73,7 @@
             </div>
 
             {{-- table --}}
-            <div class="m-4 relative overflow-x-auto rounded-lg shadow-sm">
+            <div class="m-4 relative overflow-x-auto overflow-y-hidden rounded-lg shadow-sm">
                 @if($topics->isEmpty())
                     <div class="m-4">
                         <div class="flex flex-col justify-center items-center px-6 mx-auto xl:px-0 dark:bg-gray-900">

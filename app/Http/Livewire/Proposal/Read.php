@@ -2,10 +2,11 @@
 
 namespace App\Http\Livewire\Proposal;
 
-use App\Models\User;
 use Livewire\Component;
 use App\Models\Proposal;
 use Livewire\WithPagination;
+use App\Charts\ProposalsChart;
+use Illuminate\Database\Eloquent\Builder;
 
 class Read extends Component
 {
@@ -24,16 +25,24 @@ class Read extends Component
     public function render()
     {
         $search = trim($this->search);
-        $keywords   = explode(' ', $search);
-        $query      = Proposal::query();
-        foreach ($keywords as $key) {
-            $query->orWhere('title', 'like', "%{$key}%");
-        }
+        $keywords = explode(' ', $search);
+
+        $query = Proposal::query()
+            ->where('name', 'like', $search.'%')
+            ->orWhere('status', 'like', $search.'%')
+            ->orWhere('type', 'like', $search.'%')
+            ->orWhere('adding_topic', 'like', $search.'%')
+            ->orWhereHas('topic', function (Builder $query) {
+                $query->where('name', 'like', $this->search.'%');
+            })
+            ->OrWhere(function ($query) use ($keywords) {
+                foreach ($keywords as $key) {
+                    $query->orWhere('title', 'like', "%{$key}%");
+                }
+            });
 
         return view('livewire.proposal.read', [
-            // 'proposals' => Proposal::latest()->where('title', 'like', '%'.$this->search.'%')->paginate(12),
-            // 'proposals' => Proposal::whereRaw("title LIKE CONCAT('%', ?, '%')", [$this->search])->paginate(12),
-            'proposals' => $query->paginate(12),
+            'proposals'         => $query->paginate(12),
         ]);
     }
 
@@ -57,13 +66,11 @@ class Read extends Component
 
             // for hide alert for 3 sec
             $this->emit('alert_remove');
-            return;
         } catch (\Exception $e){
             session()->flash('error', 'An error occurred while deleting the Proposal: '.$e->getMessage());
 
             // for hide alert for 3 sec
             $this->emit('alert_remove');
-            return;
         }
     }
 }

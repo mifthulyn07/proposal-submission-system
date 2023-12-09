@@ -21,6 +21,8 @@ class Lecturer extends Model
     protected $fillable = [
         'user_id',
         'nip',
+        'expertise',
+        'barcode',
     ];
 
     public function user(): BelongsTo

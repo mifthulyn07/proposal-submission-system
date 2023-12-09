@@ -9,18 +9,18 @@
         </p>
 
         @if (session()->has('warning'))
-        <div
-            x-data="{ show: true }"
-            x-show="show"
-            x-transition
-            x-init="setTimeout(() => show = false, 3000)"
-            class="mb-2 flex align-center justify-center alert-remove p-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-400" 
-            role="alert"
-        >
-            <svg class="flex-shrink-0 inline w-4 h-4 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"><path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/></svg>
-            <span class="font-semibold mr-1">Warning alert!</span> {{ session('warning') }}
-        </div>
-    @endif
+            <div
+                x-data="{ show: true }"
+                x-show="show"
+                x-transition
+                x-init="setTimeout(() => show = false, 3000)"
+                class="mb-2 flex align-center justify-center alert-remove p-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-400" 
+                role="alert"
+            >
+                <svg class="flex-shrink-0 inline w-4 h-4 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"><path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/></svg>
+                <span class="font-semibold mr-1">Warning alert!</span> {{ session('warning') }}
+            </div>
+        @endif
     </header>
 
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
@@ -91,6 +91,11 @@
                 <x-input-label for="nip" :value="__('NIP')" />
                 <x-text-input id="nip" name="nip" type="text" class="mt-1 block w-full" :value="old('nip', $user->lecturer->nip)" required autocomplete="nip" />
                 <x-input-error class="mt-2" :messages="$errors->get('nip')" />
+            </div>
+            <div>
+                <x-input-label for="expertise" :value="__('Expertise')" />
+                <x-text-input id="expertise" name="expertise" type="text" class="mt-1 block w-full" :value="old('expertise', $user->lecturer->expertise)" required autocomplete="expertise" />
+                <x-input-error class="mt-2" :messages="$errors->get('expertise')" />
             </div>
         @elseif($user->student)
             <div>

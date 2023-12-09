@@ -2,18 +2,15 @@
 
 namespace App\Http\Livewire\SubmitProposal;
 
-use App\Models\User;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\PdfRequirement;
 use Illuminate\Support\Carbon;
-use App\Models\ProposalProcess;
-use Illuminate\Support\Facades\Auth;
 
-class FinishSubmit extends Component
+class SubmissionVerification extends Component
 {
     use WithFileUploads;
-    
+
     // from parameter
     public $proposalProcess;
 
@@ -21,15 +18,15 @@ class FinishSubmit extends Component
     public $date;
     public $requirements_pdf = [];
 
+    public function render()
+    {
+        return view('livewire.submit-proposal.submission-verification');
+    }
+
     public function mount()
     {
         $date = Carbon::now();
         $this->date = $date->format('Y-m-d');
-    }
-
-    public function render()
-    {
-        return view('livewire.submit-proposal.finish-submit');
     }
 
     protected function propertyValidation()
@@ -71,11 +68,11 @@ class FinishSubmit extends Component
             $ProposalProcess->save();
         }
 
-        $this->emit('showResultSubmit');
+        $this->emit('showResults');
     }
 
     public function back()
     {
-        $this->emit('showSubmit');
+        $this->emit('showSubmission');
     }
 }

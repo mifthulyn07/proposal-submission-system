@@ -9,21 +9,24 @@ class Edit extends Component
 {
     // from parameter 
     public $lecturer;
-    public $empty = false;
 
     // modal lecturer
     public $nip;
+    public $expertise;
 
     // modal user relationship 
     public $name;
     public $email;
 
+    public $empty = false;
+
     public function mount($lecturer)
     {
         if(!empty($lecturer)){
-            $this->name     = $lecturer->user->name;
-            $this->email    = $lecturer->user->email;
-            $this->nip      = $lecturer->nip;
+            $this->name         = $lecturer->user->name;
+            $this->email        = $lecturer->user->email;
+            $this->nip          = $lecturer->nip;
+            $this->expertise    = $lecturer->expertise;
         }else{
             // for 404 not found
             $this->empty = true;
@@ -38,7 +41,8 @@ class Edit extends Component
     protected function propertyValidation()
     {
         return [
-            'required', 'numeric', 'unique:lecturers,nip,'.$this->lecturer->id
+            'nip'           => ['required', 'numeric', 'unique:lecturers,nip,'.$this->lecturer->id],
+            'expertise'     => ['required'],
         ];
     }
 

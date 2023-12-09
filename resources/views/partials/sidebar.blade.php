@@ -1,5 +1,7 @@
 <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
     <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+        
+        {{-- all menu --}}
         <ul class="space-y-2 font-medium">
             
             {{-- dashboard --}}
@@ -11,74 +13,67 @@
             </li>
 
             @if (auth()->user()->hasRole('coordinator') || auth()->user()->hasRole('lecturer') || auth()->user()->hasRole('student'))
-                {{-- lecturers  --}}
+                {{-- lists lecturer, student, proposal --}}
                 <li>
-                    <a href="{{ Route('lecturer.read')}}" class="{{ Request::is('list-lecturer') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100' }} flex items-center p-2 rounded-lg dark:text-white dark:hover:bg-gray-700">
-                        <svg class="{{ Request::is('list-lecturer') ? 'text-white' : '' }} flex-shrink-0 w-4 h-4 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18"><path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/></svg>
-                        <span class="flex-1 ml-3 whitespace-nowrap">The Lecturers</span>
-                    </a>
-                </li>
-                {{-- students  --}}
-                <li>
-                    <a href="{{ Route('student.read')}}" class="{{ Request::is('list-student') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100' }} flex items-center p-2 rounded-lg dark:text-white dark:hover:bg-gray-700">
-                        <svg class="{{ Request::is('list-student') ? 'text-white group-hover:text-gray-900' : '' }} flex-shrink-0 w-4 h-4 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 19"><path d="M14.5 0A3.987 3.987 0 0 0 11 2.1a4.977 4.977 0 0 1 3.9 5.858A3.989 3.989 0 0 0 14.5 0ZM9 13h2a4 4 0 0 1 4 4v2H5v-2a4 4 0 0 1 4-4Z"/><path d="M5 19h10v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2ZM5 7a5.008 5.008 0 0 1 4-4.9 3.988 3.988 0 1 0-3.9 5.859A4.974 4.974 0 0 1 5 7Zm5 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm5-1h-.424a5.016 5.016 0 0 1-1.942 2.232A6.007 6.007 0 0 1 17 17h2a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5ZM5.424 9H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h2a6.007 6.007 0 0 1 4.366-5.768A5.016 5.016 0 0 1 5.424 9Z"/></svg>
-                        <span class="flex-1 ml-3 whitespace-nowrap">The Students</span>
-                    </a>
-                </li>
-                {{-- proposals --}}
-                <li>
-                    <a href="{{ Route('proposal.read') }}" class="{{ Request::is('list-proposal') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100' }} flex items-center p-2 rounded-lg dark:text-white dark:hover:bg-gray-700">
-                        <svg class="{{ Request::is('list-proposal') ? 'text-white group-hover:text-gray-900' : '' }} flex-shrink-0 w-4 h-4 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18"><path d="M15.977.783A1 1 0 0 0 15 0H3a1 1 0 0 0-.977.783L.2 9h4.239a2.99 2.99 0 0 1 2.742 1.8 1.977 1.977 0 0 0 3.638 0A2.99 2.99 0 0 1 13.561 9H17.8L15.977.783ZM6 2h6a1 1 0 1 1 0 2H6a1 1 0 0 1 0-2Zm7 5H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Z"/><path d="M1 18h16a1 1 0 0 0 1-1v-6h-4.439a.99.99 0 0 0-.908.6 3.978 3.978 0 0 1-7.306 0 .99.99 0 0 0-.908-.6H0v6a1 1 0 0 0 1 1Z"/></svg>
-                        <span class="flex-1 ml-3 whitespace-nowrap">All Proposals</span>
-                    </a>
-                </li>
+                    <button type="button" class="flex items-center w-full p-2 text-sm text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-lists" data-collapse-toggle="dropdown-lists">
+                        <svg class="flex-shrink-0 w-4 h-4 text-gray-500 transition duration-75 dark:text-gray-400 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 10"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M6 1h10M6 5h10M6 9h10M1.49 1h.01m-.01 4h.01m-.01 4h.01"/></svg>
+                        <span class="flex-1 ml-3 text-left whitespace-nowrap">Lists & Records</span>
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/></svg>
+                    </button>
+                    <ul id="dropdown-lists" class="hidden py-2 space-y-2">
+                        <li>
+                            <a href="{{ Route('lecturer.read') }}" class="{{ Request::is('list-lecturer') || Request::is('add-lecturer') || Request::is('edit-lecturer/*') || Request::is('show-project-student/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }} flex items-center w-full p-2  transition duration-75 rounded-lg pl-11 group">The Lecturers</a>
+                        </li>
+                        <li>
+                            <a href="{{ Route('student.read') }}" class="{{ Request::is('list-student') || Request::is('add-student') || Request::is('edit-student/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }} flex items-center w-full p-2 transition duration-75 rounded-lg pl-11 group">The Students</a>
+                        </li>
+                        <li>
+                            <a href="{{ Route('proposal.read') }}" class="{{ Request::is('list-proposal') || Request::is('add-proposal') || Request::is('edit-proposal/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }} flex items-center w-full p-2 transition duration-75 rounded-lg pl-11 group">All Proposals</a>
+                        </li>
+                    </ul>
+                </li>    
             @endif
             
-            @if (auth()->user()->hasRole('coordinator'))
+            @if (auth()->user()->hasRole('coordinator') || auth()->user()->hasRole('kaprodi'))
+                {{-- management user & topic --}}
                 <li>
-                    <button type="button" class="flex items-center w-full p-2 text-sm text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
+                    <button type="button" class="flex items-center w-full p-2 text-sm text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-managing" data-collapse-toggle="dropdown-managing">
                         <svg class="flex-shrink-0 w-4 h-4 text-gray-500 transition duration-75 dark:text-gray-400 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18"><path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z"/></svg>
                         <span class="flex-1 ml-3 text-left whitespace-nowrap">Managing</span>
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/></svg>
                     </button>
-                    <ul id="dropdown-example" class="hidden py-2 space-y-2">
+                    <ul id="dropdown-managing" class="hidden py-2 space-y-2">
                         <li>
-                            <a href="{{ Route('user.read') }}" class="{{ Request::is('list-user') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }} flex items-center w-full p-2  transition duration-75 rounded-lg pl-11 group">User Account</a>
+                            <a href="{{ Route('user.read') }}" class="{{ Request::is('list-user') || Request::is('add-user') || Request::is('edit-user/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }} flex items-center w-full p-2  transition duration-75 rounded-lg pl-11 group">User Account</a>
                         </li>
                         <li>
-                            <a href="{{ Route('topic.read') }}" class="{{ Request::is('list-topic') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }} flex items-center w-full p-2 transition duration-75 rounded-lg pl-11 group">Topics</a>
+                            <a href="{{ Route('topic.read') }}" class="{{ Request::is('list-topic') || Request::is('add-topic') || Request::is('edit-topic/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }} flex items-center w-full p-2 transition duration-75 rounded-lg pl-11 group">Topics</a>
                         </li>
                     </ul>
                 </li>
+
                 {{-- check proposal  --}}
                 <li>
-                    <a href="{{ Route('check-proposal.read') }}" class="{{ Request::is('list-proposal-submission') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100' }} flex items-center p-2 rounded-lg dark:text-white dark:hover:bg-gray-700">
-                        <svg class="{{ Request::is('list-proposal-submission') ? 'text-white group-hover:text-gray-900' : '' }} flex-shrink-0 w-4 h-4 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20"><path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2ZM7 2h4v2H7V2ZM5 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm8 4H8a1 1 0 0 1 0-2h5a1 1 0 0 1 0 2Zm0-4H8a1 1 0 0 1 0-2h5a1 1 0 1 1 0 2Z"/></svg>
+                    <a href="{{ Route('check-proposal.read') }}" class="{{ Request::is('list-submission') || Request::is('check-submission/*') || Request::is('history-submission/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100' }} flex items-center p-2 rounded-lg dark:text-white dark:hover:bg-gray-700">
+                        <svg class="{{ Request::is('list-submission') || Request::is('check-submission/*') || Request::is('history-submission/*') ? 'text-white group-hover:text-gray-900' : '' }} flex-shrink-0 w-4 h-4 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20"><path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2ZM7 2h4v2H7V2ZM5 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm8 4H8a1 1 0 0 1 0-2h5a1 1 0 0 1 0 2Zm0-4H8a1 1 0 0 1 0-2h5a1 1 0 1 1 0 2Z"/></svg>
                         <span class="flex-1 ml-3 whitespace-nowrap">Check Proposals</span>
-                        <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-3 text-xs font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">3</span>
+                        <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-3 text-xs font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">{{ App\Models\ProposalProcess::whereNull('comment')->whereNotNull('type')->whereNotNull('date')->count() }}</span>
                     </a>
                 </li>
             @endif
 
-            {{-- @if (auth()->user()->hasRole('lecturer'))
+            @if (auth()->user()->hasRole('kaprodi'))
+                {{--  Assignment Advisor --}}
                 <li>
-                    <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-example2" data-collapse-toggle="dropdown-example2">
-                        <svg class="flex-shrink-0 w-4 h-4 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18"><path d="M15.977.783A1 1 0 0 0 15 0H3a1 1 0 0 0-.977.783L.2 9h4.239a2.99 2.99 0 0 1 2.742 1.8 1.977 1.977 0 0 0 3.638 0A2.99 2.99 0 0 1 13.561 9H17.8L15.977.783ZM6 2h6a1 1 0 1 1 0 2H6a1 1 0 0 1 0-2Zm7 5H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Z"/><path d="M1 18h16a1 1 0 0 0 1-1v-6h-4.439a.99.99 0 0 0-.908.6 3.978 3.978 0 0 1-7.306 0 .99.99 0 0 0-.908-.6H0v6a1 1 0 0 0 1 1Z"/></svg>
-                        <span class="flex-1 ml-3 text-left whitespace-nowrap">PA-Check</span>
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                        </svg>
-                    </button>
-                    <ul id="dropdown-example2" class="hidden py-2 space-y-2">
-                        <li>
-                            <a href="" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Student's Proposal</a>
-                        </li>
-                        <li>
-                            <a href="" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Lecturers</a>
-                        </li>
-                    </ul>
+                    <a href="{{ Route('assignment-advisor.read') }}" class="{{ Request::is('list-student-submission') || Request::is('check-student-submission/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100' }} flex items-center p-2 rounded-lg dark:text-white dark:hover:bg-gray-700">
+                        <svg class="{{ Request::is('list-student-submission') || Request::is('check-student-submission/*') ? 'text-white group-hover:text-gray-900' : '' }} flex-shrink-0 w-4 h-4 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20"><path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2ZM7 2h4v3H7V2Zm5.7 8.289-3.975 3.857a1 1 0 0 1-1.393 0L5.3 12.182a1.002 1.002 0 1 1 1.4-1.436l1.328 1.289 3.28-3.181a1 1 0 1 1 1.392 1.435Z"/></svg>
+                        <span class="flex-1 ml-3 whitespace-nowrap">Assignment Advisor</span>
+                        <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-3 text-xs font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                            {{ App\Models\Proposal::where('status', 'on_process')->doesntHave('lecturers')->count() }}
+                        </span>
+                    </a>
                 </li>
-            @endif --}}
+            @endif
 
             @if (auth()->user()->hasRole('student'))
                 {{-- submit proposals --}}
@@ -100,5 +95,28 @@
             </li>
 
         </ul>
+
+        {{-- required data profile --}}
+        <div id="dropdown-cta" class="p-4 mt-6 rounded-lg bg-blue-50 dark:bg-blue-900" role="alert">
+            <div class="flex items-center mb-3">
+                <div class="flex items-center text-blue-800">
+                    <svg class="flex-shrink-0 w-4 h-4 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"><path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/></svg>
+                    <span class="sr-only">Info</span>
+                    <h3 class="text-sm font-medium">Profile Data Required</h3>
+                </div>
+               <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-blue-50 inline-flex justify-center items-center w-6 h-6 text-blue-900 rounded-lg focus:ring-2 focus:ring-blue-400 p-1 hover:bg-blue-200 h-6 w-6 dark:bg-blue-900 dark:text-blue-400 dark:hover:bg-blue-800" data-dismiss-target="#dropdown-cta" aria-label="Close">
+                  <span class="sr-only">Close</span>
+                  <svg class="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg>
+               </button>
+            </div>
+            <p class="mb-3 text-sm text-blue-800 dark:text-blue-400">
+                To access all menu items, please ensure your profile is complete. Profile completion is required for full access.
+            </p>
+            <a type="button" href="{{ route('profile.edit') }}" class="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-200 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                <svg class="-ml-0.5 mr-2 h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 14"><path d="M10 0C4.612 0 0 5.336 0 7c0 1.742 3.546 7 10 7 6.454 0 10-5.258 10-7 0-1.664-4.612-7-10-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/></svg>
+                Fill Profile Data
+            </a>
+        </div>
+
     </div>
 </aside>

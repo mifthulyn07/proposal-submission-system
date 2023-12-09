@@ -12,6 +12,7 @@ class Create extends Component
     // modal lecturer 
     public $user_id;
     public $nip;
+    public $expertise;
 
     public function render()
     {
@@ -23,8 +24,9 @@ class Create extends Component
     }
 
     protected $rules = [
-        'user_id'  => ['required', 'exists:users,id'],
-        'nip'      => ['required', 'numeric', 'unique:lecturers,nip'],
+        'user_id'       => ['required', 'exists:users,id'],
+        'nip'           => ['required', 'numeric', 'unique:lecturers,nip'],
+        'expertise'     => ['required'],
     ];
 
     // realtime validation 
@@ -40,8 +42,9 @@ class Create extends Component
             $validatedData = $this->validate();
 
             $lecturer = Lecturer::create([
-                'nip'       => $validatedData['nip'],
                 'user_id'   => $validatedData['user_id'],
+                'nip'       => $validatedData['nip'],
+                'expertise' => $validatedData['expertise'],
             ]);
             
             // buat role lecturernya 

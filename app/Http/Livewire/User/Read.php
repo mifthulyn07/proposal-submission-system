@@ -4,6 +4,7 @@ namespace App\Http\Livewire\User;
 
 use App\Models\User;
 use Livewire\Component;
+use App\Charts\UsersChart;
 use Livewire\WithPagination;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -23,15 +24,17 @@ class Read extends Component
 
     public function render()
     {
-        return view('livewire.user.read', [
-            'users' => User::whereHas('roles', function (Builder $query) {
+        $users = User::whereHas('roles', function (Builder $query) {
                 $query->where('name', 'like', $this->search.'%');
             })
             ->orWhere('name', 'like', $this->search.'%')
             ->orWhere('gender', 'like', $this->search.'%')
             ->orWhere('phone', 'like', $this->search.'%')
             ->orWhere('email', 'like', $this->search.'%')
-            ->paginate(12),
+            ->paginate(12);
+
+        return view('livewire.user.read', [
+            'users'         => $users,
         ]);
     }
 

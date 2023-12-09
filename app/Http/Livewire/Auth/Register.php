@@ -26,7 +26,7 @@ class Register extends Component
     public function render()
     {
         return view('livewire.auth.register',[
-            'roles' => Role::whereNotIn('name', ['coordinator'])->get(),
+            'roles' => Role::whereNotIn('name', ['coordinator', 'kaprodi'])->get(),
         ]);
     }
 

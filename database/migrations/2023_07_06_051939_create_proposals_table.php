@@ -22,6 +22,7 @@ return new class extends Migration
             $table->year('year');
             $table->enum('status', ['done', 'on_process']);
             $table->string('adding_topic')->nullable();
+            $table->string('comment')->nullable();
             $table->timestamps();
         });
     }

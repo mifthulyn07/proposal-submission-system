@@ -22,5 +22,5 @@
 @endsection
 
 @section('content')
-    @livewire('user.read')
+    @livewire('user.read', key($refresh))
 @endsection

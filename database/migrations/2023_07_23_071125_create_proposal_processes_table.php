@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId("student_id")->constrained()->cascadeOnDelete();
             $table->enum('type', ['thesis', 'appropriate_technology', 'journal'])->nullable();
             $table->date("date")->nullable();
-            $table->string("explanation")->nullable();
+            $table->string("comment")->nullable();
             $table->timestamps();
         });
     }

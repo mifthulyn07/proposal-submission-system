@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\SubmitProposal;
+namespace App\Http\Livewire\SubmitProposal\Submission;
 
 use App\Models\Topic;
 use Livewire\Component;
@@ -29,6 +29,13 @@ class Edit extends Component
     public $oldProposal;
     public $empty = false;
     public $another_topic = false;
+
+    public function render()
+    {
+        return view('livewire.submit-proposal.submission.edit', [
+            'topics' => Topic::all(),
+        ]);
+    }
 
     public function mount($submitProposal)
     {
@@ -96,13 +103,6 @@ class Edit extends Component
         $this->reset('adding_topic', 'topic_id');
     }
 
-    public function render()
-    {
-        return view('livewire.submit-proposal.edit', [
-            'topics' => Topic::all(),
-        ]);
-    }
-    
     public function update()
     {
         try{

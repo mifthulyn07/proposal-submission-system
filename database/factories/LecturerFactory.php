@@ -18,8 +18,9 @@ class LecturerFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::all()->random()->id,
-            'nip'     => fake()->unique()->numberBetween(1000000000,9999999999),
+            'user_id'   => User::inRandomOrder()->first()->id,
+            'nip'       => fake()->unique()->numberBetween(1000000000000000,9999999999999999),
+            'expertise' => fake()->randomElement(['SIG', 'SPK', 'Machine Learning', 'SIM', 'IOT']),
         ];
     }
 }

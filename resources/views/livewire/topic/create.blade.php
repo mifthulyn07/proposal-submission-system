@@ -4,8 +4,8 @@
 
             {{-- form --}}
             <div class="m-4 ">
-                <h5 class="text-lg font-medium text-gray-900 dark:text-white">Add a new topic of proposal</h5>
-                <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">This topic will be part of the proposal category</p>
+                <h5 class="text-lg font-medium text-gray-900 dark:text-white">Add Proposal Topics</h5>
+                <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">This topic will be part of the proposal category.</p>
 
                 <form class="mt-6" wire:submit.prevent="store">
                     

@@ -3,11 +3,11 @@
         <div class="bg-white overflow-hidden rounded-lg shadow rounded-lg">
 
             {{-- form --}}
-            <div class="m-4 ">
-                <h5 class="text-lg font-medium text-gray-900 dark:text-white">Edit Proposal</h5>
+            <div class="m-4">
+                <h5 class="text-lg font-medium text-gray-900 dark:text-white">Add Proposal</h5>
                 <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">Make sure you've read and understood all the requirements before proceeding.</p>
 
-                <form class="mt-6" wire:submit.prevent="update">
+                <form class="mt-6" wire:submit.prevent="store">
                     
                     {{-- topic --}}
                     <div class="@if($another_topic) grid gap-4 md:grid-cols-2 @endif mb-4">
@@ -35,7 +35,7 @@
                     {{-- title --}}
                     <div class="mb-4">
                         <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title of proposal</label>
-                        <input type="text" wire:model="title" @if($similarity) disabled aria-label="disabled input" @endif id="title" class="@if($similarity) bg-gray-100 cursor-not-allowed @else bg-gray-50 @endif  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Implementation of Machine Learning for Attendance Tracking Application">
+                        <input type="text" wire:model="title" @if(isset($similarity)) disabled aria-label="disabled input" @endif id="title" class="@if(isset($similarity)) bg-gray-100 cursor-not-allowed @else bg-gray-50 @endif border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Implementation of Machine Learning for Attendance Tracking Application">
                         @error('title') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
                     </div>
 
@@ -47,7 +47,7 @@
                             <span class="inline-flex items-center px-3 text-sm text-gray-600 bg-gray-200 border border-r-0 border-gray-300 font-bold rounded-r-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">%</span>
                         </div>
                         @error('similarity') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
-                        <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">To check the similarity of your title, click <a href="{{ route('similarity.check', $title) }}" class="font-medium text-blue-600 hover:underline dark:text-blue-500">here</a>. You can view the percentage of similarity with this tool.</p>                          
+                        <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">To check the similarity of your title, you can view the percentage of similarity with similarity tool.</p>                          
                     </div>
 
                     {{-- proposal --}}
@@ -55,7 +55,7 @@
                         <div>
                             <label for="proposal" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Proposal: pdf</label>
                             <input type="file" id="file-upload-input" wire:model="proposal" class="hidden">
-                            <x-secondary-button class="mr-2 py-2 mt-1" id="file-upload-button">{{ __('Search File') }}</x-secondary-button>
+                            <x-secondary-button class="mr-2 py-2 mt-1" id="file-upload-button">{{ __('Upload File') }}</x-secondary-button>
                             @if($proposal) 
                                 <span class="mt-2 text-sm text-gray-800 dark:text-gray-800"> {{ $proposal->getClientOriginalName() }} </span> 
                             @endif

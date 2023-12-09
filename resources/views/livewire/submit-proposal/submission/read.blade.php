@@ -1,6 +1,6 @@
 <div>
     <div class="m-4">
-        <h5 class="text-base font-medium text-gray-900 dark:text-white">Ready to Submit Your Proposal?</h5>
+        <h5 class="text-lg font-medium text-gray-900 dark:text-white">Ready to Submit Your Proposal?</h5>
         <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">Submitting your proposal is a breeze! Just follow these three simple steps. Plus, ensure your title's uniqueness by using our built-in similarity checker tool.</p>
         
         {{-- alert --}}
@@ -36,18 +36,18 @@
                 <div class="flex flex-col items-stretch justify-end flex-shrink-0 w-full space-y-2 md:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3">
                     <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button">
                         <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" /></svg>
-                        Add Proposal
+                        New Proposal Submission
                     </button>
                 </div>
                 <!-- Dropdown menu -->
                 <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-                    <li>
-                        <a href="{{ Route('submit-proposal.create', $proposalProcess->id) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create Manual</a>
-                    </li>
-                    <li>
-                        <a href="{{ Route('submit-proposal.similarity.create', $proposalProcess->id) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create through Check Similarity Fitur</a>
-                    </li>
+                        {{-- <li>
+                            <a href="{{ Route('submit-proposal.create', $proposalProcess->id) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create Manual</a>
+                        </li> --}}
+                        <li>
+                            <a href="{{ Route('submit-proposal.similarity.create', $proposalProcess->id) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create through Check Similarity Fitur</a>
+                        </li>
                     </ul>
                 </div>
 
@@ -55,7 +55,7 @@
         </div>
 
         {{-- table --}}
-        <div class="mt-4 @if(!$submit_proposals->isEmpty()) relative overflow-x-auto rounded-lg shadow-sm @endif">
+        <div class="mt-4 @if(!$submit_proposals->isEmpty()) relative overflow-x-auto overflow-y-hidden rounded-lg shadow-sm @endif">
             @if($submit_proposals->isEmpty())
                 <div class="m-4">
                     <div class="flex flex-col justify-center items-center px-6 mx-auto xl:px-0 dark:bg-gray-900">
@@ -63,8 +63,8 @@
                             <img src="/assets/illustrations/500.svg" alt="waiting image" width="80%">
                         </div>
                         <div class="text-center xl:max-w-4xl">
-                            <h1 class="mb-3 text-md font-bold leading-tight text-indigo-700 sm:text-4xl lg:text-5xl dark:text-purple-500">🚀 Your proposal could be a game-changer!</h1>
-                            <p class="text-base font-normal text-gray-600 dark:text-gray-400">Let's embark on your submission journey and make an impact with your proposal.</p>
+                            <h1 class="mb-3 text-base font-bold leading-tight text-indigo-700 sm:text-4xl lg:text-5xl dark:text-purple-500">🚀 Your proposal could be a game-changer!</h1>
+                            <p class="text-sm font-normal text-gray-600 dark:text-gray-400">Let's embark on your submission journey and make an impact with your proposal.</p>
                         </div>
                     </div>
                 </div>            
@@ -122,9 +122,7 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4">
-                                    <button data-tooltip-target="tooltip-download" wire:click="export({{ $submit_proposal->id }})" class="inline-flex items-center py-2 px-3 text-sm hover:text-blue-700 font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                                        <svg class="w-4 h-4 hover:text-blue-700 text-gray-700 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"><path d="M14.707 7.793a1 1 0 0 0-1.414 0L11 10.086V1.5a1 1 0 0 0-2 0v8.586L6.707 7.793a1 1 0 1 0-1.414 1.414l4 4a1 1 0 0 0 1.416 0l4-4a1 1 0 0 0-.002-1.414Z"/><path d="M18 12h-2.55l-2.975 2.975a3.5 3.5 0 0 1-4.95 0L4.55 12H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2Zm-3 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>
-                                    </button>
+                                    <a href="{{ route('print.view-pdf', $submit_proposal->proposal) }}" target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</a>
                                 </td>
                                 <td class="px-6 py-4 space-x-1 whitespace-nowrap">
                                     <a data-tooltip-target="tooltip-edit" wire:click="editIdSubmitProposal({{ $submit_proposal->id }})" wire:click.prevent class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-yellow-300 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-300 dark:hover:bg-yellow-300 dark:focus:ring-yellow-300">
@@ -138,10 +136,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                <div id="tooltip-edit" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                    Edit
-                    <div class="tooltip-arrow" data-popper-arrow></div>
-                </div>
+                
                 <div id="tooltip-delete" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
                     Delete
                     <div class="tooltip-arrow" data-popper-arrow></div>
@@ -153,6 +148,7 @@
             @endif
         </div>
         
+        {{-- button next step --}}
         <div class="flex items-center justify-end gap-4 mt-6">
             <div>
                 @if (session()->has('error'))
@@ -167,7 +163,7 @@
             </div>
             @if(!$submit_proposals->isEmpty())
                 <button type="submit" wire:click="proposalSubmit()" class="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                    Next Step: Submit Proposal
+                    Next Step: Verification
                 </button>
             @endif
         </div>

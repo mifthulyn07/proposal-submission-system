@@ -4,8 +4,8 @@
 
             {{-- form --}}
             <div class="m-4 ">
-                <h5 class="text-lg font-medium text-gray-900 dark:text-white">Update account </h5>
-                <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">This feature, can only be used by Coordinator.</p>
+                <h5 class="text-lg font-medium text-gray-900 dark:text-white">Update Account </h5>
+                <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">This feature, can only be used by Coordinator and Kaprodi.</p>
 
                 <form class="mt-6" wire:submit.prevent="update">
                     

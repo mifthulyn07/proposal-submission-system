@@ -4,8 +4,8 @@
 
             {{-- form --}}
             <div class="m-4 ">
-                <h5 class="text-lg font-medium text-gray-900 dark:text-white">Add a new student</h5>
-                <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">This Feature can be use by Coordinator.</p>
+                <h5 class="text-lg font-medium text-gray-900 dark:text-white">Add New Student</h5>
+                <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">Complete the form below to add a new student to the records.</p>
 
                 <form class="mt-6" wire:submit.prevent="store">
                     

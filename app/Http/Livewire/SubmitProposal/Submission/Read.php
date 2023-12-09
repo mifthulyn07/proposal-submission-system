@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Livewire\SubmitProposal;
+namespace App\Http\Livewire\SubmitProposal\Submission;
 
 use Livewire\Component;
 use App\Models\SubmitProposal;
-use Illuminate\Support\Facades\Storage;
 
-class Submit extends Component
+class Read extends Component
 {
     // from parameter 
     public $proposalProcess;
@@ -15,6 +14,13 @@ class Submit extends Component
     public $deleteIdSubmitProposal;
     public $selectedProposals = [];
     public $selectAll = false;
+
+    public function render()
+    {
+        return view('livewire.submit-proposal.submission.read', [
+            'submit_proposals' => SubmitProposal::where('proposal_process_id', $this->proposalProcess->id)->get(),
+        ]);
+    }
 
     public function mount()
     {
@@ -28,13 +34,6 @@ class Submit extends Component
         }
     }
 
-    public function render()
-    {  
-        return view('livewire.submit-proposal.submit', [
-            'submit_proposals' => SubmitProposal::where('proposal_process_id', $this->proposalProcess->id)->get(),
-        ]);
-    }
-
     protected function updatedSelectAll($value)
     {   
         // jika di klik maka select semua, jika tidak di kosongkan semua
@@ -43,13 +42,6 @@ class Submit extends Component
         }else{
             $this->selectedProposals = [];
         }
-    }
-
-    public function export($id){
-        $submitProposal = SubmitProposal::findOrFail($id);
-        if($submitProposal){
-            return Storage::disk("public")->download('proposals/'.$submitProposal->proposal);
-        } 
     }
 
     public function editIdSubmitProposal($id)
@@ -86,7 +78,7 @@ class Submit extends Component
                 return session()->flash('error', 'you have to select min & max 3 proposal');
             }
         }else{
-            $this->emit('showFinishSubmit');
+            $this->emit('showVerification');
         }
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Student;
-use PHPUnit\Metadata\Api\Requirements;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,7 +16,7 @@ class ProposalProcess extends Model
         'student_id',
         'type',
         'date',
-        'explanation',
+        'comment',
     ];
 
     public function student(): BelongsTo

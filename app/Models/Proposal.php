@@ -25,6 +25,7 @@ class Proposal extends Model
         'year',
         'status',
         'adding_topic',
+        'comment',
     ];
 
     public function lecturers(): BelongsToMany

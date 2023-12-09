@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class RolePermissionSeeder extends Seeder
 {
@@ -14,6 +13,12 @@ class RolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
+        // roles 
+        Role::create(['name' => 'coordinator']);
+        Role::create(['name' => 'kaprodi']);
+        Role::create(['name' => 'lecturer']);
+        Role::create(['name' => 'student']);
+
         // users
         Permission::create(['name' => 'read-user']);
         Permission::create(['name' => 'add-user']);
@@ -45,56 +50,117 @@ class RolePermissionSeeder extends Seeder
         Permission::create(['name' => 'edit-proposal']);
         Permission::create(['name' => 'delete-proposal']);
 
-        // roles 
-        Role::create(['name' => 'coordinator']);
-        Role::create(['name' => 'lecturer']);
-        Role::create(['name' => 'student']);
+        // proposal submit 
+        Permission::create(['name' => 'read-proposal-submit']);
+        Permission::create(['name' => 'add-proposal-submit']);
+        Permission::create(['name' => 'edit-proposal-submit']);
+        Permission::create(['name' => 'similarity-submit']);
+        Permission::create(['name' => 'add-similarity-submit']);
+
+        // check proposals 
+        Permission::create(['name' => 'read-check-proposal']);
+        Permission::create(['name' => 'check-check-proposal']);
+        Permission::create(['name' => 'history-check-proposal']);
+
+        // assignment advisor 
+        Permission::create(['name' => 'read-assignment-advisor']);
+        Permission::create(['name' => 'check-assignment-advisor']);
+        
 
         $roleCoordinator = Role::findByName('coordinator');
-        // user 
-        $roleCoordinator->givePermissionTo('read-user');
-        $roleCoordinator->givePermissionTo('add-user');
-        $roleCoordinator->givePermissionTo('edit-user');
-        $roleCoordinator->givePermissionTo('delete-user');
-        // lecturer 
-        $roleCoordinator->givePermissionTo('read-lecturer');
-        $roleCoordinator->givePermissionTo('add-lecturer');
-        $roleCoordinator->givePermissionTo('edit-lecturer');
-        $roleCoordinator->givePermissionTo('delete-lecturer');
-        $roleCoordinator->givePermissionTo('show-lecturer');
-        // student 
-        $roleCoordinator->givePermissionTo('read-student');
-        $roleCoordinator->givePermissionTo('add-student');
-        $roleCoordinator->givePermissionTo('edit-student');
-        $roleCoordinator->givePermissionTo('delete-student');
-        // topic 
-        $roleCoordinator->givePermissionTo('read-topic');
-        $roleCoordinator->givePermissionTo('add-topic');
-        $roleCoordinator->givePermissionTo('edit-topic');
-        $roleCoordinator->givePermissionTo('delete-topic');
-        // proposal 
-        $roleCoordinator->givePermissionTo('read-proposal');
-        $roleCoordinator->givePermissionTo('add-proposal');
-        $roleCoordinator->givePermissionTo('edit-proposal');
-        $roleCoordinator->givePermissionTo('delete-proposal');
+            // user 
+            $roleCoordinator->givePermissionTo('read-user');
+            $roleCoordinator->givePermissionTo('add-user');
+            $roleCoordinator->givePermissionTo('edit-user');
+            $roleCoordinator->givePermissionTo('delete-user');
+            // lecturer 
+            $roleCoordinator->givePermissionTo('read-lecturer');
+            $roleCoordinator->givePermissionTo('add-lecturer');
+            $roleCoordinator->givePermissionTo('edit-lecturer');
+            $roleCoordinator->givePermissionTo('delete-lecturer');
+            $roleCoordinator->givePermissionTo('show-lecturer');
+            // student 
+            $roleCoordinator->givePermissionTo('read-student');
+            $roleCoordinator->givePermissionTo('add-student');
+            $roleCoordinator->givePermissionTo('edit-student');
+            $roleCoordinator->givePermissionTo('delete-student');
+            // topic 
+            $roleCoordinator->givePermissionTo('read-topic');
+            $roleCoordinator->givePermissionTo('add-topic');
+            $roleCoordinator->givePermissionTo('edit-topic');
+            $roleCoordinator->givePermissionTo('delete-topic');
+            // proposal 
+            $roleCoordinator->givePermissionTo('read-proposal');
+            $roleCoordinator->givePermissionTo('add-proposal');
+            $roleCoordinator->givePermissionTo('edit-proposal');
+            $roleCoordinator->givePermissionTo('delete-proposal');
+            // check proposals 
+            $roleCoordinator->givePermissionTo('read-check-proposal');
+            $roleCoordinator->givePermissionTo('check-check-proposal');
+            $roleCoordinator->givePermissionTo('history-check-proposal');
 
+
+        $roleCoordinator = Role::findByName('kaprodi');
+            // user 
+            $roleCoordinator->givePermissionTo('read-user');
+            $roleCoordinator->givePermissionTo('add-user');
+            $roleCoordinator->givePermissionTo('edit-user');
+            $roleCoordinator->givePermissionTo('delete-user');
+            // lecturer 
+            $roleCoordinator->givePermissionTo('read-lecturer');
+            $roleCoordinator->givePermissionTo('add-lecturer');
+            $roleCoordinator->givePermissionTo('edit-lecturer');
+            $roleCoordinator->givePermissionTo('delete-lecturer');
+            $roleCoordinator->givePermissionTo('show-lecturer');
+            // student 
+            $roleCoordinator->givePermissionTo('read-student');
+            $roleCoordinator->givePermissionTo('add-student');
+            $roleCoordinator->givePermissionTo('edit-student');
+            $roleCoordinator->givePermissionTo('delete-student');
+            // topic 
+            $roleCoordinator->givePermissionTo('read-topic');
+            $roleCoordinator->givePermissionTo('add-topic');
+            $roleCoordinator->givePermissionTo('edit-topic');
+            $roleCoordinator->givePermissionTo('delete-topic');
+            // proposal 
+            $roleCoordinator->givePermissionTo('read-proposal');
+            $roleCoordinator->givePermissionTo('add-proposal');
+            $roleCoordinator->givePermissionTo('edit-proposal');
+            $roleCoordinator->givePermissionTo('delete-proposal');
+            // check proposals 
+            $roleCoordinator->givePermissionTo('read-check-proposal');
+            $roleCoordinator->givePermissionTo('check-check-proposal');
+            $roleCoordinator->givePermissionTo('history-check-proposal');
+            // check proposals 
+            $roleCoordinator->givePermissionTo('read-assignment-advisor');
+            $roleCoordinator->givePermissionTo('check-assignment-advisor');
+
+
+        
         $roleStudent = Role::findByName('student');
-        // lecturer 
-        $roleStudent->givePermissionTo('read-lecturer');
-        $roleStudent->givePermissionTo('show-lecturer');
-        // student 
-        $roleStudent->givePermissionTo('read-student');
-        // proposal 
-        $roleStudent->givePermissionTo('read-proposal');
+            // lecturer 
+            $roleStudent->givePermissionTo('read-lecturer');
+            $roleStudent->givePermissionTo('show-lecturer');
+            // student 
+            $roleStudent->givePermissionTo('read-student');
+            // proposal 
+            $roleStudent->givePermissionTo('read-proposal');
+            // proposal submit 
+            $roleStudent->givePermissionTo('read-proposal-submit');
+            $roleStudent->givePermissionTo('add-proposal-submit');
+            $roleStudent->givePermissionTo('edit-proposal-submit');
+            $roleStudent->givePermissionTo('similarity-submit');
+            $roleStudent->givePermissionTo('add-similarity-submit');
+
 
         $roleLecturer = Role::findByName('lecturer');
-        // lecturer 
-        $roleLecturer->givePermissionTo('read-lecturer');
-        $roleLecturer->givePermissionTo('show-lecturer');
-        // student 
-        $roleLecturer->givePermissionTo('read-student');
-        // proposal 
-        $roleLecturer->givePermissionTo('read-proposal');
+            // lecturer 
+            $roleLecturer->givePermissionTo('read-lecturer');
+            $roleLecturer->givePermissionTo('show-lecturer');
+            // student 
+            $roleLecturer->givePermissionTo('read-student');
+            // proposal 
+            $roleLecturer->givePermissionTo('read-proposal');
 
     }
 }

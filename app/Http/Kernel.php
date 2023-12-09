@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
 
 
         'complete.profile' => \App\Http\Middleware\CompleteProfile::class,
+        'add.role.lecturer' => \App\Http\Middleware\AddRoleLecturer::class,
     ];
 }

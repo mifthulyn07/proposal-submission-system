@@ -2,25 +2,21 @@
 
 namespace App\Models;
 
-use App\Models\Role;
 use App\Models\Student;
 use App\Models\Lecturer;
 use Laravel\Scout\Searchable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 // class User extends Authenticatable implements MustVerifyEmail
 class User extends Authenticatable
 
 {
-    use HasRoles, HasApiTokens, HasFactory, Notifiable;
-    use Searchable;
+    use HasRoles, HasApiTokens, HasFactory, Notifiable, Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -55,11 +51,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
-    // public function roles(): BelongsToMany
-    // {
-    //     return $this->belongsToMany(Role::class, 'role_user');
-    // }
     
     public function lecturer(): HasOne
     {
@@ -70,26 +61,6 @@ class User extends Authenticatable
     {
         return $this->hasOne(Student::class);
     }
-
-    // public function hasRole($role)
-    // {
-    //     return $this->roles()->where('name', $role)->exists();
-    // }
-
-    // public function isCoordinator()
-    // {
-    //     return $this->role_user == 1;
-    // }
-
-    // public function isLecturer()
-    // {
-    //     return $this->role_user == 2;
-    // }
-
-    // public function isStudent()
-    // {
-    //     return $this->role_user == 3;
-    // }
 
     public function toSearchableArray(): array
     {

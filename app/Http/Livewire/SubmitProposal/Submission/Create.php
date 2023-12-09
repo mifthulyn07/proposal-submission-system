@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Livewire\SubmitProposal;
+namespace App\Http\Livewire\SubmitProposal\Submission;
 
 use App\Models\Topic;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\SubmitProposal;
-use App\Models\ProposalProcess;
 use Illuminate\Support\Facades\Auth;
 
 class Create extends Component
@@ -30,7 +29,7 @@ class Create extends Component
 
     public function render()
     {
-        return view('livewire.submit-proposal.create', [
+        return view('livewire.submit-proposal.submission.create', [
             'topics' => Topic::all(),
         ]);
     }
@@ -87,8 +86,9 @@ class Create extends Component
             $submit_proposal->fill($validatedData);
             $submit_proposal->save();
 
-            $this->resetExcept('proposalProcess');
+            // $this->resetExcept('proposalProcess');
             session()->flash('success', 'Proposal successfully stored.');
+            redirect()->to('/list-submit-proposal');
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
         }

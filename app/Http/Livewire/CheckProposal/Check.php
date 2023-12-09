@@ -16,18 +16,15 @@ class Check extends Component
     public $submitProposals;
     
     // modal  proposal process
-    public $explanation;
+    public $comment;
 
     // for modal submitProposals 
     public $proposal_selected; 
 
-    // many to many 
-    public $lecturer_selected1;
-    public $lecturer_selected2;
-
-    public $accept  = false;
-    public $decline = false;
-    public $show    = false;
+    public $accept              = false;
+    public $decline             = false;
+    public $show                = false;
+    public $showResultSubmit    = false;
     public $count_submission;
 
     public function mount()
@@ -44,13 +41,15 @@ class Check extends Component
         ]);
     }
 
-    public function exportProposal($id){
-        $submitProposal = SubmitProposal::findOrFail($id);
-        if($submitProposal){
-            return Storage::disk("public")->download('proposals/'.$submitProposal->proposal);
-        } 
-    }
+    // download proposal 
+    // public function exportProposal($id){
+    //     $submitProposal = SubmitProposal::findOrFail($id);
+    //     if($submitProposal){
+    //         return Storage::disk("public")->download('proposals/'.$submitProposal->proposal);
+    //     } 
+    // }
 
+    // download requirements 
     public function exportRequirements($id){
         $proposalProcess = ProposalProcess::findOrFail($id);
         if($proposalProcess){
@@ -80,27 +79,17 @@ class Check extends Component
         } 
     }
 
-    public function propertyValidation(){
-        if($this->proposalProcess->type == 'journal'){
-            return [
-                'proposal_selected'     => 'required|exists:submit_proposals,id',
-                'lecturer_selected1'    => 'required|exists:lecturers,id|different:lecturer_selected2',
-                'lecturer_selected2'    => 'exists:lecturers,id|nullable|different:lecturer_selected1',
-                'explanation'           => 'required',
-            ];
-        }elseif($this->decline === true){
+    public function propertyValidation()
+    {
+        if($this->decline === true){
             return [
                 'proposal_selected'     => 'exists:submit_proposals,id|nullable',
-                'lecturer_selected1'    => 'exists:lecturers,id|nullable|different:lecturer_selected2',
-                'lecturer_selected2'    => 'exists:lecturers,id|nullable|different:lecturer_selected1',
-                'explanation'           => 'required',
+                'comment'           => 'required',
             ];
         }else{
             return [
                 'proposal_selected'     => 'required|exists:submit_proposals,id',
-                'lecturer_selected1'    => 'required|exists:lecturers,id|different:lecturer_selected2',
-                'lecturer_selected2'    => 'required|exists:lecturers,id|different:lecturer_selected1',
-                'explanation'           => 'required',
+                'comment'           => 'nullable',
             ];
         }
     }
@@ -118,7 +107,7 @@ class Check extends Component
         $this->accept = true;
         $this->decline = false;
 
-        $this->reset('proposal_selected', 'lecturer_selected1', 'lecturer_selected2', 'explanation');
+        $this->reset('proposal_selected', 'comment');
     }
 
     public function showDecline()
@@ -128,7 +117,7 @@ class Check extends Component
         $this->accept = false;
         $this->decline = true;
 
-        $this->reset('proposal_selected', 'lecturer_selected1', 'lecturer_selected2', 'explanation');
+        $this->reset('proposal_selected', 'comment');
     }
 
     public function submit()
@@ -149,7 +138,7 @@ class Check extends Component
 
             // edit proposal process 
             $proposalProcess = ProposalProcess::findOrFail($this->proposalProcess->id);
-            $proposalProcess->explanation = $this->explanation;
+            $proposalProcess->comment = $this->comment;
             $proposalProcess->save();
 
             // if there is proposal is accepted then submit to proposals table  
@@ -168,21 +157,23 @@ class Check extends Component
                         $proposal->year         = now()->year;
                         $proposal->status       = 'on_process';
                         $proposal->adding_topic = $submitProposal->adding_topic;
+                        $proposal->comment      = $proposalProcess->comment;
                         $proposal->save();
 
-                        // many to many
-                        $proposal->lecturers()->attach($this->lecturer_selected1);
-                        $proposal->lecturers()->attach($this->lecturer_selected2);
-
                         // delete proposal process and related table 
-                        ProposalProcess::findOrFail($this->proposalProcess->id)->delete();
+                        ProposalProcess::where('student_id', $this->proposalProcess->student->id)->delete();
                     }
                 }
             }
             session()->flash('success', 'accord successfully send.');
-            redirect()->to('/list-proposal-submission');
+            redirect()->to('/list-submission');
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
         }
+    }
+
+    public function showResultSubmit()
+    {
+        $this->showResultSubmit = true;
     }
 }

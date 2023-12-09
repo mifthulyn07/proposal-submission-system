@@ -54,7 +54,6 @@ class Check extends Component
             'year'  => $query->pluck('year')->toArray(),
             'title' => $query->pluck('title')->toArray(),
         ];
-
         
         $new_cospus         = array_merge_recursive($text, $corpus);
 
@@ -67,6 +66,7 @@ class Check extends Component
         if($all_similarities === null){
             $this->null_similarity  = true;
             $this->result_cosim     = 0;
+            $this->similarities     = [];
         }else{
             $all_similarities = collect($all_similarities);
 

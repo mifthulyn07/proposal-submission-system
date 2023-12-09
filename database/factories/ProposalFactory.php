@@ -19,9 +19,9 @@ class ProposalFactory extends Factory
      */
     public function definition(): array
     {
-        $randomStudent = Student::all()->random();
+        $randomStudent = Student::inRandomOrder()->first();
         return [
-            'topic_id'      => Topic::all()->random()->id,
+            'topic_id'      => Topic::inRandomOrder()->first()->id,
             'student_id'    => $randomStudent->id,
             'name'          => $randomStudent->user->name,
             'nim'           => $randomStudent->nim,

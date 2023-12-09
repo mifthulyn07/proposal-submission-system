@@ -2,57 +2,71 @@
 
 namespace App\Http\Livewire\SubmitProposal;
 
-use App\Models\User;
 use Livewire\Component;
 use App\Models\Proposal;
 use App\Models\ProposalProcess;
-use Illuminate\Support\Facades\Auth;
 
 class Read extends Component
 {
     public $proposalProcess;
+    public $proposal_onProcess;
 
     protected $listeners = [
-        'showSubmit'        => 'showSubmit',
-        'showFinishSubmit'  => 'showFinishSubmit',
-        'showResultSubmit'  => 'showResultSubmit',
+        'showSubmission'    => 'showSubmission', //step-1
+        'showVerification'  => 'showVerification', //step-2
+        'showResults'       => 'showResults', //step-3
     ];
 
-    public $showSubmit          = false;
-    public $showFinishSubmit    = false;
-    public $showResultSubmit    = false;
+    public $showSubmission      = false;
+    public $showVerification    = false;
+    public $showResults         = false;
 
-    public $submission_done = false;
+    public $waitingAdvisor      = false;
+    public $submissionIsDone    = false;
+    public $proposalIsDone      = false;
 
     public function mount()
     {
         $proposals_process  = ProposalProcess::where('student_id', auth()->user()->student->id)->get();
-        $proposal_onProcess = Proposal::where('student_id', auth()->user()->student->id)->get();
-
-        if($proposals_process->isEmpty() && $proposal_onProcess){
-            $this->submission_done = true;
+        $proposal_onProcess = Proposal::whereHas('lecturers')->where('student_id', auth()->user()->student->id)->where('status', 'on_process')->get();
+        $proposal_done = Proposal::whereHas('lecturers')->where('student_id', auth()->user()->student->id)->where('status', 'done')->get();
+        
+        if($proposals_process->isEmpty() && !$proposal_onProcess->isEmpty()){
+            $this->submissionIsDone = true;
+            if(!$proposal_onProcess->isEmpty()){
+                foreach($proposal_onProcess as $proposal){
+                    $this->proposal_onProcess = $proposal;
+                }
+            }else{
+                foreach($proposal_done as $proposal){
+                    $this->proposal_onProcess = $proposal;
+                }
+            }
+        }elseif($proposals_process->isEmpty() && $proposal_onProcess->isEmpty()){
+            $this->waitingAdvisor = true;
         }else{
             foreach($proposals_process as $proposal_process){
-                if(!isset($proposal_process->type) && !isset($proposal_process->date) || !isset($proposal_process->explanation)){
-                    if(isset($proposal_process->type) && isset($proposal_process->date) && !isset($proposal_process->explanation)){
-                        $this->showSubmit       = false;
-                        $this->showFinishSubmit = false;
-                        $this->showResultSubmit = true;
+                if(!isset($proposal_process->type) && !isset($proposal_process->date)){
+                    if(isset($proposal_process->type) && isset($proposal_process->date)){
+                        $this->showSubmission       = false;
+                        $this->showVerification     = false;
+                        $this->showResults          = true;
                     }else{
-                        $this->showSubmit       = true;
-                        $this->showFinishSubmit = false;
-                        $this->showResultSubmit = false;
+                        $this->showSubmission       = true;
+                        $this->showVerification     = false;
+                        $this->showResults          = false;
                     }
-                    
+
                     $this->proposalProcess = $proposal_process;
                 }else{
-                    $this->showSubmit       = false;
-                    $this->showFinishSubmit = false;
-                    $this->showResultSubmit = true;
-    
+                    $this->showSubmission       = false;
+                    $this->showVerification     = false;
+                    $this->showResults          = true;
+
                     $this->proposalProcess = $proposal_process;
                 }
             }
+
         }
     }
 
@@ -61,24 +75,24 @@ class Read extends Component
         return view('livewire.submit-proposal.read');
     }
 
-    public function showSubmit()
+    public function showSubmission() //step-1
     {
-        $this->showSubmit       = true;
-        $this->showFinishSubmit = false;
-        $this->showResultSubmit = false;
+        $this->showSubmission       = true;
+        $this->showVerification     = false;
+        $this->showResults          = false;
     }
 
-    public function showFinishSubmit()
+    public function showVerification() //step-2
     {
-        $this->showSubmit       = false;
-        $this->showFinishSubmit = true;
-        $this->showResultSubmit = false;
+        $this->showSubmission       = false;
+        $this->showVerification     = true;
+        $this->showResults          = false;
     }
 
-    public function showResultSubmit()
+    public function showResults() //step-3
     {
-        $this->showSubmit       = false;
-        $this->showFinishSubmit = false;
-        $this->showResultSubmit = true;
+        $this->showSubmission       = false;
+        $this->showVerification     = false;
+        $this->showResults          = true;
     }
 }

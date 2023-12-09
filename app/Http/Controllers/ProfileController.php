@@ -40,6 +40,8 @@ class ProfileController extends Controller
         if($lecturer){
             $lecturer->fill($request->validate([
                 'nip'               => ['required','numeric', Rule::unique(Lecturer::class)->ignore(Auth::user()->lecturer->id)],
+                'expertise'         => ['required'],
+                'barcode'           => ['required'],
             ]));
             $lecturer->save();
         }elseif($student){

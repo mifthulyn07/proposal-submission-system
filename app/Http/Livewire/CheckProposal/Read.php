@@ -21,19 +21,21 @@ class Read extends Component
 
     public function render()
     {
-        return view('livewire.check-proposal.read',[
-            'proposals_process' => ProposalProcess::whereNull('explanation')
-            ->whereNotNull('type')
-            ->whereNotNull('date')
-            ->whereHas('student', function (Builder $query) {
-                $query->whereHas('user', function (Builder $userQuery) {
-                    $userQuery->where('name', 'like', $this->search.'%');
-                });
-            })
-            ->where('type', 'like', $this->search.'%')
-            ->latest()
-            ->paginate(12),
-        ]);
+        return view('livewire.check-proposal.read', [
+            'proposals_process' => ProposalProcess::whereNull('comment')
+                ->whereNotNull('type')
+                ->whereNotNull('date')
+                ->where(function ($query) {
+                    $query->orWhereHas('student', function (Builder $query) {
+                        $query->whereHas('user', function (Builder $userQuery) {
+                            $userQuery->where('name', 'like', $this->search.'%');
+                        });
+                    })
+                    ->orWhere('type', 'like', $this->search.'%');
+                })
+                ->latest()
+                ->paginate(12),
+        ]);        
     }
 
     public function checkProposal($id)

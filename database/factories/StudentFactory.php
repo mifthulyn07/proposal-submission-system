@@ -19,10 +19,10 @@ class StudentFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'       => User::all()->random()->id,
-            'lecturer_id'   => Lecturer::all()->random()->id,
-            'nim'           => fake()->unique()->numberBetween(1000000000,9999999999),
-            'class'         => "SI-".fake()->numberBetween(1, 6),
+            'user_id'       => User::inRandomOrder()->first()->id,
+            'lecturer_id'   => Lecturer::inRandomOrder()->first()->id,
+            'nim'           => '070'.fake()->unique()->numberBetween(1000000,9999999),
+            'class'         => "Sistem Informasi-".fake()->numberBetween(1, 6),
         ];
     }
 }
