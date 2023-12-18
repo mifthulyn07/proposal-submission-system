@@ -4,7 +4,6 @@ namespace App\Http\Livewire\AssignmentAdvisor;
 
 use Livewire\Component;
 use App\Models\Lecturer;
-use App\Charts\StudentAdvisorAssignmentChart;
 
 class Check extends Component
 {

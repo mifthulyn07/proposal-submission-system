@@ -28,7 +28,8 @@
                     </div>
                 </div>
 
-                <div class="mt-4 grid mb-8 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700">
+                {{-- table --}}
+                <div class="m-4 relative overflow-x-auto rounded-lg shadow-sm overflow-y-hidden">
                     @if($proposals->isEmpty())
                         <div class="m-4">
                             <div class="flex flex-col justify-center items-center px-6 mx-auto xl:px-0 dark:bg-gray-900">
@@ -42,37 +43,61 @@
                             </div>
                         </div>
                     @else
-                        @foreach ($proposals as $proposal)
-                            <figure class="flex flex-col items-center justify-center p-4 text-center bg-white border-b border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
-                                <blockquote class="max-w-2xl mx-auto mb-2 text-gray-500 lg:mb-8 dark:text-gray-400">
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                        {{$proposal->year}} | 
-                                        @if($proposal->status == 'Done')
-                                            <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Done</span>
-                                        @else
-                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">OnProcess</span>
-                                        @endif
-                                    </h3>
-                                    <p class="my-4">
-                                        <span class="font-semibold">"{{ $proposal->title }}"</span> 
-                                        with topic 
-                                        <span class="font-semibold">@if($proposal->topic) {{ $proposal->topic->name }} @else {{$proposal->adding_topic}} @endif </span>
-                                    </p>
-                                </blockquote>
-                                <figcaption class="flex items-center justify-center space-x-3">
-                                    <button data-popover-target="popover-company-profile-{{$proposal->id}}">
-                                        @if($proposal->student->user->avatar)
-                                            <div class="inline-block w-10 h-10 overflow-hidden bg-gray-300 rounded-full">
-                                                <img class="object-cover w-10 h-10" src="{{ asset('storage/avatars/'.$proposal->student->user->avatar) }}" alt="avatar"/>
-                                            </div>
-                                        @else                    
-                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($proposal->student->user->name) }}&background=e6f0ff&rounded=true" alt="avatar" width="40">
-                                        @endif
-                                    </button>
-
-                                    <div class="space-y-0.5 font-medium dark:text-white text-left">
-                                        <div>{{ $proposal->student->user->name }}</div>
-                                        <div class="text-sm text-gray-500 dark:text-gray-400">
+                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" class="p-4"></th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Student
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Title
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Status
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Year
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Topic
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Type
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ( $proposals as $index => $proposal )
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <th class="px-4 py-3 font-medium text-xs text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{ $proposals->firstItem() + $index }}
+                                        </th>
+                                        <th class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-light font-semibold text-gray-900">{{ $proposal->name }}</div>
+                                            <div class="font-normal text-gray-500">{{ $proposal->nim }}</div>
+                                        </th>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ $proposal->title }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            @if($proposal->status == 'done')
+                                                <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Done</span>
+                                            @else
+                                                <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">OnProcess</span>
+                                            @endif
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $proposal->year }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            @if($proposal->topic )
+                                                {{ $proposal->topic->name }}
+                                            @else
+                                                {{ $proposal->adding_topic }}
+                                            @endif
+                                        </td>
+                                        <td class="px-6 py-4">
                                             @if($proposal->type == 'thesis')
                                                 <p class="flex justify-center bg-green-100 text-green-800 text-xs font-medium mr-0.5 mb-1 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Thesis</p>
                                             @elseif($proposal->type == 'appropriate_technology')
@@ -80,74 +105,27 @@
                                             @elseif($proposal->type == 'journal')
                                                 <p class="flex justify-center bg-yellow-100 text-yellow-800 text-xs font-medium mr-0.5 mb-1 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Journal</p>
                                             @endif
-                                        </div>
-                                    </div>
-
-                                    {{-- popup detail profile--}}
-                                    <div data-popover id="popover-company-profile-{{$proposal->id}}" role="tooltip" class="absolute z-10 invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-80 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600">
-                                        <div class="p-3">
-                                            <div class="flex">
-                                                <div class="mr-3 shrink-0">
-                                                    <div href="#" class="block p-2 bg-gray-100 rounded-lg dark:bg-gray-700">
-                                                        @if($proposal->student->user->avatar)
-                                                            <img class="object-cover w-10 h-10 rounded-full" src="{{ asset('storage/avatars/'.$proposal->student->user->avatar) }}" alt="avatar"/>
-                                                        @else
-                                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($proposal->student->user->name) }}&background=e6f0ff&rounded=true" alt="avatar" width="38">
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <p class="mb-1 text-base font-semibold leading-none text-gray-900 dark:text-white">
-                                                        {{ $proposal->student->user->name }}
-                                                    </p>
-                                                    <p class="mb-3 text-sm font-normal">
-                                                        {{ $proposal->student->user->email }}
-                                                    </p>
-                                                    <ul class="mb-3 space-y-2 text-sm text-gray-500 dark:text-gray-400">
-                                                        <li class="flex items-center">
-                                                            <svg class="w-3 h-3 mr-2 text-gray-550 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16"><path d="M18 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM6.5 3a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3.014 13.021l.157-.625A3.427 3.427 0 0 1 6.5 9.571a3.426 3.426 0 0 1 3.322 2.805l.159.622-6.967.023ZM16 12h-3a1 1 0 0 1 0-2h3a1 1 0 0 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Z"/></svg>
-                                                            <div  role="tooltip" class="absolute z-10 left-0 invisible inline-block px-2 py-1 text-xs font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                                                                Gender
-                                                            </div>
-                                                            @if($proposal->student->user)
-                                                                {{ $proposal->student->user->gender }}
-                                                            @endif
-                                                        </li>
-                                                        <li class="flex items-center">
-                                                            <svg class="w-3 h-3 mr-2 text-gray-550 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 19 18"><path d="M18 13.446a3.02 3.02 0 0 0-.946-1.985l-1.4-1.4a3.054 3.054 0 0 0-4.218 0l-.7.7a.983.983 0 0 1-1.39 0l-2.1-2.1a.983.983 0 0 1 0-1.389l.7-.7a2.98 2.98 0 0 0 0-4.217l-1.4-1.4a2.824 2.824 0 0 0-4.218 0c-3.619 3.619-3 8.229 1.752 12.979C6.785 16.639 9.45 18 11.912 18a7.175 7.175 0 0 0 5.139-2.325A2.9 2.9 0 0 0 18 13.446Z"/></svg>
-                                                            <div role="tooltip" class="absolute z-10 left-0 invisible inline-block px-2 py-1 text-xs font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                                                                Phone
-                                                            </div>
-                                                            @if($proposal->student->user)
-                                                                {{ $proposal->student->user->phone }}
-                                                            @endif
-                                                        </li>
-                                                        <li class="flex items-center">
-                                                            <svg class="w-3 h-3 mr-2 text-gray-550 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"><path d="M19.728 10.686c-2.38 2.256-6.153 3.381-9.875 3.381-3.722 0-7.4-1.126-9.571-3.371L0 10.437V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-7.6l-.272.286Z"/><path d="m.135 7.847 1.542 1.417c3.6 3.712 12.747 3.7 16.635.01L19.605 7.9A.98.98 0 0 1 20 7.652V6a2 2 0 0 0-2-2h-3V3a3 3 0 0 0-3-3H8a3 3 0 0 0-3 3v1H2a2 2 0 0 0-2 2v1.765c.047.024.092.051.135.082ZM10 10.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5ZM7 3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1H7V3Z"/></svg>
-                                                            <div role="tooltip" class="absolute z-10 left-0 invisible inline-block px-2 py-1 text-xs font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                                                                Class
-                                                            </div>
-                                                            @if($proposal->student)
-                                                                {{ $proposal->student->class }}
-                                                            @endif
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div data-popper-arrow></div>
-                                    </div>
-
-                                </figcaption>    
-                            </figure>
-                        @endforeach
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <div id="tooltip-edit" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                            Edit
+                            <div class="tooltip-arrow" data-popper-arrow></div>
+                        </div>
+                        <div id="tooltip-delete" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                            Delete
+                            <div class="tooltip-arrow" data-popper-arrow></div>
+                        </div>
                     @endif
                 </div>
 
                 {{-- table footer --}}
-                <div class="mt-4">
+                <div class="m-4">
                     {{ $proposals->links() }}
                 </div>
+
             </div>
         </div>
     </div>

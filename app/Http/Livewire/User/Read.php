@@ -4,7 +4,6 @@ namespace App\Http\Livewire\User;
 
 use App\Models\User;
 use Livewire\Component;
-use App\Charts\UsersChart;
 use Livewire\WithPagination;
 use Illuminate\Database\Eloquent\Builder;
 

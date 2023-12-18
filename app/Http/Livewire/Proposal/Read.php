@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Proposal;
 use Livewire\Component;
 use App\Models\Proposal;
 use Livewire\WithPagination;
-use App\Charts\ProposalsChart;
 use Illuminate\Database\Eloquent\Builder;
 
 class Read extends Component

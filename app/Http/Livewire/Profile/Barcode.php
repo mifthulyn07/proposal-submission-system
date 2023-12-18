@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\Profile;
 
-use App\Models\User;
 use Livewire\Component;
 use App\Models\Lecturer;
 use Livewire\WithFileUploads;
