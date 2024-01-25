@@ -16,7 +16,8 @@
 @endsection
 
 @section('content')
-    <div class="mx-6 bg-white p-4 pb-0 rounded-lg dark:border-gray-700 overflow-hidden shadow-sm rounded-lg">
+<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="bg-white p-4 pb-0 rounded-lg dark:border-gray-700 overflow-hidden shadow-sm rounded-lg">
         {{-- jumbutron --}}
         <div class="relative bg-center bg-cover bg-gradient-to-br from-blue-200 to-blue-400 dark:from-gray-700 dark:to-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 md:p-12 mb-4" style="background-image: url('/assets/img/jumbutron.jpg');">
             <a href="#" class="bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-blue-400 mb-2">
@@ -40,11 +41,23 @@
             <div class="mb-4 bg-white overflow-x-auto rounded-lg shadow rounded-lg">
                 <div class="p-6 m-20 bg-white">
                     {!! $usersChart->container() !!}
+                    <a href="{{route('user.read')}}" class="inline-flex items-center font-medium text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-700">
+                        Read more
+                        <svg class="ml-2 w-2.5 h-2.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                        </svg>
+                    </a>
                 </div>
             </div>
             <div class="mb-4 bg-white overflow-x-auto rounded-lg shadow rounded-lg">
                 <div class="p-6 m-20 bg-white">
                     {!! $studentAdvisorAssignmentChart->container() !!}
+                    <a href="{{route('assignment-advisor.read')}}" class="inline-flex items-center font-medium text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-700">
+                        Read more
+                        <svg class="ml-2 w-2.5 h-2.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                        </svg>
+                    </a>
                 </div>
             </div>
         </div>
@@ -53,6 +66,12 @@
         <div class="bg-white overflow-hidden rounded-lg shadow rounded-lg mb-4">
             <div class="p-6 m-20 bg-white">
                 {!! $proposalsChart->container() !!}
+                <a href="{{route('proposal.read')}}" class="inline-flex items-center font-medium text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-700">
+                    Read more
+                    <svg class="ml-2 w-2.5 h-2.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                    </svg>
+                </a>
             </div>
         </div>
         {{-- lecturer gender & students gender --}}
@@ -60,15 +79,28 @@
             <div class="mb-4 bg-white overflow-x-auto rounded-lg shadow rounded-lg">
                 <div class="p-6 m-20 bg-white">
                     {!! $lecturersChart->container() !!}
+                    <a href="{{route('lecturer.read')}}" class="inline-flex items-center font-medium text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-700">
+                        Read more
+                        <svg class="ml-2 w-2.5 h-2.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                        </svg>
+                    </a>
                 </div>
             </div>
             <div class="mb-4 bg-white overflow-x-auto rounded-lg shadow rounded-lg">
                 <div class="p-6 m-20 bg-white">
                     {!! $studentsChart->container() !!}
+                    <a href="{{route('student.read')}}" class="inline-flex items-center font-medium text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-700">
+                        Read more
+                        <svg class="ml-2 w-2.5 h-2.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                        </svg>
+                    </a>
                 </div>
             </div>
         </div>
-    </div>                                        
+    </div>      
+</div>                                  
 @endsection
 
 @push('scripts')

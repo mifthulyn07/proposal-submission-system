@@ -44,9 +44,11 @@ class Edit extends Component
        try{
             $validatedData = $this->validate();
             $topic = Topic::findOrFail($this->topic->id)->fill($validatedData);
+            $topic->slug = null;
             $topic->save();
 
             session()->flash('success', 'Topic successfully updated.');
+            return redirect()->to('/topics');
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
         }

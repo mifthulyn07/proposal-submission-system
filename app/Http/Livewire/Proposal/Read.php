@@ -23,22 +23,14 @@ class Read extends Component
 
     public function render()
     {
-        $search = trim($this->search);
-        $keywords = explode(' ', $search);
-
-        $query = Proposal::query()
-            ->where('name', 'like', $search.'%')
-            ->orWhere('status', 'like', $search.'%')
-            ->orWhere('type', 'like', $search.'%')
-            ->orWhere('adding_topic', 'like', $search.'%')
-            ->orWhereHas('topic', function (Builder $query) {
+        $query = Proposal::WhereHas('topic', function (Builder $query) {
                 $query->where('name', 'like', $this->search.'%');
             })
-            ->OrWhere(function ($query) use ($keywords) {
-                foreach ($keywords as $key) {
-                    $query->orWhere('title', 'like', "%{$key}%");
-                }
-            });
+            ->orWhere('name', 'like', $this->search.'%')
+            ->orWhere('status', 'like', $this->search.'%')
+            ->orWhere('type', 'like', $this->search.'%')
+            ->orWhere('adding_topic', 'like', $this->search.'%')
+            ->orWhere('title', 'like', $this->search.'%');
 
         return view('livewire.proposal.read', [
             'proposals'         => $query->paginate(12),
@@ -47,7 +39,8 @@ class Read extends Component
 
     public function editIdProposal($id)
     {
-        return redirect()->route('proposal.edit', ['proposal' => $id]);
+        $proposal = Proposal::findOrFail($id);
+        return redirect()->route('proposal.edit', ['proposal' => $proposal->slug]);
     }
 
     public function deleteIdProposal($id)

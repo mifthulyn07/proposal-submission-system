@@ -45,7 +45,8 @@ class Read extends Component
 
     public function editIdStudent($id)
     {
-        return redirect()->route('student.edit', ['student' => $id]);
+        $student = Student::findOrFail($id);
+        return redirect()->route('student.edit', ['student' => $student->slug]);
     }
 
     public function deleteIdStudent($id)

@@ -4,7 +4,7 @@
 
             {{-- form --}}
             <div class="m-4 ">
-                <h5 class="text-lg font-medium text-gray-900 dark:text-white">Update Account </h5>
+                <h5 class="text-lg font-bold text-gray-900 dark:text-white">Update Account </h5>
                 <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">This feature, can only be used by Coordinator and Kaprodi.</p>
 
                 <form class="mt-6" wire:submit.prevent="update">
@@ -63,7 +63,7 @@
                         </div>
                         <div>
                             <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone</label>
-                            <input type="text" id="phone" wire:model="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0712345678">
+                            <input type="text" id="phone" wire:model="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0812345678">
                             @error('phone') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
                         </div>
                     </div>
@@ -90,41 +90,24 @@
 
                     {{-- roles --}}
                     <div class="mb-4">
-                        <h3 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Roles</h3>
-                        <ul class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        <label for="role" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role</label>
+                        <select id="role" name="role" wire:model="role" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected hidden value="" >Select Role</option>
                             @foreach ($roles as $role)
-                                <li class="w-full border-b border-gray-200 md:border-b-0 md:border-r dark:border-gray-600">
-                                    <div class="flex items-center pl-3">
-                                        <input type="checkbox"  wire:model="selected_roles" value="{{ $role->id }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                        <label for="vue-checkbox-list" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $role->name }}</label>
-                                    </div>
-                                </li>
+                                @if($userWithRoleKaprodiExists)
+                                    @if($role->name === 'kaprodi')
+                                        @continue
+                                    @endif
+                                @endif
+                                <option value="{{$role->id}}">{{ ucwords($role->name) }}</option>
                             @endforeach
-                        </ul>
-                        @error('selected_roles') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
+                        </select>
+                        @error('role') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
                     </div>
 
                     {{-- button submit --}}
                     <div class="flex items-center gap-4 mt-6">
                         <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-                        @if (session()->has('success'))
-                            <p
-                                x-data="{ show: true }"
-                                x-show="show"
-                                x-transition
-                                x-init="setTimeout(() => show = false, 3000)"
-                                class="text-sm text-green-600"
-                            >{{ session('success') }}</p>
-                        @endif
-                        @if (session()->has('error'))
-                            <p
-                                x-data="{ show: true }"
-                                x-show="show"
-                                x-transition
-                                x-init="setTimeout(() => show = false, 3000)"
-                                class="text-sm text-red-600"
-                            >{{ session('error') }}</p>
-                        @endif
                     </div>
 
                 </form>

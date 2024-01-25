@@ -32,6 +32,7 @@ class ProfileController extends Controller
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
+        $request->user()->slug = null;
         $request->user()->save();
  
         // update tabel lecturer/student
@@ -41,7 +42,6 @@ class ProfileController extends Controller
             $lecturer->fill($request->validate([
                 'nip'               => ['required','numeric', Rule::unique(Lecturer::class)->ignore(Auth::user()->lecturer->id)],
                 'expertise'         => ['required'],
-                'barcode'           => ['required'],
             ]));
             $lecturer->save();
         }elseif($student){

@@ -36,6 +36,6 @@ class SubmissionResults extends Component
             $proposalProcess->student_id = auth()->user()->student->id;
             $proposalProcess->save();
         }
-        return redirect()->to('/list-submit-proposal');
+        return redirect()->to('/submit-proposal');
     }
 }

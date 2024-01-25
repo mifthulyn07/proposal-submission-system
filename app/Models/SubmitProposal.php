@@ -4,12 +4,13 @@ namespace App\Models;
 
 use App\Models\Topic;
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class SubmitProposal extends Model
 {
-    use HasFactory;
+    use HasFactory, Sluggable;
 
     protected $fillable = [
         'proposal_process_id',
@@ -20,6 +21,15 @@ class SubmitProposal extends Model
         'adding_topic',
         'accord',
     ];
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
+    }
 
     public function proposal_process(): BelongsTo
     { 

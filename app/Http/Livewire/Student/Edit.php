@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Student;
 
+use App\Models\User;
 use App\Models\Student;
 use Livewire\Component;
 use App\Models\Lecturer;
@@ -19,6 +20,7 @@ class Edit extends Component
     // modal user realtionship
     public $name;
     public $email;
+    public $phone;
 
     public $empty = false;
     
@@ -27,6 +29,7 @@ class Edit extends Component
         if(!empty($student)){
             $this->name         = $student->user->name;
             $this->email        = $student->user->email;
+            $this->phone        = $student->user->phone;
             $this->nim          = $student->nim;
             $this->class        = $student->class;
             $this->lecturer_id  = $student->lecturer_id;
@@ -48,7 +51,8 @@ class Edit extends Component
         return [
             'nim'           => ['required', 'numeric', 'unique:students,nim,'.$this->student->id],
             'class'         => ['required', 'string'],
-            'lecturer_id'   => ['required', 'exists:lecturers,id']
+            'lecturer_id'   => ['required', 'exists:lecturers,id'],
+            'phone'         => ['numeric', 'unique:users,phone,'.$this->student->user->id],
         ];
     }
 
@@ -68,7 +72,12 @@ class Edit extends Component
             $student->fill($validatedData);
             $student->save();
 
+            $user = User::findOrFail($this->student->user->id);
+            $user->fill($validatedData);
+            $user->save();
+
             session()->flash('success', 'Student successfully updated.');
+            return redirect()->route('student.read');
         }catch (\Exception $e){
             session()->flash('error', $e->getMessage());
         }

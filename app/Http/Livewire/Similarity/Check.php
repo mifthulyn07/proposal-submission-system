@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Similarity;
 use Livewire\Component;
 use App\Models\Proposal;
+use Illuminate\Http\Request;
 
 class Check extends Component
 {
@@ -13,6 +14,9 @@ class Check extends Component
     public $similarities    = [];
     public $result_cosim    = null;
     public $null_similarity = false;
+
+    public $title;
+    public $similarity;
 
     protected $rules = [
         'text' => 'required|min:20',
@@ -78,5 +82,13 @@ class Check extends Component
             $result_cosim1 = $similarities->first()->cosim;
             $this->result_cosim = intval($result_cosim1);
         }
+    }
+
+    public function submitProposal(Request $request)
+    {
+        $request->session()->put('title', $this->text);
+        $request->session()->put('similarity', $this->result_cosim);
+
+        return redirect()->route('submit-proposal.create', ['proposalProcess' => $this->proposalProcess->slug]);
     }
 }

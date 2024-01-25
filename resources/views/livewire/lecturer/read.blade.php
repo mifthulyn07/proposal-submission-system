@@ -40,7 +40,7 @@
             <div class="m-4">
                 {{-- caption --}}
                 <div class="mb-4 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                    <h5 class="text-lg font-medium text-gray-900 dark:text-white">List of Lecturers</h5>
+                    <h5 class="text-lg font-bold text-gray-900 dark:text-white">List of Lecturers</h5>
                     <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">Explore the comprehensive list of academic lecturers in the State Islamic University of North Sumatra.</p>
                 </div>
 
@@ -61,15 +61,14 @@
                             </form>
                         </div>
 
-                        @if (auth()->user()->hasRole('coordinator') || auth()->user()->hasRole('kaprodi'))
-                            {{-- button add --}}
+                        {{-- @if (auth()->user()->hasRole('coordinator') || auth()->user()->hasRole('kaprodi'))
                             <div class="flex flex-col items-stretch justify-end flex-shrink-0 w-full space-y-2 md:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3">
                                 <a href="{{ Route('lecturer.create') }}" type="button" class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                                     <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" /></svg>
                                     Add Lecturer
                                 </a>
                             </div>
-                        @endif
+                        @endif --}}
 
                     </div>
                 </div>
@@ -127,7 +126,13 @@
                                         @endif
                                         <div class="px-6">
                                             <div class="text-light font-semibold text-gray-900">{{ $lecturer->user->name }}</div>
-                                            <div class="font-normal text-gray-500">{{ $lecturer->nip }}</div>
+                                            <div class="font-normal text-gray-500">
+                                                @if($lecturer->nip == null)
+                                                    [Unfilled]
+                                                @else
+                                                    {{ $lecturer->nip }}
+                                                @endif
+                                            </div>
                                         </div>
                                     </th>
                                     <td class="px-6 py-4">
@@ -136,18 +141,30 @@
                                                 <span class="flex w-2.5 h-2.5 bg-blue-600 rounded-full mr-1.5 flex-shrink-0"></span>
                                                 Male
                                             </p>
-                                        @else
+                                        @elseif($lecturer->user->gender == 'female')
                                             <p class="flex items-center text-xs font-medium text-gray-900 dark:text-white">
                                                 <span class="flex w-2.5 h-2.5 bg-red-300 rounded-full mr-1.5 flex-shrink-0"></span>
                                                 Female
                                             </p>
+                                        @else
+                                            <p class="flex items-center text-xs font-medium text-gray-900 dark:text-white">
+                                                [Unfilled]
+                                            </p>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $lecturer->user->phone }}
+                                        @if($lecturer->user->phone == null)
+                                            [Unfilled]
+                                        @else
+                                            {{ $lecturer->user->phone }}
+                                        @endif
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $lecturer->expertise }}
+                                        @if($lecturer->expertise == null)
+                                            [Unfilled]
+                                        @else
+                                            {{ $lecturer->expertise }}
+                                        @endif
                                     </td>
                                     <td class="px-6 py-4 space-x-1 whitespace-nowrap">
                                         @if (auth()->user()->hasRole('coordinator') || auth()->user()->hasRole('kaprodi'))

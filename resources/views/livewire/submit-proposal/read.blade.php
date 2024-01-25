@@ -5,7 +5,7 @@
         <div class="bg-white rounded-t-xl shadow">
             <div id="accordion-color" data-accordion="collapse" data-active-classes="bg-blue-100 dark:bg-gray-800 text-blue-600 dark:text-white">
                 <h2 id="accordion-color-heading-1">
-                    <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 dark:border-gray-700 dark:text-gray-400 hover:bg-blue-100 dark:hover:bg-gray-800" data-accordion-target="#accordion-color-body-1" aria-expanded="true" aria-controls="accordion-color-body-1">
+                    <button type="button" class="flex items-center justify-between w-full p-5 font-bold text-left text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 dark:border-gray-700 dark:text-gray-400 hover:bg-blue-100 dark:hover:bg-gray-800" data-accordion-target="#accordion-color-body-1" aria-expanded="true" aria-controls="accordion-color-body-1">
                         <span>🛠️ Technical Instructions</span>
                         <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/></svg>
                     </button>
@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <h2 id="accordion-color-heading-2">
-                    <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-gray-500 border border-b-0 border-gray-200 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 dark:border-gray-700 dark:text-gray-400 hover:bg-blue-100 dark:hover:bg-gray-800" data-accordion-target="#accordion-color-body-2" aria-expanded="false" aria-controls="accordion-color-body-2">
+                    <button type="button" class="flex items-center justify-between w-full p-5 font-bold text-left text-gray-500 border border-b-0 border-gray-200 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 dark:border-gray-700 dark:text-gray-400 hover:bg-blue-100 dark:hover:bg-gray-800" data-accordion-target="#accordion-color-body-2" aria-expanded="false" aria-controls="accordion-color-body-2">
                         <span>📄 Proposal Title Templates</span>
                         <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/></svg>
                     </button>
@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <h2 id="accordion-color-heading-3">
-                    <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-gray-500 border border-gray-200 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 dark:border-gray-700 dark:text-gray-400 hover:bg-blue-100 dark:hover:bg-gray-800" data-accordion-target="#accordion-color-body-3" aria-expanded="false" aria-controls="accordion-color-body-3">
+                    <button type="button" class="flex items-center justify-between w-full p-5 font-bold text-left text-gray-500 border border-gray-200 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 dark:border-gray-700 dark:text-gray-400 hover:bg-blue-100 dark:hover:bg-gray-800" data-accordion-target="#accordion-color-body-3" aria-expanded="false" aria-controls="accordion-color-body-3">
                         <span>📜 Supporting Request Letters</span>
                         <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/></svg>
                     </button>
@@ -57,15 +57,15 @@
             {{-- step --}}
             <div class="m-4">
                 <ol class="flex items-center w-full mb-4 sm:mb-5">
-                    <li class="flex w-full items-center text-blue-600 dark:text-blue-500 after:content-[''] after:w-full after:h-1 after:border-b @if($showVerification == true || $showResults == true || $submissionIsDone == true || $waitingAdvisor == true) after:border-blue-100 @else after:border-gray-100 @endif after:border-4 after:inline-block dark:after:border-blue-800">
+                    <li class="flex w-full items-center text-blue-600 dark:text-blue-500 after:content-[''] after:w-full after:h-1 after:border-b @if($showVerification == true || $showResults == true || $submissionIsDone == true || $waitingAdvisor == true || $proposalIsDone == true) after:border-blue-100 @else after:border-gray-100 @endif after:border-4 after:inline-block dark:after:border-blue-800">
                         <div class="flex items-center justify-center w-9 h-9 bg-blue-100 rounded-full lg:h-11 lg:w-11 dark:bg-blue-800 shrink-0">
                             <svg class="w-4 h-4 text-blue-600 lg:w-5 lg:h-5 dark:text-blue-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
                                 <path d="M18 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM6.5 3a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3.014 13.021l.157-.625A3.427 3.427 0 0 1 6.5 9.571a3.426 3.426 0 0 1 3.322 2.805l.159.622-6.967.023ZM16 12h-3a1 1 0 0 1 0-2h3a1 1 0 0 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Z"/>
                             </svg>
                         </div>
                     </li>
-                    <li class="flex w-full items-center after:content-[''] after:w-full after:h-1 after:border-b @if($showResults == true || $submissionIsDone == true || $waitingAdvisor == true) after:border-blue-100 @else after:border-gray-100 @endif after:border-4 after:inline-block dark:after:border-gray-700">
-                        <div class="flex items-center justify-center w-9 h-9 rounded-full lg:h-11 lg:w-11 @if($showVerification == true || $showResults == true || $submissionIsDone == true || $waitingAdvisor == true) bg-blue-100 @else bg-gray-100 @endif dark:bg-gray-700 shrink-0">
+                    <li class="flex w-full items-center after:content-[''] after:w-full after:h-1 after:border-b @if($showResults == true || $submissionIsDone == true || $waitingAdvisor == true || $proposalIsDone == true) after:border-blue-100 @else after:border-gray-100 @endif after:border-4 after:inline-block dark:after:border-gray-700">
+                        <div class="flex items-center justify-center w-9 h-9 rounded-full lg:h-11 lg:w-11 @if($showVerification == true || $showResults == true || $submissionIsDone == true || $waitingAdvisor == true || $proposalIsDone == true) bg-blue-100 @else bg-gray-100 @endif dark:bg-gray-700 shrink-0">
                             <svg class="w-4 h-4 text-blue-600 lg:w-5 lg:h-5 dark:text-blue-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 14">
                                 <path d="M18 0H2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM2 12V6h16v6H2Z"/>
                                 <path d="M6 8H4a1 1 0 0 0 0 2h2a1 1 0 0 0 0-2Zm8 0H9a1 1 0 0 0 0 2h5a1 1 0 1 0 0-2Z"/>
@@ -73,7 +73,7 @@
                         </div>
                     </li>
                     <li class="flex items-center">
-                        <div class="flex items-center justify-center w-9 h-9 @if($showResults == true || $submissionIsDone == true || $waitingAdvisor == true) bg-blue-100 @else bg-gray-100 @endif rounded-full lg:h-11 lg:w-11 dark:bg-gray-700 shrink-0">
+                        <div class="flex items-center justify-center w-9 h-9 @if($showResults == true || $submissionIsDone == true || $waitingAdvisor == true|| $proposalIsDone == true) bg-blue-100 @else bg-gray-100 @endif rounded-full lg:h-11 lg:w-11 dark:bg-gray-700 shrink-0">
                             <svg class="w-4 h-4 text-blue-600 lg:w-5 lg:h-5 dark:text-blue-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
                                 <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2ZM7 2h4v3H7V2Zm5.7 8.289-3.975 3.857a1 1 0 0 1-1.393 0L5.3 12.182a1.002 1.002 0 1 1 1.4-1.436l1.328 1.289 3.28-3.181a1 1 0 1 1 1.392 1.435Z"/>
                             </svg>
@@ -175,11 +175,23 @@
                             <img src="/assets/illustrations/waiting3.svg" alt="astronaut image" width="70%">
                         </div>
                         <div class="text-center xl:max-w-4xl mt-5">
-                            <h1 class="mb-2 text-lg font-bold leading-tight text-indigo-700 sm:text-4xl lg:text-5xl dark:text-purple-500">🔍 Awaits Confirmation</h1>
-                            <p class="text-base font-normal text-gray-600 dark:text-gray-400">You're eagerly awaiting the results of your submitted proposal. Stay tuned for updates!</p>
+                            <h1 class="mb-2 text-lg font-bold leading-tight text-indigo-700 sm:text-4xl lg:text-5xl dark:text-purple-500">🔍 Awaiting Assignment of Supervising Lecturers</h1>
+                            <p class="text-base font-normal text-gray-600 dark:text-gray-400">Sit tight! We're currently waiting for the assignment of supervising lecturers. Your patience is greatly appreciated.</p>
                         </div>
                     </div>  
-                </div> 
+                </div>
+            @elseif($proposalIsDone == true)
+                <div class="m-4">
+                    <div class="flex flex-col justify-center items-center px-6 mx-auto xl:px-0 dark:bg-gray-900">
+                        <div class="block max-w-sm flex justify-center">
+                            <img src="/assets/illustrations/waiting2.svg" alt="astronaut image" width="70%">
+                        </div>
+                        <div class="text-center xl:max-w-4xl mt-5">
+                            <h1 class="mb-2 text-lg font-bold leading-tight text-indigo-700 sm:text-4xl lg:text-5xl dark:text-purple-500">🎉 You've successfully submitted your title proposal!</h1>
+                            <p class="text-base font-normal text-gray-600 dark:text-gray-400">Great job! Now, you can view the results on the <a href="#">list of submitted proposals</a>.</p>
+                        </div>
+                    </div>  
+                </div>                      
             @else
                 {{-- step 1 --}}
                 <div class="@if($showSubmission == false) hidden @endif">

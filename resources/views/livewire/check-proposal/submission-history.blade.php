@@ -4,7 +4,7 @@
             <div class="relative items-center block bg-white overflow-hidden shadow rounded-lg">
                 
                 <div class="m-4">
-                    <h5 class="text-lg font-medium text-gray-900 dark:text-white">Submission History</h5>
+                    <h5 class="text-lg font-bold text-gray-900 dark:text-white">Submission History</h5>
                     <p class="mt-1 text-gray-500 dark:text-gray-400 font-normal text-sm">This section displays updates on the acceptance of submitted proposals.</p>
                         
                     <div class="mt-6 ml-6">
@@ -37,7 +37,7 @@
 
                     <div class="flex justify-end mt-6">
                         {{-- button back --}}
-                        <a type="button" href="{{ route("check-proposal.check", $proposalProcess->id) }}" class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
+                        <a type="button" href="{{ route("check-proposal.check", $proposalProcess->slug) }}" class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
                             Back
                         </a>
                     </div>

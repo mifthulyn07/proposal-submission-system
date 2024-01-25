@@ -100,6 +100,7 @@ class Create extends Component
 
             $this->reset();
             session()->flash('success', 'Proposal successfully stored.');
+            redirect()->to('/proposals');
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
         }

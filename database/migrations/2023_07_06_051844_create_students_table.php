@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('lecturer_id')->nullable()->constrained()->nullOnDelete(); 
             $table->string("nim")->nullable();
             $table->string("class")->nullable();
+            $table->string('slug')->unique();
             $table->timestamps();
         });
     }

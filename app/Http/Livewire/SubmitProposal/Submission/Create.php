@@ -4,6 +4,7 @@ namespace App\Http\Livewire\SubmitProposal\Submission;
 
 use App\Models\Topic;
 use Livewire\Component;
+use Illuminate\Http\Request;
 use Livewire\WithFileUploads;
 use App\Models\SubmitProposal;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,14 @@ class Create extends Component
 
     public $another_topic = false;
 
-    public function render()
+    public function mount(Request $request)
+    {
+        if ($request->session()->exists('title') && $request->session()->exists('similarity')) {
+            $this->title = $request->session()->get('title');
+            $this->similarity = $request->session()->get('similarity');
+        }
+    }
+    public function render()    
     {
         return view('livewire.submit-proposal.submission.create', [
             'topics' => Topic::all(),
@@ -87,8 +95,8 @@ class Create extends Component
             $submit_proposal->save();
 
             // $this->resetExcept('proposalProcess');
-            session()->flash('success', 'Proposal successfully stored.');
-            redirect()->to('/list-submit-proposal');
+            session()->flash('success-submit', 'Proposal successfully stored.');
+            redirect()->to('/submit-proposal');
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
         }

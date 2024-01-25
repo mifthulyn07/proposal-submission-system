@@ -4,11 +4,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Asignment Note</title>
 
     {{-- favicon --}}
     <link rel="shortcut icon" type="image/png" sizes="32x32" href="{{ asset('assets/img/favicon-si-panjul.png') }}">
-    
 </head>
 <body class="padding:60px;">
     <div>

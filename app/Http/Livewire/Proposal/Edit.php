@@ -121,9 +121,11 @@ class Edit extends Component
 
             $proposal = Proposal::findOrFail($this->proposal->id);
             $proposal->fill($validatedData);
+            $proposal->slug = null;
             $proposal->save();
 
             session()->flash('success', 'Proposal successfully updated.');
+            return redirect()->route('proposal.read');
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
         }

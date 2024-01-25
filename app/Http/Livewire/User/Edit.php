@@ -29,7 +29,7 @@ class Edit extends Component
     public $password;
 
     // many to many 
-    public $selected_roles = [];
+    public $role;
 
     public $avatar_null = false;
     public $make_avatar_null = false;
@@ -46,7 +46,7 @@ class Edit extends Component
             $this->gender           = $user->gender;
             $this->phone            = $user->phone;
             $this->oldAvatar        = $user->avatar;
-            $this->selected_roles   = $user->roles->pluck('id')->toArray();
+            $this->role             = $user->roles->pluck('id')->toArray();
         }else{
             // for 404 not found
             $this->empty = true;
@@ -61,7 +61,8 @@ class Edit extends Component
     public function render()
     {
         return view('livewire.user.edit', [
-            'roles' => Role::all()
+            'roles' => Role::all(),
+            'userWithRoleKaprodiExists' => User::whereHas('roles', fn($query) => $query->where('name', 'kaprodi'))->exists(),
         ]);
     }
 
@@ -76,7 +77,7 @@ class Edit extends Component
                 'email'                 => ['required', 'email', 'max:255', 'unique:users,email,'.$this->user->id],
                 'password'              => [Rules\Password::defaults()],
                 'password_confirmation' => ['same:password'],
-                'selected_roles'        => ['required', 'exists:roles,id'],
+                'role'                  => ['required', 'exists:roles,id'],
             ];
         }else{
             return [
@@ -85,7 +86,7 @@ class Edit extends Component
                 'phone'                 => ['numeric', 'unique:users,phone,'.$this->user->id],
                 'avatar'                => ['nullable','image','max:1024','mimes:jpeg,png,jpg'],
                 'email'                 => ['required', 'email', 'max:255', 'unique:users,email,'.$this->user->id],
-                'selected_roles'        => ['required', 'exists:roles,id'],
+                'role'                  => ['required', 'exists:roles,id'],
             ];
         }
     }
@@ -182,17 +183,19 @@ class Edit extends Component
             
             $user = User::findOrFail($this->user->id);
             $user->fill($validatedData);
+            // for making update on slug 
+            $user->slug = null;
             $user->save();
 
             // update roles 
-            $user->roles()->sync($validatedData['selected_roles']);
+            $user->roles()->sync($validatedData['role']);
             $this->fixingRoles($user);
 
             $this->reset(['password', 'password_confirmation', 'avatar']);
             session()->flash('success', 'User account successfully updated.');
             
             // harus dilakukan refresh untuk dir file 
-            redirect()->to('edit-user/'.$this->user->id);
+            redirect()->to('/users');
         }catch (\Exception $e){
             session()->flash('error', $e->getMessage());
         }

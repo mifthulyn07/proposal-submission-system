@@ -7,13 +7,14 @@ use App\Models\Lecturer;
 use App\Models\Proposal;
 use App\Models\ProposalProcess;
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Student extends Model
 {
-    use HasFactory;
+    use HasFactory, Sluggable;
 
     protected $fillable = [
         'user_id',
@@ -21,6 +22,15 @@ class Student extends Model
         'nim',
         'class',
     ];
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'user.name'
+            ]
+        ];
+    }
 
     public function user(): BelongsTo
     { 

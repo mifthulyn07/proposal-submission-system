@@ -12,7 +12,7 @@
                             <img src="https://ui-avatars.com/api/?name={{ urlencode($proposal->student->user->name) }}&background=e6f0ff&rounded=true" alt="avatar" width="50">
                         @endif
                         <div class="space-y-1 font-medium dark:text-white">
-                            <p>{{ $proposal->name }}</p>
+                            <p class="font-bold">{{ $proposal->name }}</p>
                             <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
                                 {{ $proposal->nim }}
                             </div>

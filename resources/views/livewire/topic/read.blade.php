@@ -39,7 +39,7 @@
             <div class="m-4">
                 {{-- caption --}}
                 <div class="mb-4 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                    <h5 class="text-lg font-medium text-gray-900 dark:text-white">Manage Proposal Topics</h5>
+                    <h5 class="text-lg font-bold text-gray-900 dark:text-white">Manage Proposal Topics</h5>
                     <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">Browse and manage a variety of research topics for final assignment proposals.</p>
                 </div>
 

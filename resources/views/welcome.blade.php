@@ -3,10 +3,10 @@
 @section('content')
     <section class="flex flex-col justify-center items-center p-6 mx-auto h-lg dark:bg-gray-900">
         <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
-            <div class="flex justify-center">
+            <div class="mb-8 flex justify-center">
                 <img src="assets/img/si-panjul-bgRemove.png" alt="Uinsu" width="250px">
             </div>
-            <p class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-400">
+            <p class="mb-4 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-400">
                 This website is specifically designed for information systems students from the State Islamic University of North Sumatra. This website is a tool to facilitate the proposal submission process.
             </p>
             <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">

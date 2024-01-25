@@ -30,7 +30,7 @@ class Read extends Component
     protected function updatedSelectedProposals()
     {
         if(count($this->selectedProposals) > 3){
-            return session()->flash('error', 'you have to select min & max 3 (three) proposal to submit');
+            return session()->flash('error', 'Please select exactly 3 proposals to proceed with your submission.');
         }
     }
 
@@ -46,7 +46,8 @@ class Read extends Component
 
     public function editIdSubmitProposal($id)
     {
-        return redirect()->route('submit-proposal.edit', ['submitProposal' => $id]);
+        $submit_proposal = SubmitProposal::findOrFail($id);
+        return redirect()->route('submit-proposal.edit', ['submitProposal' => $submit_proposal->slug]);
     }
 
     public function deleteIdSubmitProposal($id)
@@ -73,9 +74,9 @@ class Read extends Component
     {
         if(count($this->selectedProposals) > 3 || count($this->selectedProposals) < 3){
             if(count($this->selectedProposals) > 3){
-                return session()->flash('error', 'you can select only 3 proposal to submit');
+                return session()->flash('error', 'Oops! You can only submit up to 3 proposals. Please review your selections.');
             }elseif(count($this->selectedProposals) < 3){
-                return session()->flash('error', 'you have to select min & max 3 proposal');
+                return session()->flash('error', 'Oops! To proceed, please select exactly 3 proposals.');
             }
         }else{
             $this->emit('showVerification');

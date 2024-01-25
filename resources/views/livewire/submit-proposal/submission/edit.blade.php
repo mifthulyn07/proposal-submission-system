@@ -4,7 +4,7 @@
 
             {{-- form --}}
             <div class="m-4 ">
-                <h5 class="text-lg font-medium text-gray-900 dark:text-white">Edit Proposal</h5>
+                <h5 class="text-lg font-bold text-gray-900 dark:text-white">Edit Proposal</h5>
                 <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">Make sure you've read and understood all the requirements before proceeding.</p>
 
                 <form class="mt-6" wire:submit.prevent="update">
@@ -35,7 +35,7 @@
                     {{-- title --}}
                     <div class="mb-4">
                         <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title of proposal</label>
-                        <input type="text" wire:model="title" @if($similarity) disabled aria-label="disabled input" @endif id="title" class="@if($similarity) bg-gray-100 cursor-not-allowed @else bg-gray-50 @endif  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Implementation of Machine Learning for Attendance Tracking Application">
+                        <input type="text" wire:model="title" disabled aria-label="disabled input" id="title" class="bg-gray-100 cursor-not-allowed border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Implementation of Machine Learning for Attendance Tracking Application">
                         @error('title') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
                     </div>
 

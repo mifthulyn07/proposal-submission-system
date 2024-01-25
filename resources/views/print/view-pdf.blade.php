@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Document</title>
 
     {{-- favicon --}}
@@ -13,6 +14,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
 </head>
 <body>
-    <embed style="width:100%;height:100vh;" src="{{ asset('storage/proposals/'.$file_name) }}" type="application/pdf" width="100%" height="700">
+    <iframe style="width:100%;height:100vh;" src="{{ asset('storage/proposals/'.$file_name) }}" type="application/pdf" width="100%" height="700"></iframe>
 </body>
 </html>

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->enum('status', ['done', 'on_process']);
             $table->string('adding_topic')->nullable();
             $table->string('comment')->nullable();
+            $table->string('slug')->unique();
             $table->timestamps();
         });
     }

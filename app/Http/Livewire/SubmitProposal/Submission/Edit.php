@@ -39,6 +39,8 @@ class Edit extends Component
 
     public function mount($submitProposal)
     {
+        // $this->authorize('update','check.ownership');
+
         if(!empty($submitProposal)){
             $this->topic_id     = $submitProposal->topic_id;
             $this->title        = $submitProposal->title;
@@ -126,10 +128,10 @@ class Edit extends Component
             $submitProposal->update($validatedData);     
             $submitProposal->save();
 
-            session()->flash('success', 'proposal successfully updated.');
+            session()->flash('success-submit', 'proposal successfully updated.');
            
             // harus dilakukan refresh untuk dir file 
-            return redirect()->to('edit-submit-proposal/'.$submitProposal->id);
+            return redirect()->to('/submit-proposal');
         }catch (\Exception $e){
             session()->flash('error', $e->getMessage());
         }

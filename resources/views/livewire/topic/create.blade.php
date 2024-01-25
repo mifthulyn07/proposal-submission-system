@@ -4,7 +4,7 @@
 
             {{-- form --}}
             <div class="m-4 ">
-                <h5 class="text-lg font-medium text-gray-900 dark:text-white">Add Proposal Topics</h5>
+                <h5 class="text-lg font-bold text-gray-900 dark:text-white">Add Proposal Topics</h5>
                 <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">This topic will be part of the proposal category.</p>
 
                 <form class="mt-6" wire:submit.prevent="store">
@@ -26,24 +26,6 @@
                     {{-- button submit --}}
                     <div class="flex items-center gap-4 mt-6">
                         <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-                        @if (session()->has('success'))
-                            <p
-                                x-data="{ show: true }"
-                                x-show="show"
-                                x-transition
-                                x-init="setTimeout(() => show = false, 3000)"
-                                class="text-sm text-green-600"
-                            >{{ session('success') }}</p>
-                        @endif
-                        @if (session()->has('error'))
-                            <p
-                                x-data="{ show: true }"
-                                x-show="show"
-                                x-transition
-                                x-init="setTimeout(() => show = false, 3000)"
-                                class="text-sm text-red-600"
-                            >{{ session('error') }}</p>
-                        @endif
                     </div>
                     
                 </form>

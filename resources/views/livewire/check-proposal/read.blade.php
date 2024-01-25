@@ -12,7 +12,7 @@
 
             {{-- table header --}}
             <div class="m-4">
-                <h5 class="text-lg font-medium text-gray-900 dark:text-white">List Submission</h5>
+                <h5 class="text-lg font-bold text-gray-900 dark:text-white">List Submission</h5>
                 <p class="mt-1 mb-4 text-gray-500 dark:text-gray-400 font-normal text-sm">This feature is available exclusively for Coordinators</p>
                 
                 {{-- search  --}}

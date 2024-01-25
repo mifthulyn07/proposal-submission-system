@@ -40,6 +40,7 @@ class Read extends Component
 
     public function checkProposal($id)
     {
-        return redirect()->route('check-proposal.check', ['proposalProcess' => $id]);
+        $proposal_process = ProposalProcess::findOrFail($id);
+        return redirect()->route('check-proposal.check', ['proposalProcess' => $proposal_process->slug]);
     }
 }

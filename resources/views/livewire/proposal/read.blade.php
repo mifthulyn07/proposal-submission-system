@@ -40,7 +40,7 @@
             <div class="m-4">
                 {{-- caption --}}
                 <div class="mb-4 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                    <h5 class="text-lg font-medium text-gray-900 dark:text-white">List of Proposal Titles</h5>
+                    <h5 class="text-lg font-bold text-gray-900 dark:text-white">List of Proposal Titles</h5>
                     <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">Discover and review an extensive array of proposal titles submitted by students and researchers, spanning a wide range of topics and disciplines.</p>
                 </div>
 

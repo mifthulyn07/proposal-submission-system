@@ -67,8 +67,8 @@ class Kernel extends HttpKernel
         // spatie 
         'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
 
-
         'complete.profile' => \App\Http\Middleware\CompleteProfile::class,
-        'add.role.lecturer' => \App\Http\Middleware\AddRoleLecturer::class,
+        'ownership.proposal.process' => \App\Http\Middleware\OwnerProposalProcess::class,
+        'ownership.submit.proposal' => \App\Http\Middleware\OwnerSubmitProposal::class,
     ];
 }

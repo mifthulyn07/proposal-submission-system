@@ -78,8 +78,7 @@ class Barcode extends Component
             // harus dilakukan refresh untuk dir file 
             return redirect()->to('/profile');
         }catch (\Exception $e){
-            session()->flash('error_barcode', $e->getMessage());
-            return;
+            return session()->flash('error_barcode', $e->getMessage());
         }
     }
 }

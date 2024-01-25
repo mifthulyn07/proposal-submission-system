@@ -1,6 +1,6 @@
 <div>
     <div class="m-4">
-        <h5 class="text-lg font-medium text-gray-900 dark:text-white">Ready to Submit Your Proposal?</h5>
+        <h5 class="text-lg font-bold text-gray-900 dark:text-white">Ready to Submit Your Proposal?</h5>
         <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">Submitting your proposal is a breeze! Just follow these three simple steps. Plus, ensure your title's uniqueness by using our built-in similarity checker tool.</p>
         
         {{-- alert --}}
@@ -46,7 +46,7 @@
                             <a href="{{ Route('submit-proposal.create', $proposalProcess->id) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create Manual</a>
                         </li> --}}
                         <li>
-                            <a href="{{ Route('submit-proposal.similarity.create', $proposalProcess->id) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create through Check Similarity Fitur</a>
+                            <a href="{{ Route('submit-proposal.similarity.create', $proposalProcess->slug) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create through Check Similarity Fitur</a>
                         </li>
                     </ul>
                 </div>

@@ -7,13 +7,14 @@ use App\Models\Student;
 use App\Models\Lecturer;
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Proposal extends Model
 {
-    use HasFactory, Searchable;
+    use HasFactory, Searchable, Sluggable;
 
     protected $fillable = [
         'topic_id',
@@ -27,6 +28,15 @@ class Proposal extends Model
         'adding_topic',
         'comment',
     ];
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
+    }
 
     public function lecturers(): BelongsToMany
     {

@@ -12,7 +12,7 @@
 
             {{-- table header --}}
             <div class="m-4">
-                <h5 class="text-lg font-medium text-gray-900 dark:text-white">List Accepted Proposal Submissions</h5>
+                <h5 class="text-lg font-bold text-gray-900 dark:text-white">List Accepted Proposal Submissions</h5>
                 <p class="mt-1 mb-4 text-gray-500 dark:text-gray-400 font-normal text-sm">This feature is for Kaprodi to assign thesis advisors to students.</p>
                 
                 {{-- search  --}}

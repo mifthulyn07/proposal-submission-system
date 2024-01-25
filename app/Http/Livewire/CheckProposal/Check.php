@@ -166,7 +166,7 @@ class Check extends Component
                 }
             }
             session()->flash('success', 'accord successfully send.');
-            redirect()->to('/list-submission');
+            redirect()->to('/submissions');
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
         }

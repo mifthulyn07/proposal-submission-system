@@ -29,7 +29,8 @@ class Read extends Component
 
     public function editIdTopic($id)
     {
-        return redirect()->route('topic.edit', ['topic' => $id]);
+        $topic = Topic::findOrFail($id);
+        return redirect()->route('topic.edit', ['topic' => $topic->slug]);
     }
 
     public function deleteIdTopic($id)

@@ -29,7 +29,8 @@ class Read extends Component
     {
         $proposals_process  = ProposalProcess::where('student_id', auth()->user()->student->id)->get();
         $proposal_onProcess = Proposal::whereHas('lecturers')->where('student_id', auth()->user()->student->id)->where('status', 'on_process')->get();
-        $proposal_done = Proposal::whereHas('lecturers')->where('student_id', auth()->user()->student->id)->where('status', 'done')->get();
+        $proposal_done_has_lecturer= Proposal::whereHas('lecturers')->where('student_id', auth()->user()->student->id)->where('status', 'done')->get();
+        $proposal_done= Proposal::where('student_id', auth()->user()->student->id)->where('status', 'done')->get();
         
         if($proposals_process->isEmpty() && !$proposal_onProcess->isEmpty()){
             $this->submissionIsDone = true;
@@ -38,12 +39,14 @@ class Read extends Component
                     $this->proposal_onProcess = $proposal;
                 }
             }else{
-                foreach($proposal_done as $proposal){
+                foreach($proposal_done_has_lecturer as $proposal){
                     $this->proposal_onProcess = $proposal;
                 }
             }
-        }elseif($proposals_process->isEmpty() && $proposal_onProcess->isEmpty()){
+        }elseif($proposals_process->isEmpty() && $proposal_onProcess->isEmpty() && $proposal_done->isEmpty()){
             $this->waitingAdvisor = true;
+        }elseif(!$proposal_done->isEmpty()){
+            $this->proposalIsDone = true;
         }else{
             foreach($proposals_process as $proposal_process){
                 if(!isset($proposal_process->type) && !isset($proposal_process->date)){

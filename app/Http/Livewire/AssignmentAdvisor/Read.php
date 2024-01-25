@@ -36,6 +36,7 @@ class Read extends Component
 
     public function checkProposal($id)
     {
-        return redirect()->route('assignment-advisor.check', ['proposal' => $id]);
+        $proposal = Proposal::findOrFail($id);
+        return redirect()->route('assignment-advisor.check', ['proposal' => $proposal->slug]);
     }
 }

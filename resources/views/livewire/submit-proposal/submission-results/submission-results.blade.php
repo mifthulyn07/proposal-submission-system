@@ -14,7 +14,7 @@
             </div>         
         @else
             <div class="mt-4">
-                <h5 class="text-lg font-medium text-gray-900 dark:text-white">Proposal Acceptance Updates</h5>
+                <h5 class="text-lg font-bold text-gray-900 dark:text-white">Proposal Acceptance Updates</h5>
                 <p class="mt-1 text-gray-500 dark:text-gray-400 font-normal text-sm">This section displays updates on the acceptance of submitted proposals.</p>
                 
                 {{-- alert --}}
@@ -47,7 +47,7 @@
                                         {{$proposal_process->comment}}
                                     </div>
                                     <div class="flex justify-end">
-                                        <a href="{{ route('submit-proposal.show-declined', $proposal_process->id) }}" class="block text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">Read more</a>
+                                        <a href="{{ route('submit-proposal.show-declined', $proposal_process->slug) }}" class="block text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">Read more</a>
                                     </div>                        
                                 </div>
                             </li>

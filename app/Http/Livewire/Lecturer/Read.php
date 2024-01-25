@@ -45,8 +45,8 @@ class Read extends Component
 
     public function editIdLecturer($id)
     {
-        return redirect()->route('lecturer.edit', ['lecturer' => $id]);
-        
+        $lecturer = Lecturer::findOrFail($id);
+        return redirect()->route('lecturer.edit', ['lecturer' => $lecturer->slug]);
     }
 
     public function deleteIdLecturer($id)
@@ -87,7 +87,8 @@ class Read extends Component
     }
 
     public function showStudents($id)
-    {        
-        return redirect()->route('lecturer.show', ['lecturer' => $id]);
+    {   
+        $lecturer = Lecturer::findOrFail($id);
+        return redirect()->route('lecturer.show', ['lecturer' => $lecturer->slug]);
     }
 }

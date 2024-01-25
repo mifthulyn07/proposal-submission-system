@@ -7,6 +7,7 @@ use App\Models\Student;
 use App\Models\Proposal;
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Lecturer extends Model
 {
-    use HasFactory, Searchable;
+    use HasFactory, Searchable, Sluggable;
 
     protected $fillable = [
         'user_id',
@@ -24,6 +25,15 @@ class Lecturer extends Model
         'expertise',
         'barcode',
     ];
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'user.name'
+            ]
+        ];
+    }
 
     public function user(): BelongsTo
     {

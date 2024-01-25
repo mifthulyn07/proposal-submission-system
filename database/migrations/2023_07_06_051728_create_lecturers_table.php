@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string("nip")->nullable();
             $table->string("expertise")->nullable();
             $table->string("barcode")->nullable();
+            $table->string('slug')->unique();
             $table->timestamps();
         });
     }

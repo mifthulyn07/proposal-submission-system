@@ -6,11 +6,9 @@ use App\Models\User;
 use App\Models\Student;
 use App\Models\Lecturer;
 use App\Models\Proposal;
-use Illuminate\Support\Str;
 use App\Models\ProposalProcess;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UserSeeder extends Seeder
 {
@@ -19,38 +17,39 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $coordinator = User::factory()->create([
+        $coordinator = User::create([
             'name'              => 'Coordinator',
             'email'             => 'coordinator@example.com',
             'password'          => Hash::make('12345678'),
         ]);
         $coordinator->assignRole(['coordinator']);
+        Lecturer::create(['user_id' => $coordinator->id,]);
 
-        $kaprodi = User::factory()->create([
+        $kaprodi = User::create([
             'name'              => 'Kaprodi',
             'email'             => 'kaprodi@example.com',
             'password'          => Hash::make('12345678'),
         ]);
-        $kaprodi->assignRole(['kaprodi', 'lecturer']);
-        Lecturer::factory()->create(['user_id' => $kaprodi->id,]);
+        $kaprodi->assignRole(['kaprodi']);
+        Lecturer::create(['user_id' => $kaprodi->id,]);
 
-        $lecturer = User::factory()->create([
+        $lecturer = User::create([
             'name'              => 'John Doe',
             'email'             => 'johndoe@example.com',
             'password'          => Hash::make('12345678'),
         ]);
         $lecturer->assignRole(['lecturer']);
-        Lecturer::factory()->create(['user_id' => $lecturer->id]);
+        Lecturer::create(['user_id' => $lecturer->id]);
 
-        $lecturer2 = User::factory()->create([
+        $lecturer2 = User::create([
             'name'              => 'John Lenon',
             'email'             => 'johnlenon@example.com',
             'password'          => Hash::make('12345678'),
         ]);
         $lecturer2->assignRole(['lecturer']);
-        Lecturer::factory()->create(['user_id' => $lecturer2->id]);
+        Lecturer::create(['user_id' => $lecturer2->id]);
 
-        $student = User::factory()->create([
+        $student = User::create([
             'name'              => 'Bambang',
             'email'             => 'bambang@example.com',
             'password'          => Hash::make('12345678'),
@@ -95,13 +94,13 @@ class UserSeeder extends Seeder
             'adding_topic'      => null,
         ]);
 
-        $student4 = User::factory()->create([
+        $student4 = User::create([
             'name'              => 'Miftahul Ulyana Hutabarat',
             'email'             => 'miftahululyana@example.com',
             'password'          => Hash::make('12345678'),
         ]);
         $student4->assignRole(['student']);
-        $student4 = Student::factory()->create(['user_id' => $student4->id]);
+        $student4 = Student::create(['user_id' => $student4->id]);
         $student4 = ProposalProcess::create(['student_id' => $student4->id]);
     }
 }

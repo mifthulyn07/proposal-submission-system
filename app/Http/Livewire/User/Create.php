@@ -25,7 +25,7 @@ class Create extends Component
     public $password;
 
     // many to many 
-    public $selected_roles = [];
+    public $role;
     
     public $password_confirmation;
     public $show_password = false;
@@ -34,6 +34,7 @@ class Create extends Component
     {
         return view('livewire.user.create',[
             'roles' => Role::all(),
+            'userWithRoleKaprodiExists' => User::whereHas('roles', fn($query) => $query->where('name', 'kaprodi'))->exists(),
         ]);
     }
 
@@ -47,7 +48,7 @@ class Create extends Component
             'email'                 => ['required', 'email', 'max:255', 'unique:users,email'],
             'password'              => [Rules\Password::defaults()],
             'password_confirmation' => ['same:password'],
-            'selected_roles'        => ['required', 'exists:roles,id'],
+            'role'                  => ['required', 'exists:roles,id'],
         ];
     }
 
@@ -80,7 +81,7 @@ class Create extends Component
             $user->save();
 
             // buat role 
-            $user->roles()->attach($validatedData['selected_roles']);
+            $user->roles()->attach($validatedData['role']);
 
             // isi tabel student
             if($user->hasRole('student')){
@@ -96,7 +97,7 @@ class Create extends Component
             }
 
             // isi tabel lecturer 
-            if($user->hasRole('lecturer')){
+            if($user->hasRole('lecturer') || $user->hasRole('kaprodi') || $user->hasRole('coordinator')){
                 $lecturer = new Lecturer();
                 $lecturer->user_id = $user->id;
                 $lecturer->save();
@@ -104,6 +105,7 @@ class Create extends Component
 
             $this->reset();
             session()->flash('success', 'User account successfully stored.');
+            redirect()->to('/users');
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
         }

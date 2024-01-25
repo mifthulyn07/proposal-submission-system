@@ -1,6 +1,6 @@
 <div>
     <div class="m-4">
-        <h5 class="text-lg font-medium text-gray-900 dark:text-white">Complete Verification</h5>
+        <h5 class="text-lg font-bold text-gray-900 dark:text-white">Complete Verification</h5>
         <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">You're almost there! Please fill out the form below to verify and finalize your proposal submission.</p>
         
         {{-- form proposal process --}}
@@ -26,7 +26,7 @@
                     @error('date') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
                 </div>
 
-                {{-- proposal --}}
+                {{-- requirements --}}
                 <div class="mb-4">
                     <div>
                         <label for="requirements_pdf" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Requirements: pdf</label>

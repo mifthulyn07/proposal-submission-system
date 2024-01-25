@@ -21,7 +21,7 @@
                         @endif
                         <div class="space-y-1 font-medium dark:text-white">
                             <div class="lg:flex">
-                                <p class="mr-2">{{ $proposalProcess->student->user->name }}</p>
+                                <p class="mr-2 font-bold">{{ $proposalProcess->student->user->name }}</p>
                                 @if($proposalProcess->type == 'thesis')
                                     <span class="bg-green-100 text-green-800 text-xs font-medium mr-0.5 mb-1 p-1 rounded dark:bg-green-900 dark:text-green-300">Thesis</span>
                                 @elseif($proposalProcess->type == 'appropriate_technology')
@@ -102,7 +102,7 @@
 
                     {{-- see others button --}}
                     @if($count_submission > 1)
-                        <a href="{{ route('check-proposal.submission-history', $proposalProcess->id) }}" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
+                        <a href="{{ route('check-proposal.submission-history', $proposalProcess->slug) }}" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
                             Submission History
                         </a>
                     @endif
@@ -235,7 +235,7 @@
 
             {{-- form --}}
             <div class="m-4">
-                <h5 class="text-xl font-medium text-gray-900 dark:text-white">@if($accept) Accept Proposal @else Reject Proposal @endif </h5>
+                <h5 class="text-xl font-bold text-gray-900 dark:text-white">@if($accept) Accept Proposal @else Reject Proposal @endif </h5>
                 <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">This feature, can only be used by Coordinator.</p>
 
                 {{-- form --}}

@@ -2,9 +2,12 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+
+use App\Models\User;
+use App\Models\Lecturer;
+use Spatie\Permission\Models\Role;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProfileTest extends TestCase
 {
@@ -13,6 +16,9 @@ class ProfileTest extends TestCase
     public function test_profile_page_is_displayed(): void
     {
         $user = User::factory()->create();
+        $role = Role::factory()->create();
+        dd($role->name);
+        $user->assignRole([$role->name]);
 
         $response = $this
             ->actingAs($user)
@@ -24,14 +30,33 @@ class ProfileTest extends TestCase
     public function test_profile_information_can_be_updated(): void
     {
         $user = User::factory()->create();
+        $role = Role::factory()->create();
+        $user->assignRole($role->name);
 
-        $response = $this
+        if($role == 'student'){
+            $response = $this
             ->actingAs($user)
             ->patch('/profile', [
-                'name' => 'Test User',
+                'name'  => 'Test User',
                 'email' => 'test@example.com',
+                'gender' => 'male',
+                'phone' => '123456789',
+                'nim' => '0702192098    ',
+                'class' => 'Sistem Informasi-3',
             ]);
-
+        }elseif($role == 'lecturer'){
+            $response = $this
+            ->actingAs($user)
+            ->patch('/profile', [
+                'name'  => 'Test User',
+                'email' => 'test@example.com',
+                'gender' => 'male',
+                'phone' => '123456789',
+                'nip' => '4622624634643636346',
+                'expertise' => 'SIG, Machine Learning',
+            ]);
+        }
+        
         $response
             ->assertSessionHasNoErrors()
             ->assertRedirect('/profile');

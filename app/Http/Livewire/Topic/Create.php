@@ -43,6 +43,7 @@ class Create extends Component
 
             $this->reset('name');
             session()->flash('success', 'Topic successfully stored.');
+            redirect()->to('/topics');
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
         }

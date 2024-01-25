@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use App\Models\Student;
 use App\Models\Lecturer;
+use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,6 +19,9 @@ class CompleteProfile
     public function handle(Request $request, Closure $next): Response
     {
         if(!auth()->user()->phone){
+            // Set pesan peringatan dalam sesi
+            session()->flash('warning', ' Please complete your profile to access all features.');
+            
             // Jika belum, alihkan mereka ke halaman lengkapi profil
             return redirect('/profile#complete-profile');
         }
@@ -50,7 +54,7 @@ class CompleteProfile
                 session()->flash('warning_barcode', ' Please complete your barcode to access all features.');
 
                 // Jika belum, alihkan mereka ke halaman lengkapi profil
-                return redirect('/profile#complete-profile');
+                return redirect('/profile#complete-barcode');
             }
         }
        

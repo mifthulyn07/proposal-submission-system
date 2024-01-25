@@ -12,7 +12,7 @@
                 </a>
             </li>
 
-            @if (auth()->user()->hasRole('coordinator') || auth()->user()->hasRole('lecturer') || auth()->user()->hasRole('student'))
+            @if (auth()->user()->hasRole('coordinator') || auth()->user()->hasRole('lecturer') || auth()->user()->hasRole('student') || auth()->user()->hasRole('kaprodi'))
                 {{-- lists lecturer, student, proposal --}}
                 <li>
                     <button type="button" class="flex items-center w-full p-2 text-sm text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-lists" data-collapse-toggle="dropdown-lists">
@@ -22,13 +22,13 @@
                     </button>
                     <ul id="dropdown-lists" class="hidden py-2 space-y-2">
                         <li>
-                            <a href="{{ Route('lecturer.read') }}" class="{{ Request::is('list-lecturer') || Request::is('add-lecturer') || Request::is('edit-lecturer/*') || Request::is('show-project-student/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }} flex items-center w-full p-2  transition duration-75 rounded-lg pl-11 group">The Lecturers</a>
+                            <a href="{{ Route('lecturer.read') }}" class="{{ Request::is('lecturers') || Request::is('lecturers/add') || Request::is('lecturers/*') || Request::is('lecturers/show-project-student/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }} flex items-center w-full p-2  transition duration-75 rounded-lg pl-11 group">The Lecturers</a>
                         </li>
                         <li>
-                            <a href="{{ Route('student.read') }}" class="{{ Request::is('list-student') || Request::is('add-student') || Request::is('edit-student/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }} flex items-center w-full p-2 transition duration-75 rounded-lg pl-11 group">The Students</a>
+                            <a href="{{ Route('student.read') }}" class="{{ Request::is('students') || Request::is('students/add') || Request::is('students/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }} flex items-center w-full p-2 transition duration-75 rounded-lg pl-11 group">The Students</a>
                         </li>
                         <li>
-                            <a href="{{ Route('proposal.read') }}" class="{{ Request::is('list-proposal') || Request::is('add-proposal') || Request::is('edit-proposal/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }} flex items-center w-full p-2 transition duration-75 rounded-lg pl-11 group">All Proposals</a>
+                            <a href="{{ Route('proposal.read') }}" class="{{ Request::is('proposals') || Request::is('proposals/add') || Request::is('proposals/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }} flex items-center w-full p-2 transition duration-75 rounded-lg pl-11 group">All Proposals</a>
                         </li>
                     </ul>
                 </li>    
@@ -44,18 +44,18 @@
                     </button>
                     <ul id="dropdown-managing" class="hidden py-2 space-y-2">
                         <li>
-                            <a href="{{ Route('user.read') }}" class="{{ Request::is('list-user') || Request::is('add-user') || Request::is('edit-user/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }} flex items-center w-full p-2  transition duration-75 rounded-lg pl-11 group">User Account</a>
+                            <a href="{{ Route('user.read') }}" class="{{ Request::is('users') || Request::is('users/add') || Request::is('users/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }} flex items-center w-full p-2  transition duration-75 rounded-lg pl-11 group">User Account</a>
                         </li>
                         <li>
-                            <a href="{{ Route('topic.read') }}" class="{{ Request::is('list-topic') || Request::is('add-topic') || Request::is('edit-topic/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }} flex items-center w-full p-2 transition duration-75 rounded-lg pl-11 group">Topics</a>
+                            <a href="{{ Route('topic.read') }}" class="{{ Request::is('topics') || Request::is('topics/add') || Request::is('topics/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }} flex items-center w-full p-2 transition duration-75 rounded-lg pl-11 group">Topics</a>
                         </li>
                     </ul>
                 </li>
 
                 {{-- check proposal  --}}
                 <li>
-                    <a href="{{ Route('check-proposal.read') }}" class="{{ Request::is('list-submission') || Request::is('check-submission/*') || Request::is('history-submission/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100' }} flex items-center p-2 rounded-lg dark:text-white dark:hover:bg-gray-700">
-                        <svg class="{{ Request::is('list-submission') || Request::is('check-submission/*') || Request::is('history-submission/*') ? 'text-white group-hover:text-gray-900' : '' }} flex-shrink-0 w-4 h-4 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20"><path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2ZM7 2h4v2H7V2ZM5 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm8 4H8a1 1 0 0 1 0-2h5a1 1 0 0 1 0 2Zm0-4H8a1 1 0 0 1 0-2h5a1 1 0 1 1 0 2Z"/></svg>
+                    <a href="{{ Route('check-proposal.read') }}" class="{{ Request::is('submissions') || Request::is('submissions/*') || Request::is('history-submission/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100' }} flex items-center p-2 rounded-lg dark:text-white dark:hover:bg-gray-700">
+                        <svg class="{{ Request::is('submissions') || Request::is('submissions/*') || Request::is('history-submission/*') ? 'text-white group-hover:text-gray-900' : '' }} flex-shrink-0 w-4 h-4 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20"><path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2ZM7 2h4v2H7V2ZM5 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm8 4H8a1 1 0 0 1 0-2h5a1 1 0 0 1 0 2Zm0-4H8a1 1 0 0 1 0-2h5a1 1 0 1 1 0 2Z"/></svg>
                         <span class="flex-1 ml-3 whitespace-nowrap">Check Proposals</span>
                         <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-3 text-xs font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">{{ App\Models\ProposalProcess::whereNull('comment')->whereNotNull('type')->whereNotNull('date')->count() }}</span>
                     </a>
@@ -78,8 +78,8 @@
             @if (auth()->user()->hasRole('student'))
                 {{-- submit proposals --}}
                 <li>
-                    <a href="{{ Route('submit-proposal.read')}}" class="{{ Request::is('list-submit-proposal') || Request::is('add-submit-proposal/*') || Request::is('submit-proposal/similarity/*') || Request::is('add-submit-proposal/*/*/*') || Request::is('edit-submit-proposal/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100' }} flex items-center p-2 rounded-lg dark:text-white dark:hover:bg-gray-700">
-                        <svg class="{{ Request::is('list-submit-proposal') || Request::is('add-submit-proposal/*') || Request::is('submit-proposal/similarity/*') || Request::is('add-submit-proposal/*/*/*') || Request::is('edit-submit-proposal/*') ? 'text-white group-hover:text-gray-900' : '' }} flex-shrink-0 w-4 h-4 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"><path d="M18.017 15.002h-1.5v-1.5a1 1 0 0 0-2 0v1.5h-1.5a1 1 0 0 0 0 2h1.5v1.5a1 1 0 1 0 2 0v-1.5h1.5a1 1 0 1 0 0-2Z"/><path d="m17.74 4.758-7.476 8.409a1 1 0 0 1-.718.335h-.029a1 1 0 0 1-.707-.293l-4-4a1 1 0 0 1 1.414-1.413l3.25 3.25L16.53 3.11a9.5 9.5 0 1 0-3.885 15.355 2.495 2.495 0 0 1 .373-4.963 2.5 2.5 0 0 1 5 0c.035 0 .068.01.1.01a9.43 9.43 0 0 0-.38-8.754h.002Z"/></svg>
+                    <a href="{{ Route('submit-proposal.read')}}" class="{{ Request::is('submit-proposal') || Request::is('submit-proposal/add/*') || Request::is('submit-proposal/similarity/*') || Request::is('submit-proposal/edit/*') ? 'bg-blue-700 text-white' : 'text-gray-900 hover:bg-gray-100' }} flex items-center p-2 rounded-lg dark:text-white dark:hover:bg-gray-700">
+                        <svg class="{{ Request::is('submit-proposal') || Request::is('submit-proposal/add/*') || Request::is('submit-proposal/similarity/*') || Request::is('submit-proposal/edit/*') ? 'text-white group-hover:text-gray-900' : '' }} flex-shrink-0 w-4 h-4 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"><path d="M18.017 15.002h-1.5v-1.5a1 1 0 0 0-2 0v1.5h-1.5a1 1 0 0 0 0 2h1.5v1.5a1 1 0 1 0 2 0v-1.5h1.5a1 1 0 1 0 0-2Z"/><path d="m17.74 4.758-7.476 8.409a1 1 0 0 1-.718.335h-.029a1 1 0 0 1-.707-.293l-4-4a1 1 0 0 1 1.414-1.413l3.25 3.25L16.53 3.11a9.5 9.5 0 1 0-3.885 15.355 2.495 2.495 0 0 1 .373-4.963 2.5 2.5 0 0 1 5 0c.035 0 .068.01.1.01a9.43 9.43 0 0 0-.38-8.754h.002Z"/></svg>
                         <span class="flex-1 ml-3 whitespace-nowrap">Submit Proposal</span>
                     </a>
                 </li>

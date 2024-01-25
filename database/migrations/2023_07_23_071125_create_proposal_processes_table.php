@@ -17,6 +17,7 @@ return new class extends Migration
             $table->enum('type', ['thesis', 'appropriate_technology', 'journal'])->nullable();
             $table->date("date")->nullable();
             $table->string("comment")->nullable();
+            $table->string("slug")->unique();
             $table->timestamps();
         });
     }

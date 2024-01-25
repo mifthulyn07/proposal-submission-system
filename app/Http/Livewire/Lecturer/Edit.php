@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Lecturer;
 
+use App\Models\User;
 use Livewire\Component;
 use App\Models\Lecturer;
 
@@ -17,6 +18,7 @@ class Edit extends Component
     // modal user relationship 
     public $name;
     public $email;
+    public $phone;
 
     public $empty = false;
 
@@ -25,6 +27,7 @@ class Edit extends Component
         if(!empty($lecturer)){
             $this->name         = $lecturer->user->name;
             $this->email        = $lecturer->user->email;
+            $this->phone        = $lecturer->user->phone;
             $this->nip          = $lecturer->nip;
             $this->expertise    = $lecturer->expertise;
         }else{
@@ -43,6 +46,7 @@ class Edit extends Component
         return [
             'nip'           => ['required', 'numeric', 'unique:lecturers,nip,'.$this->lecturer->id],
             'expertise'     => ['required'],
+            'phone'         => ['numeric', 'unique:users,phone,'.$this->lecturer->user->id],
         ];
     }
 
@@ -58,11 +62,16 @@ class Edit extends Component
             // every realtime validation, must do this for twice
             $validatedData = $this->validate($this->propertyValidation());
 
+            $user = User::findOrFail($this->lecturer->user->id);
+            $user->fill($validatedData);
+            $user->save();
+
             $lecturer = Lecturer::findOrFail($this->lecturer->id);
             $lecturer->fill($validatedData);
             $lecturer->save();
 
             session()->flash('success', 'Lecturer successfully updated.');
+            return redirect()->route('lecturer.read');
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
         }

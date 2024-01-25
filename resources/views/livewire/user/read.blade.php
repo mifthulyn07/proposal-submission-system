@@ -40,7 +40,7 @@
             <div class="m-4">
                 {{-- caption --}}
                 <div class="mb-4 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                    <h5 class="text-lg font-medium text-gray-900 dark:text-white">Manage User Account</h5>
+                    <h5 class="text-lg font-bold text-gray-900 dark:text-white">Manage User Account</h5>
                     <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">Effortlessly view, edit, and manage user accounts and profiles.</p>
                 </div>
 
@@ -149,15 +149,23 @@
                                                 <span class="flex w-2.5 h-2.5 bg-blue-600 rounded-full mr-1.5 flex-shrink-0"></span>
                                                 Male
                                             </p>
-                                        @else
+                                        @elseif($user->gender == 'female')
                                             <p class="flex items-center text-xs font-medium text-gray-900 dark:text-white">
                                                 <span class="flex w-2.5 h-2.5 bg-red-300 rounded-full mr-1.5 flex-shrink-0"></span>
                                                 Female
                                             </p>
+                                        @else
+                                            <p class="flex items-center text-xs font-medium text-gray-900 dark:text-white">
+                                                [Unfilled]
+                                            </p>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $user->phone }}
+                                        @if($user->phone == null)
+                                            [Unfilled]
+                                        @else
+                                            {{ $user->phone }}
+                                        @endif
                                     </td>
                                     <td class="px-6 py-4 space-x-1 whitespace-nowrap">
                                         <a data-tooltip-target="tooltip-edit" href="" wire:click="editIdUser({{ $user->id }})" wire:click.prevent class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-yellow-300 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-300 dark:hover:bg-yellow-300 dark:focus:ring-yellow-300">

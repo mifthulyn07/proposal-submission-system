@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string("proposal");
             $table->string("adding_topic")->nullable();
             $table->boolean("accord")->nullable();
+            $table->string('slug')->unique();
             $table->timestamps();
         });
     }
