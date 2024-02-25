@@ -128,6 +128,7 @@ class Edit extends Component
             return redirect()->route('proposal.read');
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
+            return redirect()->route('proposal.read');
         }
     }
 }

@@ -16,7 +16,7 @@ class SubmissionVerification extends Component
 
     public $type;
     public $date;
-    public $requirements_pdf = [];
+    public $requirements;
 
     public function render()
     {
@@ -32,10 +32,9 @@ class SubmissionVerification extends Component
     protected function propertyValidation()
     {
         return [
-            'requirements_pdf.*'    => 'required|file|mimes:pdf|max:2048', // 1MB Max
-            'requirements_pdf'      => 'required|array|size:2',
-            'type'                  => 'required|in:thesis,appropriate_technology,journal',
-            'date'                  => 'required',
+            'type'          => 'required|in:thesis,appropriate_technology,journal',
+            'date'          => 'required',
+            'requirements'  => 'required|file|mimes:pdf|max:2048', // 1MB Max
         ];
     }
 
@@ -49,24 +48,15 @@ class SubmissionVerification extends Component
     {
         $validatedData = $this->validate($this->propertyValidation());
 
-        foreach ($this->requirements_pdf as $key => $requirement_pdf) {
-            $extension = $requirement_pdf->getClientOriginalExtension();//mime:pdf
-            $requirementName = $key.'.requirement'.'-'.str_replace(' ', '', $this->proposalProcess->student->user->name).'.'.$extension;
-            $proposalFolder = 'public/requirements/requirements'.time().'-'.$this->proposalProcess->student->user->name;
-            $requirement_pdf->storeAs($proposalFolder, $requirementName);
+        // simpan file proposal ke folder proposals 
+        $extension = $validatedData['requirements']->getClientOriginalExtension();//mime:pdf
+        $requirementsName = 'requirements'.time().'-'.str_replace(' ', '', $this->proposalProcess->student->user->name).'.'.$extension;
+        $validatedData['requirements']->storeAs('public/requirements', $requirementsName);
+        $validatedData['requirements'] = $requirementsName;
 
-            $PdfRequirement = new PdfRequirement;
-            $PdfRequirement['proposal_process_id'] = $this->proposalProcess->id;
-            $PdfRequirement['pdf_name'] = $requirementName;
-            $PdfRequirement->save();
-        }
-
-        if(PdfRequirement::where('proposal_process_id', $this->proposalProcess->id)->exists()) {
-            // store proposal ke proposals 
-            $ProposalProcess = $this->proposalProcess;
-            $ProposalProcess->fill($validatedData);
-            $ProposalProcess->save();
-        }
+        $ProposalProcess = $this->proposalProcess;
+        $ProposalProcess->fill($validatedData);
+        $ProposalProcess->save();
 
         $this->emit('showResults');
     }

@@ -29,6 +29,7 @@ class Read extends Component
             ->orWhere('name', 'like', $this->search.'%')
             ->orWhere('status', 'like', $this->search.'%')
             ->orWhere('type', 'like', $this->search.'%')
+            ->orWhere('year', 'like', $this->search.'%')
             ->orWhere('adding_topic', 'like', $this->search.'%')
             ->orWhere('title', 'like', $this->search.'%');
 

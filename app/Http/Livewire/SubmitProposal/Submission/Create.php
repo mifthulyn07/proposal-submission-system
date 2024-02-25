@@ -19,7 +19,8 @@ class Create extends Component
     // submitProposal model 
     public $topic_id;
     public $title;
-    public $similarity;
+    public $googleScholarSimilarity;
+    public $uinsuStudentSimilarity;
     public $proposal;
     public $adding_topic;
 
@@ -30,9 +31,10 @@ class Create extends Component
 
     public function mount(Request $request)
     {
-        if ($request->session()->exists('title') && $request->session()->exists('similarity')) {
+        if ($request->session()->exists('title') && $request->session()->exists('googleScholarSimilarity') && $request->session()->exists('uinsuStudentSimilarity')) {
             $this->title = $request->session()->get('title');
-            $this->similarity = $request->session()->get('similarity');
+            $this->googleScholarSimilarity = $request->session()->get('googleScholarSimilarity');
+            $this->uinsuStudentSimilarity = $request->session()->get('uinsuStudentSimilarity');
         }
     }
     public function render()    
@@ -46,19 +48,21 @@ class Create extends Component
     {
         if(!$this->another_topic){
             return [
-                'topic_id'      => 'required|exists:topics,id',
-                'title'         => 'required|max:255|unique:proposals,title|unique:submit_proposals,title',
-                'similarity'    => 'numeric|nullable|integer',
-                'proposal'      => 'required|file|mimes:pdf|max:2048',
-                'adding_topic'  => 'nullable|string|unique:topics,name'
+                'topic_id'                  => 'required|exists:topics,id',
+                'title'                     => 'required|max:255|unique:proposals,title|unique:submit_proposals,title',
+                'googleScholarSimilarity'   => 'numeric|nullable|integer',
+                'uinsuStudentSimilarity'    => 'numeric|nullable|integer',
+                'proposal'                  => 'required|file|mimes:pdf|max:2048',
+                'adding_topic'              => 'nullable|string|unique:topics,name'
             ];
         }else{
             return [
-                'topic_id'      => 'nullable|exists:topics,id',
-                'title'         => 'nullable|max:255|unique:proposals,title|unique:submit_proposals,title',
-                'similarity'    => 'numeric|nullable|integer',
-                'proposal'      => 'required|file|mimes:pdf|max:2048',
-                'adding_topic'  => 'required|string|unique:topics,name'
+                'topic_id'                  => 'nullable|exists:topics,id',
+                'title'                     => 'nullable|max:255|unique:proposals,title|unique:submit_proposals,title',
+                'googleScholarSimilarity'   => 'numeric|nullable|integer',
+                'uinsuStudentSimilarity'    => 'numeric|nullable|integer',
+                'proposal'                  => 'required|file|mimes:pdf|max:2048',
+                'adding_topic'              => 'required|string|unique:topics,name'
             ];
         }
         
@@ -87,6 +91,8 @@ class Create extends Component
             $validatedData['proposal']->storeAs('public/proposals', $proposalName);
 
             $validatedData['proposal_process_id'] = $this->proposalProcess->id;
+            $validatedData['google_scholar_similarity'] = $this->googleScholarSimilarity;
+            $validatedData['uinsu_student_similarity'] = $this->uinsuStudentSimilarity;
             $validatedData['proposal'] = $proposalName;
             
             // masukkan ke table submit proposal 

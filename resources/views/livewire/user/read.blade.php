@@ -8,7 +8,6 @@
 
 <div>
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-
         <div class="bg-white overflow-hidden rounded-lg shadow rounded-lg">
 
             {{-- alert --}}
@@ -138,7 +137,7 @@
                                                 <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=e6f0ff&rounded=true" alt="avatar" width="40">
                                             @endif
                                             <div class="px-6">
-                                                <div class="text-light font-semibold text-gray-900">{{ $user->name }}</div>
+                                                <div class="text-light font-semibold text-gray-900">{{ ucwords($user->name) }}</div>
                                                 <div class="font-normal text-gray-500">{{ $user->email }}</div>
                                             </div>
                                         </div>
@@ -222,6 +221,5 @@
             </x-modal>
 
         </div>
-
     </div>
 </div>

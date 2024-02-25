@@ -125,7 +125,7 @@
                                             <img src="https://ui-avatars.com/api/?name={{ urlencode($lecturer->user->name) }}&background=e6f0ff&rounded=true" alt="avatar" width="40">
                                         @endif
                                         <div class="px-6">
-                                            <div class="text-light font-semibold text-gray-900">{{ $lecturer->user->name }}</div>
+                                            <div class="text-light font-semibold text-gray-900">{{ ucwords($lecturer->user->name) }}</div>
                                             <div class="font-normal text-gray-500">
                                                 @if($lecturer->nip == null)
                                                     [Unfilled]
@@ -159,7 +159,7 @@
                                             {{ $lecturer->user->phone }}
                                         @endif
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-6 py-4 whitespace-nowrap">
                                         @if($lecturer->expertise == null)
                                             [Unfilled]
                                         @else
@@ -232,77 +232,6 @@
                                 </svg>
                             </span>
                         </x-danger-button>
-                    </div>
-                </div>
-            </x-modal>
-
-            {{-- show students modal --}}
-            <x-modal wire:ignore.self name="confirm-students-show" :show="$errors->studentsShow->isNotEmpty()" focusable>
-                <div class="p-6" wire:loading wire:target="showStudents()">
-                    <p>loading...</p>
-                </div>
-
-                {{-- table --}}
-                <div class="p-3">
-                    <div class="p-2">
-                        <h5 class="text-xl font-medium text-gray-900 dark:text-white">{{$supervisor}} Thesis Supervisor</h5>
-                        <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">This topic will be part of the proposal category</p>
-                    </div>
-
-                    <div class="p-2 text-center">
-                        {{-- <div class="relative overflow-x-auto sm:rounded-lg">
-                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                                <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">
-                                            Student's Name
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Nim
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if ($students)
-                                        @foreach ($students as $student)
-                                            <tr class="border-b border-gray-200 dark:border-gray-700">
-                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800">
-                                                    {{$student->user->name}}
-                                                </th>
-                                                <td class="px-6 py-4">
-                                                    {{$student->nim}}
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div> --}}
-                        
-                        <div class="grid mb-8 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700">
-                            {{-- @foreach($students as $student)
-                                <figure class="flex flex-col items-center justify-center p-8 text-center bg-white border-b border-gray-200 rounded-t-lg md:rounded-t-none md:rounded-tl-lg md:border-r dark:bg-gray-800 dark:border-gray-700">
-                                    <blockquote class="max-w-2xl mx-auto mb-4 text-gray-500 lg:mb-8 dark:text-gray-400">
-                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Very easy this was to integrate</h3>
-                                        <p class="my-4">If you care for your time, I hands down would go with this."</p>
-                                    </blockquote>
-                                    <figcaption class="flex items-center justify-center space-x-3">
-                                        <img class="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png" alt="profile picture">
-                                        <div class="space-y-0.5 font-medium dark:text-white text-left">
-                                            <div>Bonnie Green</div>
-                                            <div class="text-sm text-gray-500 dark:text-gray-400">Developer at Open AI</div>
-                                        </div>
-                                    </figcaption>    
-                                </figure>
-                            @endforeach --}}
-                        </div>
-
-                    </div>
-
-                    <div class="p-2 flex justify-end">
-                        <x-primary-button x-on:click="$dispatch('close')">
-                            {{ __('ok') }}
-                        </x-primary-button>
                     </div>
                 </div>
             </x-modal>

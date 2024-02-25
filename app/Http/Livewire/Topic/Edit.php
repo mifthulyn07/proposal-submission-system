@@ -51,6 +51,7 @@ class Edit extends Component
             return redirect()->to('/topics');
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
+            return redirect()->to('/topics');
         }
     }
 }

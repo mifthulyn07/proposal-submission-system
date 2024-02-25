@@ -15,6 +15,31 @@
                 <h5 class="text-lg font-bold text-gray-900 dark:text-white">List Submission</h5>
                 <p class="mt-1 mb-4 text-gray-500 dark:text-gray-400 font-normal text-sm">This feature is available exclusively for Coordinators</p>
                 
+                {{-- alert --}}
+                <div class="my-4 ">
+                    @if (session()->has('success'))
+                        <div
+                            x-data="{ show: true }"
+                            x-show="show"
+                            x-transition
+                            x-init="setTimeout(() => show = false, 3000)"
+                            class="alert-remove p-4 mt-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" 
+                            role="alert"
+                        >{{ session('success') }}</div>
+                    @endif
+
+                    @if (session()->has('error'))
+                        <div
+                            x-data="{ show: true }"
+                            x-show="show"
+                            x-transition
+                            x-init="setTimeout(() => show = false, 3000)"
+                            class="alert-remove p-4 mt-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" 
+                            role="alert"
+                        >{{ session('error') }}</div>
+                    @endif
+                </div>
+
                 {{-- search  --}}
                 <div class="relative bg-white dark:bg-gray-800 rounded-lg">
                     <div class="flex flex-col items-center justify-between space-y-3 md:flex-row md:space-y-0 md:space-x-4">

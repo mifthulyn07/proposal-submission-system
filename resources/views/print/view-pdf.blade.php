@@ -14,6 +14,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
 </head>
 <body>
-    <iframe style="width:100%;height:100vh;" src="{{ asset('storage/proposals/'.$file_name) }}" type="application/pdf" width="100%" height="700"></iframe>
+    <iframe style="width:100%;height:100vh;" @if(stripos($file_name, "requirements") !== false) src="{{ asset('storage/requirements/'.$file_name) }}" @else src="{{ asset('storage/proposals/'.$file_name) }}" @endif type="application/pdf" width="100%" height="700"></iframe>
 </body>
 </html>

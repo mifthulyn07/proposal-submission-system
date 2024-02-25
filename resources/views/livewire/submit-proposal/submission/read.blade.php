@@ -42,9 +42,6 @@
                 <!-- Dropdown menu -->
                 <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-                        {{-- <li>
-                            <a href="{{ Route('submit-proposal.create', $proposalProcess->id) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create Manual</a>
-                        </li> --}}
                         <li>
                             <a href="{{ Route('submit-proposal.similarity.create', $proposalProcess->slug) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create through Check Similarity Fitur</a>
                         </li>
@@ -82,10 +79,10 @@
                                 Proposal's Title
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                topic
+                                Google Scholar similarity
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                similarity
+                                Uinsu Student Similarity
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 proposal
@@ -104,21 +101,28 @@
                                         <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
                                     </div>
                                 </td>
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{$submit_proposal->title}}
+                                <th scope="row" class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-light font-semibold text-gray-900">{{ucfirst($submit_proposal->title)}}</div>
+                                    <div class="font-normal text-gray-500">
+                                        @if($submit_proposal->topic)
+                                            {{$submit_proposal->topic->name}}
+                                        @else
+                                            {{$submit_proposal->adding_topic}}
+                                        @endif
+                                    </div>
                                 </th>
                                 <td class="px-6 py-4">
-                                    @if($submit_proposal->topic)
-                                        {{$submit_proposal->topic->name}}
+                                    @if($submit_proposal->google_scholar_similarity === null)
+                                        [not found]
                                     @else
-                                        {{$submit_proposal->adding_topic}}
+                                        {{$submit_proposal->google_scholar_similarity}}
                                     @endif
                                 </td>
                                 <td class="px-6 py-4">
-                                    @if($submit_proposal->similarity === null)
-                                        -
+                                    @if($submit_proposal->uinsu_student_similarity === null)
+                                        [not found]
                                     @else
-                                        {{$submit_proposal->similarity}}
+                                        {{$submit_proposal->uinsu_student_similarity}}
                                     @endif
                                 </td>
                                 <td class="px-6 py-4">
@@ -150,17 +154,6 @@
         
         {{-- button next step --}}
         <div class="flex items-center justify-end gap-4 mt-6">
-            <div>
-                @if (session()->has('error'))
-                    <p
-                        x-data="{ show: true }"
-                        x-show="show"
-                        x-transition
-                        x-init="setTimeout(() => show = false, 3000)"
-                        class="text-sm text-red-600"
-                    >{{ session('error') }}</p>
-                @endif
-            </div>
             @if(!$submit_proposals->isEmpty())
                 <button type="submit" wire:click="proposalSubmit()" class="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                     Next Step: Verification

@@ -109,7 +109,7 @@
                                         {{ $topics->firstItem() + $index }}
                                     </th>
                                     <th class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-light font-semibold text-gray-900">{{ $topic->name }}</div>
+                                        <div class="text-light font-semibold text-gray-900">{{ ucwords($topic->name) }}</div>
                                     </th>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         {{ $topic->date }}

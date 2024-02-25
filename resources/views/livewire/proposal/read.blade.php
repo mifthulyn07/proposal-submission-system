@@ -107,9 +107,6 @@
                                     Year
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Topic
-                                </th>
-                                <th scope="col" class="px-6 py-3">
                                     Type
                                 </th>
                                 @if (auth()->user()->hasRole('coordinator') || auth()->user()->hasRole('kaprodi'))
@@ -126,11 +123,26 @@
                                         {{ $proposals->firstItem() + $index }}
                                     </th>
                                     <th class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-light font-semibold text-gray-900">{{ $proposal->name }}</div>
-                                        <div class="font-normal text-gray-500">{{ $proposal->nim }}</div>
+                                        <div class="text-light font-semibold text-gray-900">{{ ucwords($proposal->name) }}</div>
+                                        <div class="font-normal text-gray-500">
+                                            @if($proposal->nim)
+                                                {{ $proposal->nim }}
+                                            @else
+                                                [unfilled]
+                                            @endif
+                                        </div>
                                     </th>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        {{ $proposal->title }}
+                                        <div class="text-light font-semibold text-gray-900">{{ ucwords($proposal->title) }}</div>
+                                        <div class="font-normal text-gray-500">
+                                            @if($proposal->topic )
+                                                {{ $proposal->topic->name }}
+                                            @elseif($proposal->topic == null && $proposal->adding_topic == null)
+                                                [unfilled]
+                                            @else
+                                                {{ $proposal->adding_topic }}
+                                            @endif
+                                        </div>
                                     </td>
                                     <td class="px-6 py-4">
                                         @if($proposal->status == 'done')
@@ -143,19 +155,14 @@
                                         {{ $proposal->year }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        @if($proposal->topic )
-                                            {{ $proposal->topic->name }}
-                                        @else
-                                            {{ $proposal->adding_topic }}
-                                        @endif
-                                    </td>
-                                    <td class="px-6 py-4">
                                         @if($proposal->type == 'thesis')
                                             <p class="flex justify-center bg-green-100 text-green-800 text-xs font-medium mr-0.5 mb-1 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Thesis</p>
                                         @elseif($proposal->type == 'appropriate_technology')
                                             <p class="flex justify-center bg-purple-100 text-purple-800 text-xs font-medium mr-0.5 mb-1 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300">Appropriate_Technology</p>
                                         @elseif($proposal->type == 'journal')
                                             <p class="flex justify-center bg-yellow-100 text-yellow-800 text-xs font-medium mr-0.5 mb-1 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Journal</p>
+                                        @else
+                                            [unfilled]
                                         @endif
                                     </td>
                                     @if (auth()->user()->hasRole('coordinator') || auth()->user()->hasRole('kaprodi'))

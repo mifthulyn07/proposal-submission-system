@@ -74,9 +74,9 @@ class Read extends Component
     {
         if(count($this->selectedProposals) > 3 || count($this->selectedProposals) < 3){
             if(count($this->selectedProposals) > 3){
-                return session()->flash('error', 'Oops! You can only submit up to 3 proposals. Please review your selections.');
+                return session()->flash('error-submit', 'Oops! You can only submit up to 3 proposals. Please review your selections.');
             }elseif(count($this->selectedProposals) < 3){
-                return session()->flash('error', 'Oops! To proceed, please select exactly 3 proposals.');
+                return session()->flash('error-submit', 'Oops! To proceed, please select exactly 3 proposals.');
             }
         }else{
             $this->emit('showVerification');

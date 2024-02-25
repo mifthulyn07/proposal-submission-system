@@ -19,7 +19,8 @@ class Edit extends Component
     // submitProposal model 
     public $topic_id;
     public $title;
-    public $similarity;
+    public $googleScholarSimilarity;
+    public $uinsuStudentSimilarity;
     public $proposal;
     public $adding_topic;
 
@@ -42,9 +43,10 @@ class Edit extends Component
         // $this->authorize('update','check.ownership');
 
         if(!empty($submitProposal)){
-            $this->topic_id     = $submitProposal->topic_id;
-            $this->title        = $submitProposal->title;
-            $this->similarity   = $submitProposal->similarity;
+            $this->topic_id                 = $submitProposal->topic_id;
+            $this->title                    = $submitProposal->title;
+            $this->googleScholarSimilarity  = $submitProposal->google_scholar_similarity;
+            $this->uinsuStudentSimilarity   = $submitProposal->uinsu_student_similarity;
             $this->adding_topic = $submitProposal->adding_topic;
 
             $this->oldProposal  = $submitProposal->proposal;
@@ -62,33 +64,37 @@ class Edit extends Component
     {
         if(!$this->another_topic && !isset($this->proposal)){
             return [
-                'topic_id'      => 'required|exists:topics,id',
-                'title'         => 'required|max:255|unique:proposals,title|unique:submit_proposals,title,'.$this->submitProposal->id,
-                'similarity'    => 'numeric|nullable|integer',
-                'adding_topic'  => 'nullable|string|unique:topics,name'
+                'topic_id'                  => 'required|exists:topics,id',
+                'title'                     => 'required|max:255|unique:proposals,title|unique:submit_proposals,title,'.$this->submitProposal->id,
+                'googleScholarSimilarity'   => 'numeric|nullable|integer',
+                'uinsuStudentSimilarity'    => 'numeric|nullable|integer',
+                'adding_topic'              => 'nullable|string|unique:topics,name'
             ];
         }elseif(!$this->another_topic && isset($this->proposal)){
             return [
-                'topic_id'      => 'required|exists:topics,id',
-                'title'         => 'required|max:255|unique:proposals,title|unique:submit_proposals,title,'.$this->submitProposal->id,
-                'similarity'    => 'numeric|nullable|integer',
-                'proposal'      => 'required|file|mimes:pdf|max:2048',
-                'adding_topic'  => 'nullable|string|unique:topics,name'
+                'topic_id'                  => 'required|exists:topics,id',
+                'title'                     => 'required|max:255|unique:proposals,title|unique:submit_proposals,title,'.$this->submitProposal->id,
+                'googleScholarSimilarity'   => 'numeric|nullable|integer',
+                'uinsuStudentSimilarity'    => 'numeric|nullable|integer',
+                'proposal'                  => 'required|file|mimes:pdf|max:2048',
+                'adding_topic'              => 'nullable|string|unique:topics,name'
             ];
         }elseif($this->another_topic && !isset($this->proposal)){
             return [
-                'topic_id'      => 'nullable|exists:topics,id',
-                'title'         => 'required|max:255|unique:proposals,title|unique:submit_proposals,title,'.$this->submitProposal->id,
-                'similarity'    => 'numeric|nullable|integer',
-                'adding_topic'  => 'required|string|unique:topics,name'
+                'topic_id'                  => 'nullable|exists:topics,id',
+                'title'                     => 'required|max:255|unique:proposals,title|unique:submit_proposals,title,'.$this->submitProposal->id,
+                'googleScholarSimilarity'   => 'numeric|nullable|integer',
+                'uinsuStudentSimilarity'    => 'numeric|nullable|integer',
+                'adding_topic'              => 'required|string|unique:topics,name'
             ];
         }elseif($this->another_topic && isset($this->proposal)){
             return [
-                'topic_id'      => 'nullable|exists:topics,id',
-                'title'         => 'nullable|max:255|unique:proposals,title|unique:submit_proposals,title,'.$this->submitProposal->id,
-                'similarity'    => 'numeric|nullable|integer',
-                'proposal'      => 'required|file|mimes:pdf|max:2048',
-                'adding_topic'  => 'required|string|unique:topics,name'
+                'topic_id'                  => 'nullable|exists:topics,id',
+                'title'                     => 'nullable|max:255|unique:proposals,title|unique:submit_proposals,title,'.$this->submitProposal->id,
+                'googleScholarSimilarity'   => 'numeric|nullable|integer',
+                'uinsuStudentSimilarity'    => 'numeric|nullable|integer',
+                'proposal'                  => 'required|file|mimes:pdf|max:2048',
+                'adding_topic'              => 'required|string|unique:topics,name'
             ];
         }
         
@@ -122,6 +128,8 @@ class Edit extends Component
                 $proposalName = 'proposal'.time().'-'.str_replace(' ', '', Auth::user()->name).'.'.$extension;
                 $validatedData['proposal']->storeAs('public/proposals', $proposalName);
                 $validatedData['proposal'] = $proposalName;
+                $validatedData['google_scholar_similarity'] = $this->googleScholarSimilarity;
+                $validatedData['uinsu_student_similarity'] = $this->uinsuStudentSimilarity;
             }
 
             $submitProposal = SubmitProposal::findOrFail($this->submitProposal->id);
@@ -129,11 +137,10 @@ class Edit extends Component
             $submitProposal->save();
 
             session()->flash('success-submit', 'proposal successfully updated.');
-           
-            // harus dilakukan refresh untuk dir file 
             return redirect()->to('/submit-proposal');
         }catch (\Exception $e){
             session()->flash('error', $e->getMessage());
+            return redirect()->to('/submit-proposal');
         }
     }
 }

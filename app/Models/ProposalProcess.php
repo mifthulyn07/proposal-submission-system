@@ -18,6 +18,7 @@ class ProposalProcess extends Model
         'student_id',
         'type',
         'date',
+        'requirements',
         'comment',
     ];
 
@@ -43,10 +44,5 @@ class ProposalProcess extends Model
     public function submit_proposals(): HasMany
     {
         return $this->hasMany(SubmitProposal::class);
-    }
-
-    public function pdf_requirements(): HasMany
-    {
-        return $this->hasMany(PdfRequirement::class);
     }
 }

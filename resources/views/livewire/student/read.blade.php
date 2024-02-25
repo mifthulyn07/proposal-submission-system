@@ -8,7 +8,6 @@
 
 <div>
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-        
         <div class="bg-white overflow-hidden rounded-lg shadow rounded-lg">
             {{-- alert --}}
             <div class="m-4 ">
@@ -120,7 +119,7 @@
                                             <img src="https://ui-avatars.com/api/?name={{ urlencode($student->user->name) }}&background=e6f0ff&rounded=true" alt="avatar" width="40">
                                         @endif
                                         <div class="px-6">
-                                            <div class="text-light font-semibold text-gray-900">{{ $student->user->name }}</div>
+                                            <div class="text-light font-semibold text-gray-900">{{ ucwords($student->user->name) }}</div>
                                             <div class="font-normal text-gray-500">
                                                 @if($student->nim == null)
                                                     [Unfilled]
@@ -147,11 +146,11 @@
                                             </p>
                                         @endif
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-6 py-4 whitespace-nowrap">
                                         @if($student->class == null)
                                             [Unfilled]
                                         @else
-                                            {{ $student->class }}
+                                            {{ ucwords($student->class) }}
                                         @endif
                                     </td>
                                     <td class="px-6 py-4">
@@ -163,7 +162,7 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         @if($student->lecturer_id)
-                                            {{ $student->lecturer->user->name }}
+                                            {{ ucwords($student->lecturer->user->name) }}
                                         @else
                                             [Unfilled]
                                         @endif
@@ -224,6 +223,5 @@
                 </div>
             </x-modal>
         </div>
-    
     </div>
 </div>

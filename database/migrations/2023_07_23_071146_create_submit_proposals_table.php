@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignId("proposal_process_id")->constrained()->cascadeOnDelete();
             $table->foreignId("topic_id")->nullable()->constrained()->onDelete('set null');
             $table->string("title");
-            $table->bigInteger("similarity")->nullable();
+            $table->bigInteger("google_scholar_similarity")->nullable();
+            $table->bigInteger("uinsu_student_similarity")->nullable();
             $table->string("proposal");
             $table->string("adding_topic")->nullable();
             $table->boolean("accord")->nullable();

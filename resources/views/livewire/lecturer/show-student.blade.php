@@ -3,7 +3,7 @@
         <div class="bg-white overflow-hidden rounded-lg shadow rounded-lg">
             
             <div class="w-full p-4 bg-white dark:bg-gray-800 dark:border-gray-700">
-                <h5 class="text-lg font-medium text-gray-900 dark:text-white">Student Project Results</h5>
+                <h5 class="text-lg font-bold text-gray-900 dark:text-white">Student Project Results</h5>
                 <p class="mt-1 mb-2 text-gray-500 dark:text-gray-400 font-normal text-sm">Explore student project results. This page provides insights into the progress and outcomes of the projects supervised by various lecturers.</p>
                 
                 {{-- table header --}}

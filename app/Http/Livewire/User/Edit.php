@@ -193,11 +193,10 @@ class Edit extends Component
 
             $this->reset(['password', 'password_confirmation', 'avatar']);
             session()->flash('success', 'User account successfully updated.');
-            
-            // harus dilakukan refresh untuk dir file 
-            redirect()->to('/users');
+            return redirect()->to('/users');
         }catch (\Exception $e){
             session()->flash('error', $e->getMessage());
+            return redirect()->to('/users');
         }
     }
 }

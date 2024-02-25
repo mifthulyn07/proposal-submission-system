@@ -20,14 +20,14 @@
                     </div>
 
                     {{-- profile --}}
-                    <ul class="space-y-4 text-sm text-gray-500 dark:text-gray-400">
+                    <ul class="space-y-2 text-sm text-gray-500 dark:text-gray-400">
                         <li class="flex items-center">
                             <svg data-tooltip-target="tooltip-gender" class="w-3 h-3 mr-2 text-gray-550 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16"><path d="M18 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM6.5 3a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3.014 13.021l.157-.625A3.427 3.427 0 0 1 6.5 9.571a3.426 3.426 0 0 1 3.322 2.805l.159.622-6.967.023ZM16 12h-3a1 1 0 0 1 0-2h3a1 1 0 0 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Z"/></svg>
                             <div id="tooltip-gender" role="tooltip" class="absolute z-10 left-0 invisible inline-block px-2 py-1 text-xs font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
                                 Profil <div class="tooltip-arrow" data-popper-arrow></div>
                             </div>
                             @if($proposal->student->user)
-                                {{ $proposal->student->user->email }} | {{ $proposal->student->user->gender }}
+                                {{ $proposal->student->user->email }}
                             @endif
                         </li>
                         <li class="flex items-center">
@@ -36,7 +36,7 @@
                                 Phone <div class="tooltip-arrow" data-popper-arrow></div>
                             </div>
                             @if($proposal->student->user)
-                            Indonesia - {{ $proposal->student->user->phone }}
+                            {{ $proposal->student->user->phone }}
                             @endif
                         </li>
                         <li class="flex items-center">
@@ -54,7 +54,7 @@
                                 Supervisor <div class="tooltip-arrow" data-popper-arrow></div>
                             </div>
                             @if($proposal->student->lecturer)
-                                {{ $proposal->student->lecturer->user->name }} | {{$proposal->student->lecturer->user->gender}}
+                                {{ $proposal->student->lecturer->user->name }}
                             @endif
                         </li>
                     </ul>
@@ -62,27 +62,23 @@
 
                 {{-- assignment advisor --}}
                 <div class="col-span-2 mt-6 lg:mt-0">
-                    <div class="flex items-start mb-5">
+                    <div class="flex items-start">
                         <div class="pr-4">
                             <footer>
                                 <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
                                     Reviewed: <time>{{ Illuminate\Support\Carbon::parse($proposal->updated_at)->diffForHumans() }}</time>
                                 </p>
                             </footer>
-                            <h4 class="text-xl font-bold text-gray-900 dark:text-white">{{ $proposal->title }}</h4>
+                            <h4 class="text-xl font-bold text-gray-900 dark:text-white">{{ ucwords($proposal->title) }}</h4>
                         </div>
                     </div>
                     <p class="mb-2 text-gray-500 dark:text-gray-400">
-                        Comment from coordinator:
-                        @if ($proposal->comment)
-                            {{ $proposal->comment }}                            
+                        @if($proposal->topic)
+                            {{$proposal->topic->name}}
                         @else
-                            -
+                            {{$proposal->adding_topic}}
                         @endif
-                    </p>
-                    <aside>
-                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                            Type of proposal: 
+                        (
                             @if($proposal->type == 'thesis')
                                 <span class="bg-green-100 text-green-800 text-xs font-medium mr-0.5 mb-1 p-1 rounded dark:bg-green-900 dark:text-green-300">Thesis</span>
                             @elseif($proposal->type == 'appropriate_technology')
@@ -90,24 +86,16 @@
                             @elseif($proposal->type == 'journal')
                                 <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-0.5 mb-1 p-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Journal</span>
                             @endif
-                        </p>
-                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                            Topic: 
-                            @if($proposal->topic)
-                                {{$proposal->topic->name}}
-                            @else
-                                {{$proposal->adding_topic}}
-                            @endif
-                        </p>
-                    </aside>
+                        )
+                    </p>
 
                     {{-- form --}}
                     <div class="mt-4 w-full p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                         <form class="space-y-4" wire:submit.prevent="assign">
-                            <h5 class="text-base font-medium text-gray-900 dark:text-white">Assign an Advisor</h5>
+                            <h5 class="text-base font-medium text-gray-900 dark:text-white">Choose Assignment Advisor for Student's Proposal</h5>
                             <div class="@if($proposal->type !=  'journal') grid gap-4 md:grid-cols-2 @endif mb-2">
                                 <div>
-                                    <label for="lecturer_selected1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">@if($proposal->type ==  'journal') Lecturer @else Lecturer(1) @endif</label>
+                                    <label for="lecturer_selected1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">@if($proposal->type ==  'journal') Lecturer @else Lecturer 1 @endif</label>
                                     <select id="lecturer_selected1" name="lecturer_selected1" wire:model="lecturer_selected1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         <option hidden selected value="null" >Select lecturer 1</option>
                                         @foreach ($lecturers as $lecturer)
@@ -117,7 +105,7 @@
                                     @error('lecturer_selected1') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
                                 </div>
                                 <div @if($proposal->type ==  'journal') class=hidden @endif>
-                                    <label for="lecturer_selected2" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Lecturer(2)</label>
+                                    <label for="lecturer_selected2" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Lecturer 2</label>
                                     <select id="lecturer_selected2" name="lecturer_selected2" wire:model="lecturer_selected2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         <option hidden selected value="null" >Select lecturer 2</option>
                                         @foreach ($lecturers as $lecturer)

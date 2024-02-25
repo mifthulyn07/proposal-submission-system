@@ -26,22 +26,29 @@
                     @error('date') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
                 </div>
 
+                <div class="mb-4">
+                    <h2 class="mb-2 text-md font-semibold text-gray-900 dark:text-white">Please submit the following documents in one file:</h2>
+                    <ol class="list-decimal list-inside max-w-md space-y-1 text-gray-500 dark:text-gray-400">
+                        <li>Study plan card (for the active semester)</li>
+                        <li>Academic transcript</li>
+                        <li>Internship report approval sheet</li>
+                        <li>Proposal registration form</li>
+                        <li>Advisor verification form</li>
+                    </ol>
+                </div>
+
                 {{-- requirements --}}
                 <div class="mb-4">
                     <div>
-                        <label for="requirements_pdf" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Requirements: pdf</label>
-                        <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" type="file" id="file-upload-input" wire:model="requirements_pdf" multiple>
-                        @if($requirements_pdf)
-                            @foreach ($requirements_pdf as $requirement_pdf)
-                                @if(file_exists($requirement_pdf->getRealPath()))
-                                    <span class="mt-2 text-sm text-gray-800 dark:text-gray-800"> {{ $requirement_pdf->getClientOriginalName() }} </span> 
-                                @endif
-                            @endforeach 
+                        <label for="requirements" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Requirements: pdf</label>
+                        <input type="file" id="file-upload-input" wire:model="requirements" class="hidden">
+                        <x-secondary-button class="mr-2 py-2 mt-1" id="file-upload-button">{{ __('Upload File') }}</x-secondary-button>
+                        @if($requirements) 
+                            <span class="mt-2 text-sm text-gray-800 dark:text-gray-800"> {{ $requirements->getClientOriginalName() }} </span> 
                         @endif
                     </div>
-                    @error('requirements_pdf.*') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
-                    @error('requirements_pdf') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
-                    <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">you need supporting request letters. Please refer to the proposal submission instructions for details.</p>                      
+                    @error('requirements') <span class="error mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</span> @enderror
+                    <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">To submit your proposal, please use the provided template and follow the submission procedures.</p>
                 </div>
 
                 {{-- button --}}

@@ -44,13 +44,19 @@ class Check extends Component
 
     public function assign()
     {
-        // validation when button clicking 
-        $this->validate($this->propertyValidation());
+        try{
+            // validation when button clicking 
+            $this->validate($this->propertyValidation());
 
-        // many to many
-        $this->proposal->lecturers()->attach($this->lecturer_selected1);
-        $this->proposal->lecturers()->attach($this->lecturer_selected2);
+            // many to many
+            $this->proposal->lecturers()->attach($this->lecturer_selected1);
+            $this->proposal->lecturers()->attach($this->lecturer_selected2);
 
-        return redirect()->to('/list-student-submission');
+            session()->flash('success', 'accord successfully send.');
+            return redirect()->to('/list-student-submission');
+        }catch (\Exception $e){
+            session()->flash('error', $e->getMessage());
+            return redirect()->to('/list-student-submission');
+        }
     }
 }

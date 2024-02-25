@@ -7,7 +7,6 @@ use App\Models\Lecturer;
 use App\Models\Proposal;
 use App\Models\SubmitProposal;
 use App\Models\ProposalProcess;
-use Illuminate\Support\Facades\Storage;
 
 class Check extends Component
 {
@@ -41,44 +40,6 @@ class Check extends Component
         ]);
     }
 
-    // download proposal 
-    // public function exportProposal($id){
-    //     $submitProposal = SubmitProposal::findOrFail($id);
-    //     if($submitProposal){
-    //         return Storage::disk("public")->download('proposals/'.$submitProposal->proposal);
-    //     } 
-    // }
-
-    // download requirements 
-    public function exportRequirements($id){
-        $proposalProcess = ProposalProcess::findOrFail($id);
-        if($proposalProcess){
-            // Create a temporary directory to store the files to be zipped.
-            $tempDirectory = storage_path('app/public/temp_zip');
-            if (!file_exists($tempDirectory)) {
-                mkdir($tempDirectory);
-            }
-
-            // Create a unique zip file name.
-            $zipFileName = 'requirements'.time().$proposalProcess->student->user->name.'.zip';
-
-            // Create a zip archive containing the copied PDF files.
-            $zip = new \ZipArchive;
-            if ($zip->open(storage_path('app/public/requirements/') . $zipFileName, \ZipArchive::CREATE) === true) {
-                $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($tempDirectory));
-                foreach ($files as $file) {
-                    if (!$file->isDir()) {
-                        $filePath = $file->getRealPath();
-                        $relativePath = substr($filePath, strlen($tempDirectory) + 1);
-                        $zip->addFile($filePath, $relativePath);
-                    }
-                }
-                $zip->close();                
-            }
-            return Storage::disk("public")->download('requirements/requirements'.time().$proposalProcess->student->user->name.'.zip');
-        } 
-    }
-
     public function propertyValidation()
     {
         if($this->decline === true){
@@ -102,6 +63,7 @@ class Check extends Component
 
     public function showAccept()
     {
+
         $this->show = true;
 
         $this->accept = true;
@@ -169,6 +131,7 @@ class Check extends Component
             redirect()->to('/submissions');
         } catch (\Exception $e){
             session()->flash('error', $e->getMessage());
+            redirect()->to('/submissions');
         }
     }
 
