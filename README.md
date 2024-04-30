@@ -1,3 +1,12 @@
+# Proposal Submission System
+An application for students to submit their proposals, integrated with machine learning to verify similarity with Google Scholar and alumni database titles. Built with Laravel 10 (PHP), Livewire, Tailwind (CSS), MySQL, and Python.
+
+# Contact
+You can reach me at [mifthulyn07@gmail.com](mailto:mifthulyn07@gmail.com), if you have any questions or just want to connect.
+
+# Demo
+![Proposal Submission System](https://github.com/mifthulyn07/proposal-submission-system/assets/84966642/96f0c386-48d1-44ef-b24a-f25130204e0e)
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
